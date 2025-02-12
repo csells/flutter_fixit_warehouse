@@ -1,0 +1,22 @@
+{
+  "name": "genkit",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "genkit start -- ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "genkit-cli": "^0.9.12",
+    "prettier": "3.4.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@genkit-ai/googleai": "^0.9.7",
+    "genkit": "^0.9.7"
+  }
+}
