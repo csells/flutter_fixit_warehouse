@@ -1,4 +1,4 @@
-# flutter_fixit_warehouse
+# flutter_fix_warehouse
 
 A new Flutter project.
 

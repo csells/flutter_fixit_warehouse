@@ -1,6 +1,6 @@
 {
-    "name": "flutter_fixit_warehouse",
-    "short_name": "flutter_fixit_warehouse",
+    "name": "flutter_fix_warehouse",
+    "short_name": "flutter_fix_warehouse",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
