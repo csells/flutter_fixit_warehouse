@@ -1,3 +1,0 @@
-# Flutter Fixit Warehouse
-
-TODO

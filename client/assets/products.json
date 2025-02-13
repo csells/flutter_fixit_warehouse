@@ -1,0 +1,802 @@
+[
+    {
+        "Product Name": "Heavy-Duty Cordless Drill",
+        "Manufacturer": "PowerMax",
+        "Short Description": "A powerful 18V cordless drill with a high-torque motor, ideal for tough drilling and driving tasks on the jobsite or at home.",
+        "Cost (USD)": 129,
+        "imageFile": "",
+        "id": 1
+    },
+    {
+        "Product Name": "Precision Screwdriver Set",
+        "Manufacturer": "ACME Tools",
+        "Short Description": "A set of fine-tip screwdrivers with ergonomic handles, designed for precision work on electronics, appliances, and small fasteners.",
+        "Cost (USD)": 18,
+        "imageFile": "",
+        "id": 2
+    },
+    {
+        "Product Name": "Steel Claw Hammer",
+        "Manufacturer": "CraftMaster",
+        "Short Description": "A 16oz steel claw hammer with a durable handle and balanced weight, perfect for driving nails and general carpentry tasks.",
+        "Cost (USD)": 12,
+        "imageFile": "",
+        "id": 3
+    },
+    {
+        "Product Name": "24-inch Spirit Level",
+        "Manufacturer": "BuildPro",
+        "Short Description": "A 24-inch aluminum spirit level with easy-to-read vials, ensuring accurate horizontal and vertical alignment for any project.",
+        "Cost (USD)": 20,
+        "imageFile": "",
+        "id": 4
+    },
+    {
+        "Product Name": "Electric Circular Saw",
+        "Manufacturer": "ToolWorks",
+        "Short Description": "A 7-1/4 inch electric circular saw featuring a powerful motor and adjustable cutting depth, suitable for lumber and sheet goods.",
+        "Cost (USD)": 99,
+        "imageFile": "",
+        "id": 5
+    },
+    {
+        "Product Name": "Compact Jigsaw",
+        "Manufacturer": "Apex Tools",
+        "Short Description": "A lightweight electric jigsaw with variable speed control and an orbital setting, ideal for making curved and intricate cuts in wood.",
+        "Cost (USD)": 59,
+        "imageFile": "",
+        "id": 6
+    },
+    {
+        "Product Name": "Cordless Impact Driver",
+        "Manufacturer": "PowerMax",
+        "Short Description": "A compact 18V cordless impact driver delivering high-torque output, perfect for driving heavy screws and bolts with ease.",
+        "Cost (USD)": 89,
+        "imageFile": "",
+        "id": 7
+    },
+    {
+        "Product Name": "Rotary Hammer Drill",
+        "Manufacturer": "ACME Tools",
+        "Short Description": "A heavy-duty rotary hammer drill with multiple modes and vibration control, built for drilling into concrete, brick, and masonry.",
+        "Cost (USD)": 150,
+        "imageFile": "",
+        "id": 8
+    },
+    {
+        "Product Name": "Angle Grinder",
+        "Manufacturer": "CraftMaster",
+        "Short Description": "A 4.5-inch angle grinder with a powerful motor and adjustable guard, great for cutting, grinding, and polishing metal and masonry.",
+        "Cost (USD)": 45,
+        "imageFile": "",
+        "id": 9
+    },
+    {
+        "Product Name": "Electric Palm Sander",
+        "Manufacturer": "ToolWorks",
+        "Short Description": "A compact palm sander with a 2-amp motor and dust collection bag, ideal for smoothing surfaces and prep work on wood projects.",
+        "Cost (USD)": 30,
+        "imageFile": "",
+        "id": 10
+    },
+    {
+        "Product Name": "Cordless Brad Nailer",
+        "Manufacturer": "Apex Tools",
+        "Short Description": "An 18-gauge cordless brad nailer with a quick-charge battery, designed for trim work and cabinetry without the need for compressors.",
+        "Cost (USD)": 110,
+        "imageFile": "",
+        "id": 11
+    },
+    {
+        "Product Name": "Adjustable Wrench Set",
+        "Manufacturer": "BuildPro",
+        "Short Description": "A set of three adjustable wrenches made of forged steel, offering versatile use for various nuts and bolts in plumbing and automotive work.",
+        "Cost (USD)": 25,
+        "imageFile": "",
+        "id": 12
+    },
+    {
+        "Product Name": "Gasoline Chainsaw",
+        "Manufacturer": "Spartan Tools",
+        "Short Description": "A 16-inch gas-powered chainsaw with a high-performance engine and low-kickback chain, ideal for cutting trees and heavy-duty yard work.",
+        "Cost (USD)": 180,
+        "imageFile": "",
+        "id": 13
+    },
+    {
+        "Product Name": "20V Cordless Leaf Blower",
+        "Manufacturer": "GardenPro",
+        "Short Description": "A lightweight cordless leaf blower with a 20V rechargeable battery, providing powerful airflow for clearing leaves and debris outdoors.",
+        "Cost (USD)": 99,
+        "imageFile": "",
+        "id": 14
+    },
+    {
+        "Product Name": "High-Power Pressure Washer",
+        "Manufacturer": "UltraCraft",
+        "Short Description": "An electric pressure washer delivering 2000 PSI of cleaning power, equipped with interchangeable nozzles for tackling patios, siding, and driveways.",
+        "Cost (USD)": 250,
+        "imageFile": "",
+        "id": 15
+    },
+    {
+        "Product Name": "Portable Air Compressor",
+        "Manufacturer": "Apex Tools",
+        "Short Description": "A portable 6-gallon air compressor with a quick recovery time and easy-carry handle, perfect for powering pneumatic tools and inflating tires.",
+        "Cost (USD)": 130,
+        "imageFile": "",
+        "id": 16
+    },
+    {
+        "Product Name": "Stud Finder",
+        "Manufacturer": "BuildPro",
+        "Short Description": "An electronic stud finder that quickly locates wood and metal studs behind drywall, helping ensure secure mounting for frames or cabinets.",
+        "Cost (USD)": 15,
+        "imageFile": "",
+        "id": 17
+    },
+    {
+        "Product Name": "Power Paint Sprayer",
+        "Manufacturer": "ToolWorks",
+        "Short Description": "An electric paint sprayer that applies a smooth, even coat, featuring adjustable spray patterns for fences, furniture, and walls.",
+        "Cost (USD)": 75,
+        "imageFile": "",
+        "id": 18
+    },
+    {
+        "Product Name": "Rolling Tool Chest",
+        "Manufacturer": "ACME Tools",
+        "Short Description": "A multi-drawer steel rolling tool chest with lockable drawers and casters, providing organized storage for tools in workshops and garages.",
+        "Cost (USD)": 220,
+        "imageFile": "",
+        "id": 19
+    },
+    {
+        "Product Name": "Fiberglass Step Ladder",
+        "Manufacturer": "SafeStep",
+        "Short Description": "A 6-foot fiberglass step ladder with a 250 lb load capacity and non-slip steps, ideal for painting, repairs, and reaching high areas.",
+        "Cost (USD)": 85,
+        "imageFile": "",
+        "id": 20
+    },
+    {
+        "Product Name": "Stainless Steel Refrigerator",
+        "Manufacturer": "HomeTech",
+        "Short Description": "An 18 cubic foot stainless steel refrigerator with adjustable glass shelves and an energy-efficient cooling system to keep food fresh.",
+        "Cost (USD)": 1200,
+        "imageFile": "",
+        "id": 21
+    },
+    {
+        "Product Name": "Energy Star Dishwasher",
+        "Manufacturer": "KitchenCo",
+        "Short Description": "A built-in dishwasher rated Energy Star for efficiency, featuring multiple wash cycles, a stainless steel tub, and a quiet operation design.",
+        "Cost (USD)": 450,
+        "imageFile": "",
+        "id": 22
+    },
+    {
+        "Product Name": "Front-Load Washing Machine",
+        "Manufacturer": "HomeTech",
+        "Short Description": "A high-efficiency front-load washing machine with a 4.5 cu. ft. capacity and multiple wash settings, designed to save water and energy.",
+        "Cost (USD)": 700,
+        "imageFile": "",
+        "id": 23
+    },
+    {
+        "Product Name": "Electric Range with Oven",
+        "Manufacturer": "AppliancePro",
+        "Short Description": "A freestanding electric range with a smooth ceramic cooktop and a spacious oven, offering even baking and easy cleanup for everyday cooking.",
+        "Cost (USD)": 800,
+        "imageFile": "",
+        "id": 24
+    },
+    {
+        "Product Name": "Over-the-Range Microwave",
+        "Manufacturer": "KitchenCo",
+        "Short Description": "A 1.7 cu. ft. over-the-range microwave with 1000W of cooking power, featuring convenient presets and an exhaust fan for kitchen ventilation.",
+        "Cost (USD)": 250,
+        "imageFile": "",
+        "id": 25
+    },
+    {
+        "Product Name": "Chest Freezer",
+        "Manufacturer": "AppliancePro",
+        "Short Description": "A compact 5 cubic foot chest freezer with an easy-access hinged lid and adjustable thermostat, ideal for extra frozen food storage in a garage or basement.",
+        "Cost (USD)": 300,
+        "imageFile": "",
+        "id": 26
+    },
+    {
+        "Product Name": "Portable Air Conditioner",
+        "Manufacturer": "CoolTech",
+        "Short Description": "A 12,000 BTU portable air conditioner on caster wheels, equipped with a remote control and dehumidifier mode to cool and dry rooms up to 300 sq. ft.",
+        "Cost (USD)": 299,
+        "imageFile": "",
+        "id": 27
+    },
+    {
+        "Product Name": "40-Gallon Electric Water Heater",
+        "Manufacturer": "HomeComfort",
+        "Short Description": "A 40-gallon electric water heater with quick recovery, foam insulation, and an adjustable thermostat, ensuring a reliable supply of hot water for the household.",
+        "Cost (USD)": 400,
+        "imageFile": "",
+        "id": 28
+    },
+    {
+        "Product Name": "Dehumidifier",
+        "Manufacturer": "EverChill",
+        "Short Description": "A 50-pint portable dehumidifier that removes excess moisture from the air, featuring automatic shut-off and a removable easy-empty water tank.",
+        "Cost (USD)": 180,
+        "imageFile": "",
+        "id": 29
+    },
+    {
+        "Product Name": "Smart Thermostat",
+        "Manufacturer": "SmartHome Co.",
+        "Short Description": "A Wi-Fi enabled smart thermostat that learns your schedule, allowing remote temperature control and energy savings through advanced programming.",
+        "Cost (USD)": 200,
+        "imageFile": "",
+        "id": 30
+    },
+    {
+        "Product Name": "Robotic Vacuum",
+        "Manufacturer": "HomeTech",
+        "Short Description": "An automatic robotic vacuum cleaner with multiple cleaning modes and smart navigation, designed to keep floors clean with minimal effort.",
+        "Cost (USD)": 250,
+        "imageFile": "",
+        "id": 31
+    },
+    {
+        "Product Name": "Stainless Steel Range Hood",
+        "Manufacturer": "KitchenCo",
+        "Short Description": "A 30-inch wall-mount stainless steel range hood with a 3-speed fan and LED lighting, effectively removing smoke and odors from your kitchen.",
+        "Cost (USD)": 150,
+        "imageFile": "",
+        "id": 32
+    },
+    {
+        "Product Name": "Built-In Wall Oven",
+        "Manufacturer": "AppliancePro",
+        "Short Description": "A 27-inch built-in electric wall oven with a convection setting and digital controls, providing even cooking and a sleek integrated kitchen look.",
+        "Cost (USD)": 1000,
+        "imageFile": "",
+        "id": 33
+    },
+    {
+        "Product Name": "Electric Clothes Dryer",
+        "Manufacturer": "HomeComfort",
+        "Short Description": "A large capacity electric clothes dryer with sensor drying technology and multiple heat settings to efficiently dry laundry and prevent over-drying.",
+        "Cost (USD)": 600,
+        "imageFile": "",
+        "id": 34
+    },
+    {
+        "Product Name": "Dual-Flush Toilet",
+        "Manufacturer": "FlowMaster",
+        "Short Description": "A water-saving dual-flush toilet with a modern two-piece design, offering separate flush options to conserve water without sacrificing performance.",
+        "Cost (USD)": 250,
+        "imageFile": "",
+        "id": 35
+    },
+    {
+        "Product Name": "Stainless Steel Kitchen Faucet",
+        "Manufacturer": "AquaPure",
+        "Short Description": "A stainless steel kitchen faucet with a pull-down sprayer and single-handle control, providing smooth water flow and easy temperature adjustment.",
+        "Cost (USD)": 120,
+        "imageFile": "",
+        "id": 36
+    },
+    {
+        "Product Name": "Bathroom Vanity Sink",
+        "Manufacturer": "BathWorks",
+        "Short Description": "A 36-inch bathroom vanity with an integrated ceramic sink and storage cabinet, featuring a modern design that adds style and functionality to any bathroom.",
+        "Cost (USD)": 300,
+        "imageFile": "",
+        "id": 37
+    },
+    {
+        "Product Name": "Rain Shower Head",
+        "Manufacturer": "WaterWorks",
+        "Short Description": "A 10-inch rain shower head made of chrome-plated brass that delivers a soothing, rainfall-like water flow for a spa-like shower experience.",
+        "Cost (USD)": 45,
+        "imageFile": "",
+        "id": 38
+    },
+    {
+        "Product Name": "Acrylic Bathtub",
+        "Manufacturer": "BathWorks",
+        "Short Description": "A 60-inch alcove acrylic bathtub with a slip-resistant bottom and insulated backing, designed for durability and maintaining water temperature.",
+        "Cost (USD)": 400,
+        "imageFile": "",
+        "id": 39
+    },
+    {
+        "Product Name": "Utility Sink",
+        "Manufacturer": "ClearWater Co.",
+        "Short Description": "A deep molded utility sink with sturdy steel legs and a built-in drain, perfect for laundry rooms, garages, or workshops for easy cleanup tasks.",
+        "Cost (USD)": 90,
+        "imageFile": "",
+        "id": 40
+    },
+    {
+        "Product Name": "Garbage Disposal",
+        "Manufacturer": "FlowMaster",
+        "Short Description": "A 1/2 HP garbage disposal unit with stainless steel grinding components and overload protection, helping to efficiently eliminate kitchen food waste.",
+        "Cost (USD)": 100,
+        "imageFile": "",
+        "id": 41
+    },
+    {
+        "Product Name": "Copper Pipe Set",
+        "Manufacturer": "PlumbCo",
+        "Short Description": "A set of 1/2-inch copper pipes totaling 10 feet, ideal for residential water line repairs and new installations requiring durable piping.",
+        "Cost (USD)": 60,
+        "imageFile": "",
+        "id": 42
+    },
+    {
+        "Product Name": "PVC Pipe Kit",
+        "Manufacturer": "PlumbCo",
+        "Short Description": "A PVC piping kit including assorted 3/4-inch pipes and elbows, designed for easy assembly in home plumbing or irrigation projects.",
+        "Cost (USD)": 25,
+        "imageFile": "",
+        "id": 43
+    },
+    {
+        "Product Name": "Submersible Sump Pump",
+        "Manufacturer": "WaterWorks",
+        "Short Description": "A 1/3 HP submersible sump pump with an automatic float switch, built to keep basements dry by efficiently pumping out standing water.",
+        "Cost (USD)": 150,
+        "imageFile": "",
+        "id": 44
+    },
+    {
+        "Product Name": "Water Softener System",
+        "Manufacturer": "PureFlow",
+        "Short Description": "A whole-house water softener system with a 30,000 grain capacity, reducing hardness in water to prevent mineral buildup in pipes and appliances.",
+        "Cost (USD)": 500,
+        "imageFile": "",
+        "id": 45
+    },
+    {
+        "Product Name": "Tankless Water Heater",
+        "Manufacturer": "AquaPure",
+        "Short Description": "An on-demand tankless water heater that provides continuous hot water, offering energy savings and a compact design that saves space.",
+        "Cost (USD)": 700,
+        "imageFile": "",
+        "id": 46
+    },
+    {
+        "Product Name": "Shower Faucet Set",
+        "Manufacturer": "BathWorks",
+        "Short Description": "A complete shower faucet and tub spout set in brushed nickel, including a pressure-balanced valve to maintain water temperature and prevent scalding.",
+        "Cost (USD)": 80,
+        "imageFile": "",
+        "id": 47
+    },
+    {
+        "Product Name": "PEX Tubing Coil",
+        "Manufacturer": "ClearWater Co.",
+        "Short Description": "A 100-foot coil of 1/2-inch PEX tubing that is flexible and easy to install, ideal for hot and cold water plumbing applications throughout the home.",
+        "Cost (USD)": 50,
+        "imageFile": "",
+        "id": 48
+    },
+    {
+        "Product Name": "Toilet Repair Kit",
+        "Manufacturer": "FlowMaster",
+        "Short Description": "A universal toilet repair kit that includes a replacement fill valve, flapper, and hardware, designed to fix common toilet leaks and flushing issues.",
+        "Cost (USD)": 20,
+        "imageFile": "",
+        "id": 49
+    },
+    {
+        "Product Name": "Drain Snake Tool",
+        "Manufacturer": "Drainage Pro",
+        "Short Description": "A 25-foot hand-crank drain snake that helps clear clogs in sinks, showers, and tub drains, offering a convenient solution for home plumbing maintenance.",
+        "Cost (USD)": 30,
+        "imageFile": "",
+        "id": 50
+    },
+    {
+        "Product Name": "Kitchen Sink",
+        "Manufacturer": "AquaPure",
+        "Short Description": "A double basin stainless steel kitchen sink with sound-dampening pads and a brushed finish, built to handle daily dishwashing and food prep cleanup.",
+        "Cost (USD)": 180,
+        "imageFile": "",
+        "id": 51
+    },
+    {
+        "Product Name": "LED Bulb 6-Pack",
+        "Manufacturer": "EverLight",
+        "Short Description": "A six-pack of energy-efficient 60W-equivalent LED light bulbs that offer soft white illumination and last up to 10 years, reducing energy costs.",
+        "Cost (USD)": 18,
+        "imageFile": "",
+        "id": 52
+    },
+    {
+        "Product Name": "Recessed Lighting Kit",
+        "Manufacturer": "Lumina",
+        "Short Description": "A set of four recessed light fixtures with LED bulbs and trim, easy to install in ceilings for modern, low-profile lighting throughout the home.",
+        "Cost (USD)": 70,
+        "imageFile": "",
+        "id": 53
+    },
+    {
+        "Product Name": "Ceiling Fan with LED Light",
+        "Manufacturer": "BrightHome",
+        "Short Description": "A 52-inch ceiling fan in brushed nickel finish with an integrated LED light and remote control, providing both air circulation and illumination.",
+        "Cost (USD)": 130,
+        "imageFile": "",
+        "id": 54
+    },
+    {
+        "Product Name": "Outdoor LED Floodlight",
+        "Manufacturer": "EverLight",
+        "Short Description": "A motion-activated outdoor LED floodlight with dual heads, offering bright security lighting for driveways, garages, and backyards.",
+        "Cost (USD)": 40,
+        "imageFile": "",
+        "id": 55
+    },
+    {
+        "Product Name": "Solar Garden Lights",
+        "Manufacturer": "GardenPro",
+        "Short Description": "A set of eight solar-powered garden pathway lights that automatically charge by day and illuminate your yard at night with efficient LED bulbs.",
+        "Cost (USD)": 55,
+        "imageFile": "",
+        "id": 56
+    },
+    {
+        "Product Name": "Crystal Chandelier",
+        "Manufacturer": "Lumina",
+        "Short Description": "An elegant crystal chandelier with five lights and a chrome finish, designed to add a touch of luxury and brilliant illumination to dining rooms or foyers.",
+        "Cost (USD)": 250,
+        "imageFile": "",
+        "id": 57
+    },
+    {
+        "Product Name": "LED Desk Lamp",
+        "Manufacturer": "LiteSource",
+        "Short Description": "A flexible LED desk lamp with touch controls and brightness settings, perfect for providing focused light on a desk or bedside table while saving energy.",
+        "Cost (USD)": 25,
+        "imageFile": "",
+        "id": 58
+    },
+    {
+        "Product Name": "Modern Pendant Light",
+        "Manufacturer": "Radiant Lighting",
+        "Short Description": "A single pendant light with a modern glass shade and adjustable height, ideal as a stylish centerpiece above kitchen islands or dining tables.",
+        "Cost (USD)": 80,
+        "imageFile": "",
+        "id": 59
+    },
+    {
+        "Product Name": "Wall Sconce Set",
+        "Manufacturer": "BrightHome",
+        "Short Description": "A pair of wall sconces in an oil-rubbed bronze finish with frosted glass shades, providing warm accent lighting for hallways or living spaces.",
+        "Cost (USD)": 70,
+        "imageFile": "",
+        "id": 60
+    },
+    {
+        "Product Name": "Under-Cabinet Light",
+        "Manufacturer": "Lumina",
+        "Short Description": "A 24-inch under-cabinet LED light bar with a slim profile and plug-in design, adding bright task lighting to kitchen counters or workspaces.",
+        "Cost (USD)": 35,
+        "imageFile": "",
+        "id": 61
+    },
+    {
+        "Product Name": "Dimmable LED Downlight",
+        "Manufacturer": "EverLight",
+        "Short Description": "A 6-inch dimmable LED downlight retrofit with an easy-fit mounting, offering energy-efficient recessed lighting for any room in the home.",
+        "Cost (USD)": 30,
+        "imageFile": "",
+        "id": 62
+    },
+    {
+        "Product Name": "Motion Sensor Porch Light",
+        "Manufacturer": "LightMaster",
+        "Short Description": "A wall-mounted porch light with a built-in motion sensor and dusk-to-dawn feature, enhancing home security and convenience at entryways.",
+        "Cost (USD)": 45,
+        "imageFile": "",
+        "id": 63
+    },
+    {
+        "Product Name": "High-Lumen Flashlight",
+        "Manufacturer": "SecureHome",
+        "Short Description": "A rugged high-lumen LED flashlight with an aluminum body and multiple modes, providing reliable bright light for emergencies and outdoor use.",
+        "Cost (USD)": 25,
+        "imageFile": "",
+        "id": 64
+    },
+    {
+        "Product Name": "LED Strip Lights",
+        "Manufacturer": "GlowCo",
+        "Short Description": "A 16-foot roll of color-changing LED strip lights with adhesive backing and remote control, great for adding customizable accent lighting under cabinets or behind TVs.",
+        "Cost (USD)": 25,
+        "imageFile": "",
+        "id": 65
+    },
+    {
+        "Product Name": "Contemporary Floor Lamp",
+        "Manufacturer": "LiteSource",
+        "Short Description": "A tall floor lamp with a modern design and an LED bulb, featuring an adjustable reading light and a sturdy base for bright, ambient living room lighting.",
+        "Cost (USD)": 60,
+        "imageFile": "",
+        "id": 66
+    },
+    {
+        "Product Name": "Oak Hardwood Flooring",
+        "Manufacturer": "FloorCraft",
+        "Short Description": "A pack of oak hardwood flooring covering 20 sq. ft., featuring tongue-and-groove planks with a pre-finished surface for a classic, durable floor.",
+        "Cost (USD)": 120,
+        "imageFile": "",
+        "id": 67
+    },
+    {
+        "Product Name": "Porcelain Floor Tile",
+        "Manufacturer": "TileCo",
+        "Short Description": "A case of porcelain floor tiles (12-inch square, 12 tiles per case) that are water-resistant and ideal for bathrooms, kitchens, or entryways.",
+        "Cost (USD)": 75,
+        "imageFile": "",
+        "id": 68
+    },
+    {
+        "Product Name": "Luxury Vinyl Plank Flooring",
+        "Manufacturer": "HomeFlooring",
+        "Short Description": "A box of luxury vinyl plank flooring covering 15 sq. ft., designed to mimic hardwood with a waterproof, scratch-resistant finish for easy maintenance.",
+        "Cost (USD)": 85,
+        "imageFile": "",
+        "id": 69
+    },
+    {
+        "Product Name": "Berber Carpet Tiles",
+        "Manufacturer": "FloorMaster",
+        "Short Description": "A pack of 12 Berber carpet tiles with peel-and-stick backing, offering a durable and stain-resistant flooring solution that's easy to install and replace.",
+        "Cost (USD)": 90,
+        "imageFile": "",
+        "id": 70
+    },
+    {
+        "Product Name": "Laminate Wood Flooring",
+        "Manufacturer": "FloorCraft",
+        "Short Description": "A 20 sq. ft. carton of laminate wood flooring with a rich oak finish, featuring a click-lock installation system and a protective wear layer.",
+        "Cost (USD)": 70,
+        "imageFile": "",
+        "id": 71
+    },
+    {
+        "Product Name": "Garage Floor Epoxy Kit",
+        "Manufacturer": "TimberLux",
+        "Short Description": "A two-part garage floor epoxy coating kit that covers up to 250 sq. ft., providing a durable, chemical-resistant surface with a glossy finish.",
+        "Cost (USD)": 130,
+        "imageFile": "",
+        "id": 72
+    },
+    {
+        "Product Name": "Marble Floor Tiles",
+        "Manufacturer": "StoneCraft",
+        "Short Description": "A case of polished marble floor tiles (6 tiles, 12-inch square) that add an elegant, high-end look, suitable for foyers and bathrooms.",
+        "Cost (USD)": 300,
+        "imageFile": "",
+        "id": 73
+    },
+    {
+        "Product Name": "Composite Deck Tiles",
+        "Manufacturer": "EverTile",
+        "Short Description": "A box of interlocking composite deck tiles (covers 10 sq. ft.), made from weather-resistant materials, ideal for quickly upgrading outdoor patios or balconies.",
+        "Cost (USD)": 150,
+        "imageFile": "",
+        "id": 74
+    },
+    {
+        "Product Name": "Carpet Underlayment Roll",
+        "Manufacturer": "HomeFlooring",
+        "Short Description": "A 100 sq. ft. roll of foam carpet underlayment that provides cushioning and moisture protection, improving comfort and extending carpet life.",
+        "Cost (USD)": 40,
+        "imageFile": "",
+        "id": 75
+    },
+    {
+        "Product Name": "Tile Grout (25 lb)",
+        "Manufacturer": "BuildCo",
+        "Short Description": "A 25 lb bag of sanded tile grout in a neutral gray color, suitable for filling joints between tiles on floors or walls, offering a strong and mold-resistant finish.",
+        "Cost (USD)": 20,
+        "imageFile": "",
+        "id": 76
+    },
+    {
+        "Product Name": "Interior Wall Paint (1 Gallon)",
+        "Manufacturer": "ColorWave",
+        "Short Description": "A 1-gallon can of interior wall paint in an eggshell finish, offering excellent coverage and a durable, washable surface for living rooms and bedrooms.",
+        "Cost (USD)": 32,
+        "imageFile": "",
+        "id": 77
+    },
+    {
+        "Product Name": "Paint Brush Set",
+        "Manufacturer": "ColorWave",
+        "Short Description": "A set of 5 paint brushes with various sizes and nylon-polyester bristles, ideal for applying latex or oil-based paints smoothly on walls, trim, or furniture.",
+        "Cost (USD)": 15,
+        "imageFile": "",
+        "id": 78
+    },
+    {
+        "Product Name": "Paint Roller Kit",
+        "Manufacturer": "PaintCo",
+        "Short Description": "A paint roller kit that includes two rollers, a tray, and a liner, designed for quickly covering large wall and ceiling areas with even coats of paint.",
+        "Cost (USD)": 22,
+        "imageFile": "",
+        "id": 79
+    },
+    {
+        "Product Name": "Smart Door Lock",
+        "Manufacturer": "SecureHome",
+        "Short Description": "A keyless electronic deadbolt smart lock with a touchscreen keypad and smartphone connectivity, allowing remote access and customizable passcodes for enhanced security.",
+        "Cost (USD)": 140,
+        "imageFile": "",
+        "id": 80
+    },
+    {
+        "Product Name": "Smoke and Carbon Monoxide Detector",
+        "Manufacturer": "SafeHome",
+        "Short Description": "A battery-operated smoke and carbon monoxide alarm with dual sensors and a loud 85-decibel alarm, designed to detect home hazards and provide early warnings.",
+        "Cost (USD)": 45,
+        "imageFile": "",
+        "id": 81
+    },
+    {
+        "Product Name": "Video Doorbell",
+        "Manufacturer": "SecureHome",
+        "Short Description": "A wireless video doorbell with 1080p HD camera and two-way audio, allowing you to see, hear, and speak to visitors at your door via a smartphone app.",
+        "Cost (USD)": 120,
+        "imageFile": "",
+        "id": 82
+    },
+    {
+        "Product Name": "Extension Cord (25 ft)",
+        "Manufacturer": "PowerTech",
+        "Short Description": "A 25-foot heavy-duty extension cord with a grounded plug and weather-resistant insulation, suitable for both indoor and outdoor power needs.",
+        "Cost (USD)": 20,
+        "imageFile": "",
+        "id": 83
+    },
+    {
+        "Product Name": "Power Strip (Surge Protector)",
+        "Manufacturer": "PowerTech",
+        "Short Description": "A 6-outlet power strip with surge protection and a 4-foot cord, featuring an overload reset switch to safeguard electronics from voltage spikes.",
+        "Cost (USD)": 25,
+        "imageFile": "",
+        "id": 84
+    },
+    {
+        "Product Name": "Safety Glasses",
+        "Manufacturer": "SafeGuard",
+        "Short Description": "A pair of impact-resistant safety glasses with clear anti-fog lenses and comfortable arms, providing eye protection during woodworking, construction, or DIY projects.",
+        "Cost (USD)": 8,
+        "imageFile": "",
+        "id": 85
+    },
+    {
+        "Product Name": "Work Gloves",
+        "Manufacturer": "SafeGuard",
+        "Short Description": "A pair of heavy-duty work gloves made from durable leather with reinforced palms, designed to protect hands during construction, gardening, or mechanical work.",
+        "Cost (USD)": 12,
+        "imageFile": "",
+        "id": 86
+    },
+    {
+        "Product Name": "Insulation Roll",
+        "Manufacturer": "BuildCo",
+        "Short Description": "A roll of R-13 fiberglass insulation covering 40 sq. ft., designed to fit between wall studs or attic joists to improve home energy efficiency and comfort.",
+        "Cost (USD)": 50,
+        "imageFile": "",
+        "id": 87
+    },
+    {
+        "Product Name": "Drywall Panel (4x8)",
+        "Manufacturer": "BuildCo",
+        "Short Description": "A standard 1/2-inch thick drywall panel measuring 4 ft by 8 ft, easy to cut and install for wall and ceiling construction or repair projects.",
+        "Cost (USD)": 15,
+        "imageFile": "",
+        "id": 88
+    },
+    {
+        "Product Name": "Plywood Sheet (4x8)",
+        "Manufacturer": "TimberPro",
+        "Short Description": "A 4 ft by 8 ft construction-grade plywood sheet with 1/2-inch thickness, providing a versatile and sturdy material for subflooring, sheathing, or DIY projects.",
+        "Cost (USD)": 25,
+        "imageFile": "",
+        "id": 89
+    },
+    {
+        "Product Name": "Cement Mix (50 lb)",
+        "Manufacturer": "QuickSet",
+        "Short Description": "A 50 lb bag of fast-setting cement mix ideal for pouring slabs, setting posts, and general concrete repair jobs, requiring only the addition of water.",
+        "Cost (USD)": 10,
+        "imageFile": "",
+        "id": 90
+    },
+    {
+        "Product Name": "Roofing Shingles (20-Pack)",
+        "Manufacturer": "RoofMaster",
+        "Short Description": "A bundle of 20 asphalt roofing shingles in a charcoal color, offering durable weather resistance and an easy installation for small roof repair projects.",
+        "Cost (USD)": 30,
+        "imageFile": "",
+        "id": 91
+    },
+    {
+        "Product Name": "6-Panel Interior Door",
+        "Manufacturer": "HomeEssentials",
+        "Short Description": "A standard 32-inch wide six-panel interior door made of primed composite wood, ready to be painted and hung, enhancing privacy and style in your home.",
+        "Cost (USD)": 85,
+        "imageFile": "",
+        "id": 92
+    },
+    {
+        "Product Name": "Double-Pane Window",
+        "Manufacturer": "ClearView",
+        "Short Description": "A 36x48 inch double-pane vinyl window with low-E glass, providing improved insulation and noise reduction for increased energy efficiency in the home.",
+        "Cost (USD)": 150,
+        "imageFile": "",
+        "id": 93
+    },
+    {
+        "Product Name": "Metal Storage Shelf Unit",
+        "Manufacturer": "StoreEase",
+        "Short Description": "A five-tier metal storage shelving unit with an adjustable shelf height and 800 lb total capacity, perfect for organizing garages, basements, or workshops.",
+        "Cost (USD)": 90,
+        "imageFile": "",
+        "id": 94
+    },
+    {
+        "Product Name": "Wheelbarrow",
+        "Manufacturer": "YardMaster",
+        "Short Description": "A heavy-duty wheelbarrow with a 6 cubic foot steel tray and a pneumatic tire, ideal for hauling soil, gravel, or plants around the yard or construction site.",
+        "Cost (USD)": 65,
+        "imageFile": "",
+        "id": 95
+    },
+    {
+        "Product Name": "Lawn Mower (Gas Push)",
+        "Manufacturer": "YardMaster",
+        "Short Description": "A gas-powered push lawn mower with a 21-inch cutting deck and adjustable cutting heights, designed to provide a clean, even cut for small to medium yards.",
+        "Cost (USD)": 250,
+        "imageFile": "",
+        "id": 96
+    },
+    {
+        "Product Name": "Garden Shovel",
+        "Manufacturer": "GardenPro",
+        "Short Description": "A sturdy garden shovel with a sharp steel blade and a hardwood handle, suitable for digging holes, transplanting shrubs, and moving soil in yard projects.",
+        "Cost (USD)": 25,
+        "imageFile": "",
+        "id": 97
+    },
+    {
+        "Product Name": "Leaf Rake",
+        "Manufacturer": "GardenPro",
+        "Short Description": "A 24-tine leaf rake with a wide fan shape and a lightweight handle, ideal for gathering leaves and debris on lawns without damaging the grass.",
+        "Cost (USD)": 20,
+        "imageFile": "",
+        "id": 98
+    },
+    {
+        "Product Name": "BBQ Grill (Charcoal)",
+        "Manufacturer": "FlameMaster",
+        "Short Description": "A 22-inch charcoal BBQ grill with an adjustable air vent and porcelain-enameled bowl and lid, providing classic grilling performance for backyard cookouts.",
+        "Cost (USD)": 140,
+        "imageFile": "",
+        "id": 99
+    },
+    {
+        "Product Name": "Mailbox (Steel)",
+        "Manufacturer": "PostalPro",
+        "Short Description": "A durable steel mailbox with a powder-coated finish and flag, designed for post mounting and built to withstand weather while keeping your mail secure.",
+        "Cost (USD)": 35,
+        "imageFile": "",
+        "id": 100
+    }
+]
