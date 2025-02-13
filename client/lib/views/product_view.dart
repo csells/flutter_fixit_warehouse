@@ -19,14 +19,27 @@ class ProductView extends StatelessWidget {
     child: Column(
       children: [
         ExpansionTile(
-          leading: const Placeholder(child: Text('TODO: Image')),
+          leading: const SizedBox(
+            width: 50,
+            height: 50,
+            child: Placeholder(child: Text('TODO: Image')),
+          ),
           title: Text(product.productName),
           subtitle: Text(product.manufacturer),
           initiallyExpanded: expanded,
           onExpansionChanged: onExpansionChanged,
           children: [
-            Text(product.shortDescription),
-            Text('Cost: ${product.costUsd}'),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(product.shortDescription),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Cost: \$${product.costUsd}'),
+              ),
+            ),
           ],
         ),
       ],

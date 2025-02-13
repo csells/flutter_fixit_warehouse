@@ -37,7 +37,11 @@ class ProductResponseView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Placeholder(child: Text('TODO: Image')),
+                  const SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Placeholder(child: Text('TODO: Image')),
+                  ),
                   const SizedBox(width: 16),
                   Text(
                     product.productName,
