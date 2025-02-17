@@ -1,10 +1,12 @@
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fix_warehouse/pages/gardening_page.dart';
 import 'package:provider/provider.dart';
 
 import '../data/chat_data.dart';
 
 class ChatPage extends StatelessWidget {
-  const ChatPage({super.key});
+  const ChatPage({super.key, GardeningAction? action, required XFile image});
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -64,12 +66,8 @@ class _QuestionView extends StatelessWidget {
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () {
-                  Provider.of<ConversationData>(
-                    context,
-                    listen: false,
-                  ).addResponse(option);
-                },
+                onPressed:
+                    () => context.read<ConversationData>().addResponse(option),
                 child: Text(option),
               ),
             ),

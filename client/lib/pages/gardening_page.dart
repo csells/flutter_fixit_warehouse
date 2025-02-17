@@ -1,12 +1,24 @@
+import 'dart:io';
+
+import 'package:cross_file/cross_file.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picture_taker/flutter_picture_taker.dart';
-import 'package:provider/provider.dart';
 
-import '../data/garden_data.dart';
 import 'chat_page.dart';
 
-class GardeningPage extends StatelessWidget {
+enum GardeningAction { expandGarden, keepGardenHealthy }
+
+class GardeningPage extends StatefulWidget {
   const GardeningPage({super.key});
+
+  @override
+  State<GardeningPage> createState() => _GardeningPageState();
+}
+
+class _GardeningPageState extends State<GardeningPage> {
+  GardeningAction? _selectedAction;
+  final List<XFile> _images = [];
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -18,7 +30,7 @@ class GardeningPage extends StatelessWidget {
           Text('GreenThumb', style: TextStyle(color: Colors.black)),
           Text(
             ' by Fix-It Warehouse',
-            style: TextStyle(fontSize: 12, color: Colors.grey),
+            style: TextStyle(fontSize: 18, color: Colors.green),
           ),
         ],
       ),
@@ -36,48 +48,82 @@ class GardeningPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  Provider.of<GardeningData>(context, listen: false)
-                      .selectedAction = 'Expand my garden';
-                },
-                icon: const Icon(Icons.local_florist),
-                label: const Text('Expand my garden'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightGreen.shade100,
-                  foregroundColor: Colors.black,
+              SizedBox(
+                width: 160,
+                height: 160,
+                child: ElevatedButton(
+                  onPressed:
+                      () => setState(
+                        () => _selectedAction = GardeningAction.expandGarden,
+                      ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        _selectedAction == GardeningAction.expandGarden
+                            ? Colors.lightGreen
+                            : Colors.lightGreen.shade100,
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.local_florist, size: 48),
+                      SizedBox(height: 8),
+                      Text('Expand my\ngarden', textAlign: TextAlign.center),
+                    ],
+                  ),
                 ),
               ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Provider.of<GardeningData>(context, listen: false)
-                      .selectedAction = 'Keep my garden healthy';
-                },
-                icon: const Icon(Icons.water_drop),
-                label: const Text('Keep my garden healthy'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightGreen.shade100,
-                  foregroundColor: Colors.black,
+              SizedBox(
+                width: 160,
+                height: 160,
+                child: ElevatedButton(
+                  onPressed:
+                      () => setState(
+                        () =>
+                            _selectedAction = GardeningAction.keepGardenHealthy,
+                      ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        _selectedAction == GardeningAction.keepGardenHealthy
+                            ? Colors.lightGreen
+                            : Colors.lightGreen.shade100,
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.water_drop, size: 48),
+                      SizedBox(height: 8),
+                      Text(
+                        'Keep my\ngarden healthy',
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 32),
-          const Text(
-            'Your plants',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          Center(
-            child: InkWell(
-              onTap: () {
-                // Handle "Take a picture" action.
-              },
+          if (_selectedAction != null) ...[
+            const SizedBox(height: 32),
+            const Text(
+              'Your plants',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  if (_images.isEmpty) const Text('Nothing yet! '),
                   InkWell(
-                    onTap: () => _takePicture(context),
+                    onTap: _takePicture,
                     child: const Text(
                       'Take a picture',
                       style: TextStyle(
@@ -87,38 +133,58 @@ class GardeningPage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  if (_images.isNotEmpty) const Text(' or choose a picture '),
                   const Text(' of a plant to get started'),
                 ],
               ),
             ),
-          ),
-          const Spacer(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Ask a gardening question',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                  borderSide: BorderSide.none,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: GridView.extent(
+                  maxCrossAxisExtent: 300,
+                  mainAxisSpacing: 32,
+                  crossAxisSpacing: 32,
+                  children: [
+                    for (final image in _images)
+                      InkWell(
+                        onTap: () => _navigateToChat(image),
+                        child: Container(
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child:
+                              kIsWeb
+                                  ? Image.network(image.path, fit: BoxFit.cover)
+                                  : Image.file(
+                                    File(image.path),
+                                    fit: BoxFit.cover,
+                                  ),
+                        ),
+                      ),
+                  ],
                 ),
-                filled: true,
-                fillColor: Colors.grey[200],
               ),
             ),
-          ),
+          ],
         ],
       ),
     ),
   );
 
-  Future<void> _takePicture(BuildContext context) async {
+  Future<void> _takePicture() async {
     final image = await showStillCameraDialog(context);
-    if (image == null || !context.mounted) return;
+    if (image == null) return;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const ChatPage()),
-    );
+    setState(() => _images.add(image));
+    _navigateToChat(image);
   }
+
+  Future<void> _navigateToChat(XFile image) => Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ChatPage(action: _selectedAction, image: image),
+    ),
+  );
 }

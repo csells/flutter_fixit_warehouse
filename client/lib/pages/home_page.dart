@@ -122,7 +122,6 @@ class HomePage extends StatelessWidget {
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () {
-                    debugPrint('Pressed');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
