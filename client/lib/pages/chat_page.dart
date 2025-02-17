@@ -6,7 +6,10 @@ import 'package:provider/provider.dart';
 import '../data/chat_data.dart';
 
 class ChatPage extends StatelessWidget {
-  const ChatPage({super.key, GardeningAction? action, required XFile image});
+  const ChatPage({super.key, this.action, required this.image});
+
+  final GardeningAction? action;
+  final XFile image;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -47,29 +50,52 @@ class _QuestionView extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        DecoratedBox(
-          decoration: const BoxDecoration(
-            color: Colors.lightGreen,
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(message.text),
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CircleAvatar(
+              backgroundColor: Colors.green,
+              child: Icon(Icons.eco, color: Colors.white),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  // color: Colors.green.shade50,
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(message.text),
+                ),
+              ),
+            ),
+          ],
         ),
         if (message.options != null)
-          ...message.options!.map<Widget>(
-            (option) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed:
-                    () => context.read<ConversationData>().addResponse(option),
-                child: Text(option),
-              ),
+          Padding(
+            padding: const EdgeInsets.only(left: 48),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:
+                  message.options!
+                      .map<Widget>(
+                        (option) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              foregroundColor: Colors.white,
+                            ),
+                            onPressed:
+                                () => context
+                                    .read<ConversationData>()
+                                    .addResponse(option),
+                            child: Text(option),
+                          ),
+                        ),
+                      )
+                      .toList(),
             ),
           ),
       ],
@@ -83,13 +109,13 @@ class _AnswerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.all(8),
+    padding: const EdgeInsets.all(8).copyWith(left: 48),
     child: Align(
-      alignment: Alignment.topRight,
+      alignment: Alignment.topLeft,
       child: DecoratedBox(
-        decoration: const BoxDecoration(
-          color: Colors.lightBlueAccent,
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade100,
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8),
