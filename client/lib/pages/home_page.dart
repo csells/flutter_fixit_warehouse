@@ -102,10 +102,7 @@ class HomePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Center(
-              child: Image.network(
-                'https://www.gstatic.com/flutter-onestack-prototype/genui/example_1.jpg',
-                fit: BoxFit.cover,
-              ),
+              child: Image.asset('assets/blue-bird.jpg', fit: BoxFit.cover),
             ),
           ),
         ),
