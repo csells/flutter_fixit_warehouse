@@ -5,7 +5,10 @@
       "name": "client",
       "type": "dart",
       "request": "launch",
-      "program": "client/lib/main.dart"
+      "program": "client/lib/main.dart",
+      "args": [
+        "--web-experimental-hot-reload",
+      ]
     },
   ]
 }
