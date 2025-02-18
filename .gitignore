@@ -1,2 +1,3 @@
 client/.flutter-plugins-dependencies
 .DS_Store
+.vscode/launch.json
