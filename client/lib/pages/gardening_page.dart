@@ -5,9 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picture_taker/flutter_picture_taker.dart';
 
+import '../gardening_action.dart';
 import 'chat_page.dart';
-
-enum GardeningAction { expandGarden, keepGardenHealthy }
 
 class GardeningPage extends StatefulWidget {
   const GardeningPage({super.key});
@@ -19,10 +18,11 @@ class GardeningPage extends StatefulWidget {
 class _GardeningPageState extends State<GardeningPage> {
   GardeningAction? _selectedAction;
   final List<XFile> _images = [
+    // TODO: Remove this
     XFile(
       kIsWeb
-          ? 'https://www.gstatic.com/flutter-onestack-prototype/genui/example_1.jpg'
-          : '/Users/csells/Code/Other/flutter_fixit_warehouse/client/assets/blue-bird.jpg',
+          ? 'https://drive.usercontent.google.com/download?id=1zbaRuHo0DKwJzHe8Ymmk9QtPocQe-XZf'
+          : '/Users/csells/Code/Other/flutter_fixit_warehouse/client/assets/unhealthy-plant.png',
     ),
   ];
 
@@ -54,66 +54,32 @@ class _GardeningPageState extends State<GardeningPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(
-                width: 160,
-                height: 160,
-                child: ElevatedButton(
-                  onPressed:
-                      () => setState(
-                        () => _selectedAction = GardeningAction.expandGarden,
+              for (final action in GardeningAction.values)
+                SizedBox(
+                  width: 160,
+                  height: 160,
+                  child: ElevatedButton(
+                    onPressed: () => setState(() => _selectedAction = action),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          _selectedAction == action
+                              ? Colors.lightGreen
+                              : Colors.lightGreen.shade100,
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        _selectedAction == GardeningAction.expandGarden
-                            ? Colors.lightGreen
-                            : Colors.lightGreen.shade100,
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(action.icon, size: 48),
+                        SizedBox(height: 8),
+                        Text(action.display, textAlign: TextAlign.center),
+                      ],
                     ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.local_florist, size: 48),
-                      SizedBox(height: 8),
-                      Text('Expand my\ngarden', textAlign: TextAlign.center),
-                    ],
-                  ),
                 ),
-              ),
-              SizedBox(
-                width: 160,
-                height: 160,
-                child: ElevatedButton(
-                  onPressed:
-                      () => setState(
-                        () =>
-                            _selectedAction = GardeningAction.keepGardenHealthy,
-                      ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        _selectedAction == GardeningAction.keepGardenHealthy
-                            ? Colors.lightGreen
-                            : Colors.lightGreen.shade100,
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.water_drop, size: 48),
-                      SizedBox(height: 8),
-                      Text(
-                        'Keep my\ngarden healthy',
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
             ],
           ),
           if (_selectedAction != null) ...[

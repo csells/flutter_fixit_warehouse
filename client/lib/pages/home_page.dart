@@ -10,26 +10,29 @@ class HomePage extends StatelessWidget {
     appBar: AppBar(
       title: Row(
         children: [
-          const Icon(Icons.build_circle, size: 30),
+          const Icon(Icons.build_circle, size: 30, color: Colors.green),
           const SizedBox(width: 8),
           Expanded(
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.green[50],
                 borderRadius: BorderRadius.circular(4),
               ),
               child: const TextField(
                 decoration: InputDecoration(
                   hintText: 'Search',
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: Icon(Icons.search, color: Colors.green),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: 10),
                 ),
               ),
             ),
           ),
-          IconButton(icon: const Icon(Icons.shopping_cart), onPressed: () {}),
+          IconButton(
+            icon: const Icon(Icons.shopping_cart, color: Colors.green),
+            onPressed: () {},
+          ),
         ],
       ),
       bottom: const PreferredSize(
