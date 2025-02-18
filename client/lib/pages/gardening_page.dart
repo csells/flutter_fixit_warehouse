@@ -153,10 +153,14 @@ class _GardeningPageState extends State<GardeningPage> {
     _navigateToChat(image);
   }
 
-  Future<void> _navigateToChat(XFile image) => Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ChatPage(action: _selectedAction, image: image),
-    ),
-  );
+  Future<void> _navigateToChat(XFile image) {
+    assert(_selectedAction != null);
+
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatPage(action: _selectedAction!, image: image),
+      ),
+    );
+  }
 }

@@ -5,9 +5,9 @@ import '../chat_service.dart';
 import '../gardening_action.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key, this.action, required this.image});
+  const ChatPage({super.key, required this.action, required this.image});
 
-  final GardeningAction? action;
+  final GardeningAction action;
   final XFile image;
 
   @override
@@ -21,7 +21,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    _chat.sendMessage(widget.action?.toString() ?? '');
+    _chat.sendMessage(widget.action.prompt, widget.image);
   }
 
   @override
@@ -32,22 +32,20 @@ class _ChatPageState extends State<ChatPage> {
             Scaffold(appBar: AppBar(title: Text(title)), body: child),
     child: ListenableBuilder(
       listenable: _chat,
-      builder:
-          (context, child) => ListView.builder(
-            itemCount: _chat.turns.length,
-            itemBuilder: (context, index) {
-              final turn = _chat.turns[index];
-              return switch (turn) {
-                UserTurn(:var userQuery) => Text(userQuery),
-                ModelTurn(:var llmQuery, :var optionsForUser) =>
-                  ModelTurnWidget(
-                    llmQuery: llmQuery,
-                    options: optionsForUser,
-                    onPressed: (query) => _submitQuery(query),
-                  ),
-              };
-            },
-          ),
+      builder: (context, child) {
+        final llmTurns = _chat.turns.whereType<ModelTurn>().toList();
+        return ListView.builder(
+          itemCount: llmTurns.length,
+          itemBuilder: (context, index) {
+            final turn = llmTurns[index];
+            return ModelTurnWidget(
+              llmQuery: turn.llmQuery,
+              options: turn.optionsForUser,
+              onPressed: (query) => _submitQuery(query),
+            );
+          },
+        );
+      },
     ),
   );
 

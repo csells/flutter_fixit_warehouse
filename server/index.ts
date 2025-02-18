@@ -1,5 +1,5 @@
 import { gemini15Flash, googleAI } from "@genkit-ai/googleai";
-import { genkit, run, z } from "genkit";
+import { genkit, z } from "genkit";
 
 const ai = genkit({
   plugins: [googleAI()],
@@ -19,6 +19,7 @@ const InputSchema = ai.defineSchema(
   "InputSchema",
   z.object({
     userQuery: z.string(),
+    image: z.string().optional(),
   }),
 );
 
@@ -43,6 +44,7 @@ const OutputSchema = ai.defineSchema(
     storeOptions: z.array(StoreOption).optional(),
   }),
 );
+
 const OutputWithHistory = z.object({
   output: OutputSchema,
   history: z.any(),
@@ -55,22 +57,39 @@ export const greenThumb = ai.defineFlow(
     outputSchema: OutputWithHistory,
   },
   async ({ input, history }) => {
-    // System is only supported in the first prompt in the history.
+
+
     const system =
       history.length > 0
         ? {}
         : {
-            system: `You're an expert gardener. The user will talk to you to you to figure out what is wrong with their plants. Be helpful and ask clarifying questions.
+          // System is only supported in the first prompt in the history.
+          system: `
+You're an expert gardener. The user will talk to you to you to figure out what
+is wrong with their plants. Be helpful and ask clarifying questions.
 
-Assume that your output is going to be displayed on an interative UI. The user will interact with you throuh a combination of text and multiple choice questions.`,
-          };
+Assume that your output is going to be displayed on an interative UI. 
+The user will interact with you throuh a combination of text and multiple choice
+questions.
+
+If the user provides an image, use it to help you answer the user's question.
+`,
+        };
+
+    const prompt = {
+      image: input.image,
+      text: input.userQuery,
+    };
+
+    console.log('Processing request: ', prompt);
 
     const { output, messages } = await ai.generate({
       ...system,
-      prompt: input.userQuery,
+      prompt,
       messages: history,
       output: { schema: OutputSchema },
     });
+
     return { output: output!, history: messages };
   },
 );
