@@ -26,4 +26,3 @@ flutter:
   uses-material-design: true
   assets:
     - assets/blue-bird.jpg
-    - assets/unhealthy-plant.png

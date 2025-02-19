@@ -17,14 +17,7 @@ class GardeningPage extends StatefulWidget {
 
 class _GardeningPageState extends State<GardeningPage> {
   GardeningAction? _selectedAction;
-  final List<XFile> _images = [
-    // TODO: Remove this
-    XFile(
-      kIsWeb
-          ? 'https://drive.usercontent.google.com/download?id=1zbaRuHo0DKwJzHe8Ymmk9QtPocQe-XZf'
-          : '/Users/csells/Code/Other/flutter_fixit_warehouse/client/assets/unhealthy-plant.png',
-    ),
-  ];
+  final List<XFile> _images = [];
 
   @override
   Widget build(BuildContext context) => Scaffold(
