@@ -40,13 +40,16 @@ class _ChatPageState extends State<ChatPage> {
           itemBuilder: (context, index) {
             final turn = llmTurns[index];
             final selectedOption = _selectedOptions[turn];
+            final productDescription = turn.productDescription;
 
-            return ModelTurnWidget(
-              llmQuery: turn.llmQuery,
-              options: turn.optionsForUser,
-              onPressed: (option) => _optionSelected(turn, option),
-              selectedOption: selectedOption,
-            );
+            return productDescription.isNotEmpty
+                ? Text(productDescription)
+                : ModelTurnWidget(
+                  llmQuery: turn.llmQuery,
+                  options: turn.optionsForUser,
+                  onPressed: (option) => _optionSelected(turn, option),
+                  selectedOption: selectedOption,
+                );
           },
         );
       },

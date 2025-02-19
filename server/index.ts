@@ -1,23 +1,17 @@
-import { gemini15Flash, googleAI } from "@genkit-ai/googleai";
+import { startFlowServer } from '@genkit-ai/express';
+import { gemini20Flash, googleAI } from "@genkit-ai/googleai";
 import { genkit, z } from "genkit";
 
 const ai = genkit({
   plugins: [googleAI()],
-  model: gemini15Flash,
+  model: gemini20Flash,
 });
-
-const ProductDescription = z.object(
-  {
-    description: z.string(),
-  },
-  { description: "Description of a product that will help the user with their plant." },
-);
 
 const InputSchema = ai.defineSchema(
   "InputSchema",
   z.object({
     userQuery: z.string(),
-    image: z.string().optional(),
+    image: z.string().nullable(),
   }),
 );
 
@@ -39,7 +33,9 @@ const OutputSchema = ai.defineSchema(
         }),
       )
       .optional(),
-    storeOptions: z.array(ProductDescription).optional(),
+    productDescription: z.string({
+      description: "A description of a product that will help the user with their original query.",
+    }),
   }),
 );
 
@@ -95,6 +91,6 @@ This product description should NOT include another question for the user.
   },
 );
 
-ai.startFlowServer({
+startFlowServer({
   flows: [greenThumb],
 });

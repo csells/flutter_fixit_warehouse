@@ -10,13 +10,14 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "genkit-cli": "^0.9.12",
-    "prettier": "3.4.2",
+    "genkit-cli": "^1.0.4",
+    "prettier": "3.5.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   },
   "dependencies": {
-    "@genkit-ai/googleai": "^0.9.7",
-    "genkit": "^0.9.7"
+    "@genkit-ai/express": "^1.0.4",
+    "@genkit-ai/googleai": "^1.0.4",
+    "genkit": "^1.0.4"
   }
 }

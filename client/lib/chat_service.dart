@@ -19,12 +19,12 @@ class UserTurn extends Turn {
 class ModelTurn extends Turn {
   final String llmQuery;
   final List<String> optionsForUser;
-  final List<dynamic> storeOptions;
+  final String productDescription;
   final History history;
   ModelTurn.fromMap(Map<String, dynamic> object)
     : llmQuery = object['output']['llmQuery'],
       optionsForUser = object['output']['optionsForUser'].cast<String>() ?? [],
-      storeOptions = object['output']['storeOptions'] ?? [],
+      productDescription = object['output']['productDescription'],
       history = object['history'];
 }
 
