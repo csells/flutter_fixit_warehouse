@@ -65,6 +65,7 @@ Future<Map<String, dynamic>> greenThumbRequest({
     final bytes = await image.readAsBytes();
     final originalImage = img.decodeImage(bytes);
     if (originalImage != null) {
+      // TODO: still needed with GenKit 1.x?
       // Resize image to max dimension of 400px while maintaining aspect ratio
       final resized = img.copyResize(
         originalImage,
