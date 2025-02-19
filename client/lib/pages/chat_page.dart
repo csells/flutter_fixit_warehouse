@@ -44,10 +44,7 @@ class _ChatPageState extends State<ChatPage> {
             return ModelTurnWidget(
               llmQuery: turn.llmQuery,
               options: turn.optionsForUser,
-              onPressed:
-                  selectedOption == null
-                      ? (option) => _optionSelected(turn, option)
-                      : (_) {},
+              onPressed: (option) => _optionSelected(turn, option),
               selectedOption: selectedOption,
             );
           },
@@ -57,7 +54,7 @@ class _ChatPageState extends State<ChatPage> {
   );
 
   void _optionSelected(ModelTurn turn, String option) {
-    _selectedOptions[turn] = option;
+    setState(() => _selectedOptions[turn] = option);
     _chat.sendMessage(option);
   }
 }
@@ -67,76 +64,76 @@ class ModelTurnWidget extends StatelessWidget {
     super.key,
     required this.llmQuery,
     required this.options,
-    this.onPressed,
+    required this.onPressed,
     this.selectedOption,
   });
 
   final String llmQuery;
   final List<String> options;
-  final void Function(String)? onPressed;
+  final void Function(String) onPressed;
   final String? selectedOption;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.green[50],
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.eco, color: Colors.green, size: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                llmQuery,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(height: 1.4),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.only(left: 40.0), // Align with text
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.green[50],
-                  shape: BoxShape.circle,
+              for (final option in options)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed:
+                        selectedOption == null || selectedOption == option
+                            ? () => onPressed(option)
+                            : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
+                      ),
+                    ),
+                    child: Text(option, textAlign: TextAlign.center),
+                  ),
                 ),
-                child: const Icon(Icons.eco, color: Colors.green, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  llmQuery,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(height: 1.4),
-                ),
-              ),
             ],
           ),
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.only(left: 40.0), // Align with text
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final option in options)
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed:
-                          onPressed != null ? () => onPressed!(option) : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
-                        ),
-                      ),
-                      child: Text(option, textAlign: TextAlign.center),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 }
