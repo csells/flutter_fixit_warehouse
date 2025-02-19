@@ -39,17 +39,14 @@ class _ChatPageState extends State<ChatPage> {
           itemCount: llmTurns.length,
           itemBuilder: (context, index) {
             final turn = llmTurns[index];
-            final selectedOption = _selectedOptions[turn];
-            final productDescription = turn.productDescription;
+            final moreQuestions = index < 3;
 
-            return productDescription.isNotEmpty
-                ? Text(productDescription)
-                : ModelTurnWidget(
-                  llmQuery: turn.llmQuery,
-                  options: turn.optionsForUser,
-                  onPressed: (option) => _optionSelected(turn, option),
-                  selectedOption: selectedOption,
-                );
+            return ModelTurnWidget(
+              text: moreQuestions ? turn.llmQuery : turn.productDescription,
+              options: moreQuestions ? turn.optionsForUser : <String>[],
+              onPressed: (option) => _optionSelected(turn, option),
+              selectedOption: moreQuestions ? _selectedOptions[turn] : null,
+            );
           },
         );
       },
@@ -65,13 +62,13 @@ class _ChatPageState extends State<ChatPage> {
 class ModelTurnWidget extends StatelessWidget {
   const ModelTurnWidget({
     super.key,
-    required this.llmQuery,
+    required this.text,
     required this.options,
     required this.onPressed,
     this.selectedOption,
   });
 
-  final String llmQuery;
+  final String text;
   final List<String> options;
   final void Function(String) onPressed;
   final String? selectedOption;
@@ -96,7 +93,7 @@ class ModelTurnWidget extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                llmQuery,
+                text,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyLarge?.copyWith(height: 1.4),
@@ -104,38 +101,40 @@ class ModelTurnWidget extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.only(left: 40.0), // Align with text
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final option in options)
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed:
-                        selectedOption == null || selectedOption == option
-                            ? () => onPressed(option)
-                            : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
+        if (options.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.only(left: 40.0), // Align with text
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final option in options)
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed:
+                          selectedOption == null || selectedOption == option
+                              ? () => onPressed(option)
+                              : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 16,
+                        ),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 16,
-                      ),
+                      child: Text(option, textAlign: TextAlign.center),
                     ),
-                    child: Text(option, textAlign: TextAlign.center),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ],
     ),
   );

@@ -7,6 +7,10 @@ const ai = genkit({
   model: gemini20Flash,
 });
 
+// TODO: two flows:
+// one for the follow-up questions,
+// one for the product description.
+
 const InputSchema = ai.defineSchema(
   "InputSchema",
   z.object({
@@ -51,16 +55,9 @@ export const greenThumb = ai.defineFlow(
     outputSchema: OutputWithHistory,
   },
   async ({ input, history }) => {
-
-
-    const system =
-      history.length > 0
-        ? {}
-        : {
-          // System is only supported in the first prompt in the history.
-          system: `
+    const system = `
 You're an expert gardener. The user will ask a question about how to manage the
-plants in their garden. Be helpful and ask up to three clarifying questions,
+plants in their garden. Be helpful and ask three clarifying questions,
 although only ask one question at a time.
 
 If the user provides an image, use it to help with the user's original query.
@@ -73,12 +70,13 @@ should ask the user about any other topic or to start a new conversation.
 
 After the user has answered your follow-up questions, please provide a
 description of a product that will help the user with their original query.
-This product description should NOT include another question for the user.
-`,
-        };
+This product description should NOT include another question for the user. The
+product description should NOT include the name of any specific product.
+`;
 
     const { output, messages } = await ai.generate({
-      ...system,
+      // System is only supported in the first prompt in the history.
+      ...(history.length == 0 ? { system } : {}),
       prompt: [
         ...(input.image ? [{ media: { url: input.image } }] : []),
         { text: input.userQuery },
