@@ -88,7 +88,7 @@ class _GardeningPageState extends State<GardeningPage> {
                 children: [
                   if (_images.isEmpty) const Text('Nothing yet! '),
                   InkWell(
-                    onTap: _takePicture,
+                    onTap: _getPicture,
                     child: const Text(
                       'Take a picture',
                       style: TextStyle(
@@ -138,11 +138,9 @@ class _GardeningPageState extends State<GardeningPage> {
     ),
   );
 
-  Future<void> _takePicture() async {
-    final isDesktop =
-        !kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
+  Future<void> _getPicture() async {
     final image =
-        isDesktop
+        _isDesktop
             ? await ImagePicker().pickImage(source: ImageSource.gallery)
             // ignore: use_build_context_synchronously
             : await showStillCameraDialog(context);
@@ -162,4 +160,11 @@ class _GardeningPageState extends State<GardeningPage> {
       ),
     );
   }
+
+  bool get _isDesktop => switch (defaultTargetPlatform) {
+    TargetPlatform.macOS ||
+    TargetPlatform.windows ||
+    TargetPlatform.linux => true,
+    _ => false,
+  };
 }

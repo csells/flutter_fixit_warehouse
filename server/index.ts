@@ -10,6 +10,11 @@ const ai = genkit({
 // TODO: two flows:
 // one for the follow-up questions,
 // one for the product description.
+// hopefully that will fix the issue with the product description being
+// included in the follow-up questions. and the issue with the questions
+// not always being provided with options, e.g.
+// “That’s a beautiful rose! To help me recommend the best companion plants,
+// what type of rose is it (e.g., hybrid tea, floribunda, climbing)?”
 
 const InputSchema = ai.defineSchema(
   "InputSchema",
