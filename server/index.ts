@@ -66,7 +66,8 @@ export const greenThumb = ai.defineFlow(
           // System is only supported in the first prompt in the history.
           system: `
 You're an expert gardener. The user will talk to you to you to figure out what
-is wrong with their plants. Be helpful and ask clarifying questions.
+is wrong with their plants. Be helpful and ask clarifying questions, although
+only ask one question at a time.
 
 Assume that your output is going to be displayed on an interative UI. 
 The user will interact with you throuh a combination of text and multiple choice
