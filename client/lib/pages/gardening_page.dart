@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picture_taker/flutter_picture_taker.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../gardening_action.dart';
 import 'chat_page.dart';
@@ -146,9 +146,15 @@ class _GardeningPageState extends State<GardeningPage> {
   );
 
   Future<void> _takePicture() async {
-    final image = await showStillCameraDialog(context);
-    if (image == null) return;
+    final isDesktop =
+        !kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
+    final image =
+        isDesktop
+            ? await ImagePicker().pickImage(source: ImageSource.gallery)
+            // ignore: use_build_context_synchronously
+            : await showStillCameraDialog(context);
 
+    if (image == null) return;
     setState(() => _images.add(image));
     _navigateToChat(image);
   }

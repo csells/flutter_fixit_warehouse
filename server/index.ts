@@ -76,16 +76,12 @@ If the user provides an image, use it to help you answer the user's question.
 `,
         };
 
-    const prompt = {
-      image: input.image,
-      text: input.userQuery,
-    };
-
-    console.log('Processing request: ', prompt);
-
     const { output, messages } = await ai.generate({
       ...system,
-      prompt,
+      prompt: [
+        ...(input.image ? [{ media: { url: input.image } }] : []),
+        { text: input.userQuery },
+      ],
       messages: history,
       output: { schema: OutputSchema },
     });
