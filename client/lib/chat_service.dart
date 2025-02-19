@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
@@ -75,7 +74,6 @@ Future<Map<String, dynamic>> greenThumbRequest({
       // Encode as JPG with 85% quality and create data URL
       final compressed = img.encodeJpg(resized, quality: 85);
       base64Image = 'data:image/jpeg;base64,${base64Encode(compressed)}';
-      File('foo.txt').writeAsString(base64Image);
     }
   }
 
