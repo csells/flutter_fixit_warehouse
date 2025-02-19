@@ -6,13 +6,11 @@ const ai = genkit({
   model: gemini15Flash,
 });
 
-const StoreOption = z.object(
+const ProductDescription = z.object(
   {
-    name: z.string(),
-    thumbnailUrl: z.string(),
-    purchaseUrl: z.string(),
+    description: z.string(),
   },
-  { description: "Information about a specific product." },
+  { description: "Description of a product that will help the user with their plant." },
 );
 
 const InputSchema = ai.defineSchema(
@@ -41,7 +39,7 @@ const OutputSchema = ai.defineSchema(
         }),
       )
       .optional(),
-    storeOptions: z.array(StoreOption).optional(),
+    storeOptions: z.array(ProductDescription).optional(),
   }),
 );
 
@@ -69,11 +67,17 @@ You're an expert gardener. The user will talk to you to you to figure out what
 is wrong with their plants. Be helpful and ask clarifying questions, although
 only ask one question at a time.
 
-Assume that your output is going to be displayed on an interative UI. 
-The user will interact with you throuh a combination of text and multiple choice
-questions.
-
 If the user provides an image, use it to help you answer the user's question.
+
+Assume that your output is going to be displayed on an interative UI. 
+The user will interact with you through a set of multiple choice questions.
+
+Each follow-up question should be related to the original query from the user.
+No question should ask the user about any other topic or to start a new
+conversation.
+
+After the user has answered all the questions, provide a description of a
+product that will help the user with their original query.
 `,
         };
 
