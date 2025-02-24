@@ -58,7 +58,7 @@ Future<Map<String, dynamic>> sendQuestionRequest({
   required History history,
   XFile? image,
 }) async {
-  final host = PlatformUtil.isAndroid ? '10.0.2.2' : '127.0.0.1';
+  final host = PlatformUtil.isAndroidEmulator ? '10.0.2.2' : '127.0.0.1';
   final url = Uri.parse('http://$host:3400/greenThumbQuestion');
   final headers = {'Content-Type': 'application/json'};
 

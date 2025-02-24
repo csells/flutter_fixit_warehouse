@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 class PlatformUtil {
   static bool? _isIosSimulator;
+  static bool? _isAndroidEmulator;
 
   static final isDesktop = switch (defaultTargetPlatform) {
     TargetPlatform.macOS ||
@@ -11,15 +12,21 @@ class PlatformUtil {
     _ => false,
   };
 
-  static bool isAndroid = defaultTargetPlatform == TargetPlatform.android;
-
   static Future<void> init() async {
-    if (defaultTargetPlatform != TargetPlatform.iOS) {
-      _isIosSimulator = false;
+    final deviceInfo = DeviceInfoPlugin();
+
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      final androidInfo = await deviceInfo.androidInfo;
+      _isAndroidEmulator = !androidInfo.isPhysicalDevice;
     } else {
-      final deviceInfo = DeviceInfoPlugin();
+      _isAndroidEmulator = false;
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
       final iosInfo = await deviceInfo.iosInfo;
       _isIosSimulator = !iosInfo.isPhysicalDevice;
+    } else {
+      _isIosSimulator = false;
     }
   }
 
@@ -30,4 +37,14 @@ class PlatformUtil {
 
     return _isIosSimulator!;
   }
+
+  static bool get isAndroidEmulator {
+    if (_isAndroidEmulator == null) {
+      throw Exception('PlatformUtil.init must be called first');
+    }
+
+    return _isAndroidEmulator!;
+  }
+
+  static bool get isVirtualDevice => isIosSimulator || isAndroidEmulator;
 }

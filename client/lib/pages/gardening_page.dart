@@ -141,16 +141,11 @@ class _GardeningPageState extends State<GardeningPage> {
   );
 
   Future<void> _getPicture() async {
-    // If the user is running on desktop or ios simulator, use the gallery;
-    // otherwise, use the camera. This doesn't assume that the user has a camera
-    // on their desktop and skips even checking for a camera if the user is on
-    // an ios simulator, since it doesn't have a camera at the time of writing.
-    // Another way to solve this problem is to check for a camera and make the
-    // decision based on that, but that is a slow operation which we should
-    // really do every time, since the the number of cameras on the device can
-    // change. Doing this differently is left as an exercise to the reader. : )
+    // If the user is running on desktop or a virtual device, use the gallery;
+    // otherwise, use the camera. This assumes that mobile physical devices have
+    // cameras and that desktop and virtual devices do not.
     final image =
-        PlatformUtil.isDesktop || PlatformUtil.isIosSimulator
+        PlatformUtil.isDesktop || PlatformUtil.isVirtualDevice
             ? await ImagePicker().pickImage(source: ImageSource.gallery)
             // ignore: use_build_context_synchronously
             : await showStillCameraDialog(context);
