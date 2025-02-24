@@ -15,15 +15,16 @@ class UserTurn extends Turn {
   UserTurn({required this.userQuery});
 }
 
-class ModelTurn extends Turn {
+class LlmQuestion extends Turn {
   final String llmQuery;
   final List<String> optionsForUser;
-  final String productDescription;
   final History history;
-  ModelTurn.fromMap(Map<String, dynamic> object)
+  final String? titleForChat;
+
+  LlmQuestion.fromMap(Map<String, dynamic> object)
     : llmQuery = object['output']['llmQuery'],
+      titleForChat = object['output']['titleForChat'],
       optionsForUser = object['output']['optionsForUser'].cast<String>() ?? [],
-      productDescription = object['output']['productDescription'],
       history = object['history'];
 }
 
@@ -32,32 +33,31 @@ class Chat with ChangeNotifier {
 
   History get _previousHistory =>
       turns
-          .whereType<ModelTurn>()
-          .map((modelTurn) => modelTurn.history)
+          .whereType<LlmQuestion>()
+          .map((llmQuestion) => llmQuestion.history)
           .lastOrNull ??
       [];
 
   Future<void> sendMessage(String userQuery, [XFile? image]) async {
     turns.add(UserTurn(userQuery: userQuery));
 
-    final jsonResponse = await greenThumbRequest(
+    final jsonResponse = await sendQuestionRequest(
       userQuery: userQuery,
       image: image,
       history: _previousHistory,
     );
 
-    turns.add(ModelTurn.fromMap(jsonResponse['result']));
-
+    turns.add(LlmQuestion.fromMap(jsonResponse['result']));
     notifyListeners();
   }
 }
 
-Future<Map<String, dynamic>> greenThumbRequest({
+Future<Map<String, dynamic>> sendQuestionRequest({
   required String userQuery,
   required History history,
   XFile? image,
 }) async {
-  final url = Uri.parse('http://127.0.0.1:3400/greenThumb');
+  final url = Uri.parse('http://127.0.0.1:3400/greenThumbQuestion');
   final headers = {'Content-Type': 'application/json'};
 
   String? base64Image;
@@ -66,7 +66,7 @@ Future<Map<String, dynamic>> greenThumbRequest({
     final originalImage = img.decodeImage(bytes);
     if (originalImage != null) {
       // TODO: still needed with GenKit 1.x?
-      // TODO: this blocks the next page from loading on the web
+      // TODO: this is slow and noticeable on the web
       // Resize image to max dimension of 400px while maintaining aspect ratio
       final resized = img.copyResize(
         originalImage,

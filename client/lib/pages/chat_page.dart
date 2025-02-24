@@ -17,12 +17,17 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final _title = ValueNotifier('Untitled');
   final _chat = Chat();
-  final _selectedOptions = <ModelTurn, String>{};
+  final _selectedOptions = <LlmQuestion, String>{};
 
   @override
   void initState() {
     super.initState();
-    _chat.sendMessage(widget.action.prompt, widget.image);
+
+    () async {
+      await _chat.sendMessage(widget.action.prompt, widget.image);
+      final title = _chat.turns.whereType<LlmQuestion>().last.titleForChat;
+      if (title != null) _title.value = title;
+    }();
   }
 
   @override
@@ -34,18 +39,17 @@ class _ChatPageState extends State<ChatPage> {
     child: ListenableBuilder(
       listenable: _chat,
       builder: (context, child) {
-        final llmTurns = _chat.turns.whereType<ModelTurn>().toList();
+        final llmTurns = _chat.turns.whereType<LlmQuestion>().toList();
         return ListView.builder(
           itemCount: llmTurns.length,
           itemBuilder: (context, index) {
             final turn = llmTurns[index];
-            final moreQuestions = index < 3;
 
-            return ModelTurnWidget(
-              text: moreQuestions ? turn.llmQuery : turn.productDescription,
-              options: moreQuestions ? turn.optionsForUser : <String>[],
+            return LlmQuestionView(
+              text: turn.llmQuery,
+              options: turn.optionsForUser,
               onPressed: (option) => _optionSelected(turn, option),
-              selectedOption: moreQuestions ? _selectedOptions[turn] : null,
+              selectedOption: _selectedOptions[turn],
             );
           },
         );
@@ -53,14 +57,14 @@ class _ChatPageState extends State<ChatPage> {
     ),
   );
 
-  void _optionSelected(ModelTurn turn, String option) {
+  void _optionSelected(LlmQuestion turn, String option) {
     setState(() => _selectedOptions[turn] = option);
     _chat.sendMessage(option);
   }
 }
 
-class ModelTurnWidget extends StatelessWidget {
-  const ModelTurnWidget({
+class LlmQuestionView extends StatelessWidget {
+  const LlmQuestionView({
     super.key,
     required this.text,
     required this.options,
@@ -101,17 +105,16 @@ class ModelTurnWidget extends StatelessWidget {
             ),
           ],
         ),
-        if (options.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.only(left: 40.0), // Align with text
-            child: Wrap(
+        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.only(left: 40.0), // Align with text
+          child: Center(
+            child: Column(
               spacing: 8,
-              runSpacing: 8,
               children: [
                 for (final option in options)
                   SizedBox(
-                    width: double.infinity,
+                    width: 300,
                     child: ElevatedButton(
                       onPressed:
                           selectedOption == null || selectedOption == option
@@ -134,7 +137,7 @@ class ModelTurnWidget extends StatelessWidget {
               ],
             ),
           ),
-        ],
+        ),
       ],
     ),
   );
