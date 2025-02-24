@@ -22,14 +22,15 @@ class _GardeningPageState extends State<GardeningPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
+      backgroundColor: Colors.green,
       title: const Row(
         children: [
-          Icon(Icons.eco, color: Colors.green),
+          Icon(Icons.eco, color: Colors.white),
           SizedBox(width: 8),
-          Text('GreenThumb', style: TextStyle(color: Colors.black)),
+          Text('GreenThumb', style: TextStyle(color: Colors.white)),
           Text(
             ' by Fix-It Warehouse',
-            style: TextStyle(fontSize: 18, color: Colors.green),
+            style: TextStyle(fontSize: 18, color: Colors.white),
           ),
         ],
       ),

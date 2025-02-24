@@ -8,9 +8,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
+      backgroundColor: Colors.green,
       title: Row(
         children: [
-          const Icon(Icons.build_circle, size: 30, color: Colors.green),
+          const Icon(Icons.build_circle, size: 30, color: Colors.white),
           const SizedBox(width: 8),
           Expanded(
             child: Container(
@@ -30,23 +31,24 @@ class HomePage extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.shopping_cart, color: Colors.green),
+            icon: const Icon(Icons.shopping_cart, color: Colors.white),
             onPressed: () {},
           ),
         ],
       ),
-      bottom: const PreferredSize(
-        preferredSize: Size.fromHeight(40),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(40),
+        child: Container(
+          color: Colors.green,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: const Row(
             children: [
-              Icon(Icons.location_on),
-              Text('Valley Stream'),
-              Text(' 10PM'),
+              Icon(Icons.location_on, color: Colors.white),
+              Text('Valley Stream', style: TextStyle(color: Colors.white)),
+              Text(' 10PM', style: TextStyle(color: Colors.white)),
               Spacer(),
-              Icon(Icons.local_shipping),
-              Text('11581'),
+              Icon(Icons.local_shipping, color: Colors.white),
+              Text('11581', style: TextStyle(color: Colors.white)),
             ],
           ),
         ),

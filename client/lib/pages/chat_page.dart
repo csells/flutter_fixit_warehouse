@@ -34,8 +34,13 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) => ValueListenableBuilder<String>(
     valueListenable: _title,
     builder:
-        (context, title, child) =>
-            Scaffold(appBar: AppBar(title: Text(title)), body: child),
+        (context, title, child) => Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.green,
+            title: Text(title, style: const TextStyle(color: Colors.white)),
+          ),
+          body: child,
+        ),
     child: ListenableBuilder(
       listenable: _chat,
       builder: (context, child) {
