@@ -34,7 +34,7 @@ const QuestionInputWithHistory = z.object({
 const QuestionOutputSchema = ai.defineSchema(
   "QuestionOutputSchema",
   z.object({
-    llmQuery: z.string({
+    llmResponse: z.string({
       description: "The query from the model to the user.",
     }),
     optionsForUser: z
@@ -99,6 +99,11 @@ includes the name of the plant in question.
       messages: history,
       output: { schema: QuestionOutputSchema },
     });
+
+    const moreQuestions = (output?.optionsForUser?.length ?? 0) > 0;
+    console.log("moreQuestions", moreQuestions);
+    // TODO: if there are no more questions, feed the llmResponse into RAG to
+    // find a matching product.
 
     return { output: output!, history: messages };
   },

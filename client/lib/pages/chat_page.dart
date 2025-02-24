@@ -15,7 +15,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final _title = ValueNotifier('Untitled');
+  final _title = ValueNotifier('Loading...');
   final _chat = Chat();
   final _selectedOptions = <LlmQuestion, String>{};
 
@@ -26,7 +26,7 @@ class _ChatPageState extends State<ChatPage> {
     () async {
       await _chat.sendMessage(widget.action.prompt, widget.image);
       final title = _chat.turns.whereType<LlmQuestion>().last.titleForChat;
-      if (title != null) _title.value = title;
+      _title.value = title ?? widget.action.chatTitle;
     }();
   }
 
@@ -46,7 +46,7 @@ class _ChatPageState extends State<ChatPage> {
             final turn = llmTurns[index];
 
             return LlmQuestionView(
-              text: turn.llmQuery,
+              text: turn.llmResponse,
               options: turn.optionsForUser,
               onPressed: (option) => _optionSelected(turn, option),
               selectedOption: _selectedOptions[turn],

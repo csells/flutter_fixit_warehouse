@@ -68,7 +68,7 @@ class _GardeningPageState extends State<GardeningPage> {
                       children: [
                         Icon(action.icon, size: 48),
                         SizedBox(height: 8),
-                        Text(action.display, textAlign: TextAlign.center),
+                        Text(action.buttonName, textAlign: TextAlign.center),
                       ],
                     ),
                   ),

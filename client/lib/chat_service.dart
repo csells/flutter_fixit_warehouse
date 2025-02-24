@@ -16,13 +16,13 @@ class UserTurn extends Turn {
 }
 
 class LlmQuestion extends Turn {
-  final String llmQuery;
+  final String llmResponse;
   final List<String> optionsForUser;
   final History history;
   final String? titleForChat;
 
   LlmQuestion.fromMap(Map<String, dynamic> object)
-    : llmQuery = object['output']['llmQuery'],
+    : llmResponse = object['output']['llmResponse'],
       titleForChat = object['output']['titleForChat'],
       optionsForUser = object['output']['optionsForUser'].cast<String>() ?? [],
       history = object['history'];
