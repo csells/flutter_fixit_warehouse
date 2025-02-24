@@ -3,12 +3,15 @@ import 'package:flutter/foundation.dart';
 
 class PlatformUtil {
   static bool? _isIosSimulator;
+
   static final isDesktop = switch (defaultTargetPlatform) {
     TargetPlatform.macOS ||
     TargetPlatform.windows ||
     TargetPlatform.linux => true,
     _ => false,
   };
+
+  static bool isAndroid = defaultTargetPlatform == TargetPlatform.android;
 
   static Future<void> init() async {
     if (defaultTargetPlatform != TargetPlatform.iOS) {

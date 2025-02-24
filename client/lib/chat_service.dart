@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_fix_warehouse/platform_util.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 
@@ -57,7 +58,8 @@ Future<Map<String, dynamic>> sendQuestionRequest({
   required History history,
   XFile? image,
 }) async {
-  final url = Uri.parse('http://127.0.0.1:3400/greenThumbQuestion');
+  final host = PlatformUtil.isAndroid ? '10.0.2.2' : '127.0.0.1';
+  final url = Uri.parse('http://$host:3400/greenThumbQuestion');
   final headers = {'Content-Type': 'application/json'};
 
   String? base64Image;
