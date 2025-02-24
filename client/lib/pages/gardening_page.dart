@@ -107,11 +107,11 @@ class _GardeningPageState extends State<GardeningPage> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(32),
+                padding: const EdgeInsets.all(16),
                 child: GridView.extent(
-                  maxCrossAxisExtent: 300,
-                  mainAxisSpacing: 32,
-                  crossAxisSpacing: 32,
+                  maxCrossAxisExtent: 160,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
                   children: [
                     for (final image in _images)
                       InkWell(

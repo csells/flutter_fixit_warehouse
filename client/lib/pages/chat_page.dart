@@ -19,6 +19,7 @@ class _ChatPageState extends State<ChatPage> {
   final _title = ValueNotifier('Loading...');
   final _chat = Chat();
   final _selectedOptions = <LlmQuestion, String>{};
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -49,7 +50,24 @@ class _ChatPageState extends State<ChatPage> {
       listenable: _chat,
       builder: (context, child) {
         final llmTurns = _chat.turns.whereType<LlmQuestion>().toList();
+
+        // Wait for the frame to be rendered before scrolling because:
+        // 1. The ListView's layout and content need to be built first
+        // 2. The maxScrollExtent isn't known during the build phase
+        // 3. Attempting to scroll during build would cause an error
+        // This ensures we scroll after the new content has been laid out.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients) {
+            _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          }
+        });
+
         return ListView.builder(
+          controller: _scrollController,
           itemCount: llmTurns.length,
           itemBuilder: (context, index) {
             final turn = llmTurns[index];
@@ -69,6 +87,12 @@ class _ChatPageState extends State<ChatPage> {
   void _optionSelected(LlmQuestion turn, String option) {
     setState(() => _selectedOptions[turn] = option);
     _chat.sendMessage(option);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
 
