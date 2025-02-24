@@ -103,7 +103,6 @@ includes the name of the plant in question.
     });
 
     const moreQuestions = (output?.optionsForUser?.length ?? 0) > 0;
-    console.log("moreQuestions", moreQuestions);
     // TODO: if there are no more questions, feed the llmResponse into RAG to
     // find a matching product.
 
