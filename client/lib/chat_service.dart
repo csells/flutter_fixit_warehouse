@@ -65,8 +65,6 @@ Future<Map<String, dynamic>> sendQuestionRequest({
     final bytes = await image.readAsBytes();
     final originalImage = img.decodeImage(bytes);
     if (originalImage != null) {
-      // TODO: still needed with GenKit 1.x?
-      // TODO: this is slow and noticeable on the web
       // Resize image to max dimension of 400px while maintaining aspect ratio
       final resized = img.copyResize(
         originalImage,

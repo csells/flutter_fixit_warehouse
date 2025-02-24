@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fix_warehouse/platform_util.dart';
 import 'package:flutter_picture_taker/flutter_picture_taker.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -84,8 +85,8 @@ class _GardeningPageState extends State<GardeningPage> {
             ),
             const SizedBox(height: 16),
             Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Wrap(
+                alignment: WrapAlignment.center,
                 children: [
                   if (_images.isEmpty) const Text('Nothing yet! '),
                   InkWell(
@@ -140,8 +141,10 @@ class _GardeningPageState extends State<GardeningPage> {
   );
 
   Future<void> _getPicture() async {
+    // if the user is running on desktop or ios simulator, use the gallery;
+    // otherwise, use the camera.
     final image =
-        _isDesktop
+        PlatformUtil.isDesktop || PlatformUtil.isIosSimulator
             ? await ImagePicker().pickImage(source: ImageSource.gallery)
             // ignore: use_build_context_synchronously
             : await showStillCameraDialog(context);
@@ -161,11 +164,4 @@ class _GardeningPageState extends State<GardeningPage> {
       ),
     );
   }
-
-  bool get _isDesktop => switch (defaultTargetPlatform) {
-    TargetPlatform.macOS ||
-    TargetPlatform.windows ||
-    TargetPlatform.linux => true,
-    _ => false,
-  };
 }
