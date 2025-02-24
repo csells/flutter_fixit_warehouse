@@ -1,0 +1,802 @@
+[
+    {
+      "productName": "Organic Vegetable Garden Starter Kit",
+      "manufacturer": "Pure Growth",
+      "description": "Everything you need to start your own organic vegetable garden. Includes soil, seeds, and fertilizer.",
+      "Cost": 45,
+      "image": "pure_growth.png",
+      "id": 1
+    },
+    {
+      "productName": "Garden Gloves (Large)",
+      "manufacturer": "Open Meadows",
+      "description": "Durable and comfortable gardening gloves for all your outdoor tasks.",
+      "Cost": 8,
+      "image": "open_meadows.png",
+      "id": 2
+    },
+    {
+      "productName": "Premium Potting Mix (8 qt)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "High-quality potting mix for indoor and outdoor container gardening.",
+      "Cost": 12,
+      "image": "evergreen_gardens.png",
+      "id": 3
+    },
+    {
+      "productName": "Tomato Seeds (Heirloom)",
+      "manufacturer": "Fresh Harvest",
+      "description": "Heirloom tomato seeds for a delicious and productive harvest.",
+      "Cost": 4,
+      "image": "fresh_harvest.png",
+      "id": 4
+    },
+    {
+      "productName": "Shovel - Long Handle",
+      "manufacturer": "Open Meadows",
+      "description": "Durable shovel for digging and moving soil.",
+      "Cost": 25,
+      "image": "open_meadows.png",
+      "id": 5
+    },
+    {
+      "productName": "Rose Fertilizer",
+      "manufacturer": "Pure Growth",
+      "description": "Specially formulated fertilizer for vibrant and healthy roses.",
+      "Cost": 15,
+      "image": "pure_growth.png",
+      "id": 6
+    },
+    {
+      "productName": "Lavender Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Fragrant lavender plant for your garden or patio.",
+      "Cost": 10,
+      "image": "wild_roots.png",
+      "id": 7
+    },
+    {
+      "productName": "Herb Garden Starter Kit",
+      "manufacturer": "Fresh Harvest",
+      "description": "A collection of popular herb seeds to start your own herb garden.",
+      "Cost": 20,
+      "image": "fresh_harvest.png",
+      "id": 8
+    },
+    {
+      "productName": "Watering Can (2 Gallon)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Durable watering can with a comfortable handle.",
+      "Cost": 18,
+      "image": "evergreen_gardens.png",
+      "id": 9
+    },
+    {
+      "productName": "Pruning Shears",
+      "manufacturer": "Open Meadows",
+      "description": "Sharp and reliable pruning shears for trimming plants.",
+      "Cost": 16,
+      "image": "open_meadows.png",
+      "id": 10
+    },
+    {
+      "productName": "All-Purpose Plant Food",
+      "manufacturer": "Pure Growth",
+      "description": "Provides essential nutrients for healthy plant growth.",
+      "Cost": 12,
+      "image": "pure_growth.png",
+      "id": 11
+    },
+    {
+      "productName": "Sunflower Seeds",
+      "manufacturer": "Wild Roots",
+      "description": "Tall and beautiful sunflower seeds for a cheerful garden.",
+      "Cost": 3,
+      "image": "wild_roots.png",
+      "id": 12
+    },
+    {
+      "productName": "Raised Garden Bed (4x4)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Easy-to-assemble raised garden bed for growing vegetables and flowers.",
+      "Cost": 80,
+      "image": "evergreen_gardens.png",
+      "id": 13
+    },
+    {
+      "productName": "Cucumber Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "High-yielding cucumber seeds for fresh salads and pickles.",
+      "Cost": 5,
+      "image": "fresh_harvest.png",
+      "id": 14
+    },
+    {
+      "productName": "Wheelbarrow",
+      "manufacturer": "Open Meadows",
+      "description": "Sturdy wheelbarrow for hauling soil, mulch, and other materials.",
+      "Cost": 75,
+      "image": "open_meadows.png",
+      "id": 15
+    },
+    {
+      "productName": "Citrus Fertilizer",
+      "manufacturer": "Pure Growth",
+      "description": "Specialized fertilizer for citrus trees and plants.",
+      "Cost": 17,
+      "image": "pure_growth.png",
+      "id": 16
+    },
+    {
+      "productName": "Peony Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Beautiful peony plant with large, fragrant blooms.",
+      "Cost": 18,
+      "image": "wild_roots.png",
+      "id": 17
+    },
+    {
+      "productName": "Lettuce Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Fast-growing lettuce seeds for fresh salads.",
+      "Cost": 3,
+      "image": "fresh_harvest.png",
+      "id": 18
+    },
+    {
+      "productName": "Garden Hose (50 ft)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Durable and flexible garden hose for watering your plants.",
+      "Cost": 22,
+      "image": "evergreen_gardens.png",
+      "id": 19
+    },
+    {
+      "productName": "Rake - Leaf",
+      "manufacturer": "Open Meadows",
+      "description": "Lightweight rake for gathering leaves and debris.",
+      "Cost": 12,
+      "image": "open_meadows.png",
+      "id": 20
+    },
+    {
+      "productName": "Rooting Hormone",
+      "manufacturer": "Pure Growth",
+      "description": "Promotes root growth in cuttings and transplants.",
+      "Cost": 9,
+      "image": "pure_growth.png",
+      "id": 21
+    },
+    {
+      "productName": "Wildflower Seed Mix",
+      "manufacturer": "Wild Roots",
+      "description": "A colorful mix of wildflower seeds for attracting pollinators.",
+      "Cost": 7,
+      "image": "wild_roots.png",
+      "id": 22
+    },
+    {
+      "productName": "Hanging Basket",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Woven hanging basket for displaying flowers and plants.",
+      "Cost": 15,
+      "image": "evergreen_gardens.png",
+      "id": 23
+    },
+    {
+      "productName": "Pepper Seeds (Jalapeno)",
+      "manufacturer": "Fresh Harvest",
+      "description": "Spicy jalapeno pepper seeds for adding heat to your dishes.",
+      "Cost": 4,
+      "image": "fresh_harvest.png",
+      "id": 24
+    },
+    {
+      "productName": "Hand Trowel",
+      "manufacturer": "Open Meadows",
+      "description": "Small hand trowel for planting and weeding.",
+      "Cost": 9,
+      "image": "open_meadows.png",
+      "id": 25
+    },
+    {
+      "productName": "Compost Starter",
+      "manufacturer": "Pure Growth",
+      "description": "Accelerates the decomposition process in compost piles.",
+      "Cost": 11,
+      "image": "pure_growth.png",
+      "id": 26
+    },
+    {
+      "productName": "Poppy Seeds",
+      "manufacturer": "Wild Roots",
+      "description": "Beautiful poppy seeds for a vibrant and colorful garden.",
+      "Cost": 4,
+      "image": "wild_roots.png",
+      "id": 27
+    },
+      {
+      "productName": "Garden Edging (20 ft)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Flexible edging to define garden beds and borders.",
+      "Cost": 28,
+      "image": "evergreen_gardens.png",
+      "id": 28
+    },
+    {
+      "productName": "Radish Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Quick-growing radish seeds for a crunchy and peppery harvest.",
+      "Cost": 2,
+      "image": "fresh_harvest.png",
+      "id": 29
+    },
+    {
+      "productName": "Hoe",
+      "manufacturer": "Open Meadows",
+      "description": "Garden hoe for weeding and cultivating soil.",
+      "Cost": 20,
+      "image": "open_meadows.png",
+      "id": 30
+    },
+    {
+      "productName": "Bone Meal",
+      "manufacturer": "Pure Growth",
+      "description": "Organic fertilizer that promotes strong root development.",
+      "Cost": 14,
+      "image": "pure_growth.png",
+      "id": 31
+    },
+    {
+      "productName": "Marigold Seeds",
+      "manufacturer": "Wild Roots",
+      "description": "Bright and cheerful marigold seeds for repelling pests.",
+      "Cost": 3,
+      "image": "wild_roots.png",
+      "id": 32
+    },
+    {
+      "productName": "Ceramic Plant Pot (12 inch)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Decorative ceramic plant pot for indoor and outdoor use.",
+      "Cost": 25,
+      "image": "evergreen_gardens.png",
+      "id": 33
+    },
+    {
+      "productName": "Spinach Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Nutritious spinach seeds for fresh salads and cooking.",
+      "Cost": 3,
+      "image": "fresh_harvest.png",
+      "id": 34
+    },
+    {
+      "productName": "Garden Fork",
+      "manufacturer": "Open Meadows",
+      "description": "Heavy-duty garden fork for turning soil and compost.",
+      "Cost": 30,
+      "image": "open_meadows.png",
+      "id": 35
+    },
+    {
+      "productName": "Epsom Salt",
+      "manufacturer": "Pure Growth",
+      "description": "Helps improve nutrient uptake and reduce stress in plants.",
+      "Cost": 7,
+      "image": "pure_growth.png",
+      "id": 36
+    },
+    {
+      "productName": "Zinnia Seeds",
+      "manufacturer": "Wild Roots",
+      "description": "Colorful zinnia seeds for attracting butterflies and hummingbirds.",
+      "Cost": 4,
+      "image": "wild_roots.png",
+      "id": 37
+    },
+    {
+      "productName": "Planting Soil (1 cu ft)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "All-purpose planting soil for a variety of plants.",
+      "Cost": 20,
+      "image": "evergreen_gardens.png",
+      "id": 38
+    },
+    {
+      "productName": "Broccoli Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Healthy broccoli seeds for a nutritious harvest.",
+      "Cost": 5,
+      "image": "fresh_harvest.png",
+      "id": 39
+    },
+    {
+      "productName": "Lawn Mower (Push)",
+      "manufacturer": "Open Meadows",
+      "description": "Basic push lawn mower for small to medium-sized lawns.",
+      "Cost": 90,
+      "image": "open_meadows.png",
+      "id": 40
+    },
+    {
+      "productName": "Tree and Shrub Fertilizer",
+      "manufacturer": "Pure Growth",
+      "description": "Promotes healthy growth in trees and shrubs.",
+      "Cost": 16,
+      "image": "pure_growth.png",
+      "id": 41
+    },
+    {
+      "productName": "Bee Balm Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Attractive bee balm plant that attracts pollinators.",
+      "Cost": 12,
+      "image": "wild_roots.png",
+      "id": 42
+    },
+      {
+      "productName": "Rose Bush (Pink)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "A classic pink rose bush, perfect for adding beauty to your garden.",
+      "Cost": 25,
+      "image": "evergreen_gardens.png",
+      "id": 43
+    },
+    {
+      "productName": "Eggplant Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Easy-to-grow eggplant seeds for delicious summer dishes.",
+      "Cost": 4,
+      "image": "fresh_harvest.png",
+      "id": 44
+    },
+     {
+      "productName": "String Trimmer",
+      "manufacturer": "Open Meadows",
+      "description": "Electric string trimmer for edging and trimming grass.",
+      "Cost": 55,
+      "image": "open_meadows.png",
+      "id": 45
+    },
+    {
+      "productName": "Liquid Seaweed Fertilizer",
+      "manufacturer": "Pure Growth",
+      "description": "Organic liquid seaweed fertilizer for healthy plant growth.",
+      "Cost": 13,
+      "image": "pure_growth.png",
+      "id": 46
+    },
+    {
+      "productName": "Coneflower Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Drought-tolerant coneflower plant that attracts butterflies.",
+      "Cost": 11,
+      "image": "wild_roots.png",
+      "id": 47
+    },
+    {
+      "productName": "Gardening Tool Set (3 Piece)",
+      "manufacturer": "Open Meadows",
+      "description": "Includes a trowel, hand fork, and cultivator.",
+      "Cost": 30,
+      "image": "open_meadows.png",
+      "id": 48
+    },
+    {
+      "productName": "Organic Fertilizer Granules",
+      "manufacturer": "Pure Growth",
+      "description": "Slow-release organic fertilizer for all types of plants.",
+      "Cost": 18,
+      "image": "pure_growth.png",
+      "id": 49
+    },
+    {
+      "productName": "Butterfly Bush",
+      "manufacturer": "Wild Roots",
+      "description": "A bush that attracts butterflies.",
+      "Cost": 14,
+      "image": "wild_roots.png",
+      "id": 50
+    },
+   {
+      "productName": "Gardening Kneeler",
+      "manufacturer": "Open Meadows",
+      "description": "Protects your knees while you garden.",
+      "Cost": 22,
+      "image": "open_meadows.png",
+      "id": 51
+    },
+    {
+      "productName": "All-Purpose Fertilizer Spreader",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Easily spread fertilizer throughout your lawn and garden.",
+      "Cost": 35,
+      "image": "evergreen_gardens.png",
+      "id": 52
+    },
+    {
+      "productName": "Rose Bush (Yellow)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "A beautiful yellow rose bush.",
+      "Cost": 27,
+      "image": "evergreen_gardens.png",
+      "id": 53
+    },
+      {
+      "productName": "Hydrangea Plant",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Beautiful flowering shrub.",
+      "Cost": 20,
+      "image": "evergreen_gardens.png",
+      "id": 54
+    },
+    {
+      "productName": "Cilantro Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Fresh cilantro for your garden",
+      "Cost": 3,
+      "image": "fresh_harvest.png",
+      "id": 55
+    },
+    {
+      "productName": "Basil Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Fresh basil for your garden",
+      "Cost": 3,
+      "image": "fresh_harvest.png",
+      "id": 56
+    },
+      {
+      "productName": "Garden Cart",
+      "manufacturer": "Open Meadows",
+      "description": "Heavy duty cart for carrying materials in the yard",
+      "Cost": 80,
+      "image": "open_meadows.png",
+      "id": 57
+    },
+    {
+      "productName": "Organic Seed Starter Tray",
+      "manufacturer": "Pure Growth",
+      "description": "Start your seeds indoors with ease.",
+      "Cost": 15,
+      "image": "pure_growth.png",
+      "id": 58
+    },
+    {
+      "productName": "Mint Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Great for making tea.",
+      "Cost": 7,
+      "image": "wild_roots.png",
+      "id": 59
+    },
+    {
+      "productName": "Planter Box (Wood)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "A rustic wooden planter box for your plants.",
+      "Cost": 40,
+      "image": "evergreen_gardens.png",
+      "id": 60
+    },
+     {
+      "productName": "Garlic Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Easy to grow, use in every dish!",
+      "Cost": 6,
+      "image": "fresh_harvest.png",
+      "id": 61
+    },
+     {
+      "productName": "Leaf Blower",
+      "manufacturer": "Open Meadows",
+      "description": "Electric leaf blower for easy cleanup",
+      "Cost": 70,
+      "image": "open_meadows.png",
+      "id": 62
+    },
+     {
+      "productName": "Liquid Plant Food",
+      "manufacturer": "Pure Growth",
+      "description": "Instant plant nutrition",
+      "Cost": 12,
+      "image": "pure_growth.png",
+      "id": 63
+    },
+     {
+      "productName": "Hosta Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Shade-loving plant.",
+      "Cost": 15,
+      "image": "wild_roots.png",
+      "id": 64
+    },
+     {
+      "productName": "Clay Pots (Set of 3)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Classic clay pots for various plant sizes.",
+      "Cost": 18,
+      "image": "evergreen_gardens.png",
+      "id": 65
+    },
+    {
+      "productName": "Onion Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Onion seeds for your garden",
+      "Cost": 4,
+      "image": "fresh_harvest.png",
+      "id": 66
+    },
+       {
+      "productName": "Mulch (2 cu ft)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Helps maintain moisture and suppress weeds.",
+      "Cost": 10,
+      "image": "evergreen_gardens.png",
+      "id": 67
+    },
+    {
+      "productName": "Collard Greens Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Seeds for home garden collard greens",
+      "Cost": 4,
+      "image": "fresh_harvest.png",
+      "id": 68
+    },
+        {
+      "productName": "Garden Decor - Gnome",
+      "manufacturer": "Open Meadows",
+      "description": "Cute gnome decoration for your yard",
+      "Cost": 15,
+      "image": "open_meadows.png",
+      "id": 69
+    },
+    {
+      "productName": "Slow Release Fertilizer",
+      "manufacturer": "Pure Growth",
+      "description": "Feed your plants for a long time!",
+      "Cost": 20,
+      "image": "pure_growth.png",
+      "id": 70
+    },
+    {
+       "productName": "Thyme Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Popular herb for cooking.",
+      "Cost": 6,
+      "image": "wild_roots.png",
+      "id": 71
+    },
+    {
+       "productName": "Metal Garden Bench",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Sturdy bench to relax in your yard.",
+      "Cost": 95,
+      "image": "evergreen_gardens.png",
+      "id": 72
+    },
+    {
+      "productName": "Green Bean Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Tasty green beans for your garden",
+      "Cost": 3,
+      "image": "fresh_harvest.png",
+      "id": 73
+    },
+    {
+        "productName": "Garden Hose Nozzle",
+      "manufacturer": "Open Meadows",
+      "description": "Attach to hose to control water flow",
+      "Cost": 12,
+      "image": "open_meadows.png",
+      "id": 74
+    },
+    {
+       "productName": "Organic Vegetable Food",
+      "manufacturer": "Pure Growth",
+      "description": "Helps organic veggies grow healthy.",
+      "Cost": 20,
+      "image": "pure_growth.png",
+      "id": 75
+    },
+     {
+      "productName": "Sedum Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Low-maintenance succulent.",
+      "Cost": 8,
+      "image": "wild_roots.png",
+      "id": 76
+    },
+    {
+         "productName": "Terra Cotta Pot",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Classic clay pot for flowers",
+      "Cost": 12,
+      "image": "evergreen_gardens.png",
+      "id": 77
+    },
+      {
+      "productName": "Pea Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Delicious peas for your garden!",
+      "Cost": 3,
+      "image": "fresh_harvest.png",
+      "id": 78
+    },
+    {
+           "productName": "Outdoor Thermometer",
+      "manufacturer": "Open Meadows",
+      "description": "Easily see the temperature outside",
+      "Cost": 15,
+      "image": "open_meadows.png",
+      "id": 79
+    },
+    {
+            "productName": "Rose Food",
+      "manufacturer": "Pure Growth",
+      "description": "Special food for beautiful roses",
+      "Cost": 20,
+      "image": "pure_growth.png",
+      "id": 80
+    },
+      {
+      "productName": "Daylily Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Easy to grow and beautiful.",
+      "Cost": 9,
+      "image": "wild_roots.png",
+      "id": 81
+    },
+     {
+      "productName": "Hanging Planter",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Easy to hang up and beautify any porch or overhang",
+      "Cost": 18,
+      "image": "evergreen_gardens.png",
+      "id": 82
+    },
+    {
+      "productName": "Rutabaga Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Root vegetables for your garden!",
+      "Cost": 4,
+      "image": "fresh_harvest.png",
+      "id": 83
+    },
+    {
+           "productName": "Water Timer",
+      "manufacturer": "Open Meadows",
+      "description": "Automated watering for convenience.",
+      "Cost": 30,
+      "image": "open_meadows.png",
+      "id": 84
+    },
+    {
+           "productName": "Cactus Food",
+      "manufacturer": "Pure Growth",
+      "description": "Specal nutrition for cacti and succulents.",
+      "Cost": 12,
+      "image": "pure_growth.png",
+      "id": 85
+    },
+     {
+      "productName": "Oregano Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Another common cooking herb.",
+      "Cost": 6,
+      "image": "wild_roots.png",
+      "id": 86
+    },
+   {
+      "productName": "Raised Garden Bed Liner",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Keeps raised beds fresh.",
+      "Cost": 15,
+      "image": "evergreen_gardens.png",
+      "id": 87
+    },
+    {
+      "productName": "Winter Squash Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Winter Squash for your garden!",
+      "Cost": 4,
+      "image": "fresh_harvest.png",
+      "id": 88
+    },
+     {
+           "productName": "Garden Fence (Roll)",
+      "manufacturer": "Open Meadows",
+      "description": "Keeps animals out and beauty in!",
+      "Cost": 45,
+      "image": "open_meadows.png",
+      "id": 89
+    },
+      {
+           "productName": "African Violet Food",
+      "manufacturer": "Pure Growth",
+      "description": "Feed your African Violets right!",
+      "Cost": 12,
+      "image": "pure_growth.png",
+      "id": 90
+    },
+     {
+      "productName": "Sage Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Great for stuffing and poultry seasoning.",
+      "Cost": 6,
+      "image": "wild_roots.png",
+      "id": 91
+    },
+     {
+      "productName": "Plant Saucers (Set of 5)",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Protect surfaces under plants.",
+      "Cost": 8,
+      "image": "evergreen_gardens.png",
+      "id": 92
+    },
+     {
+      "productName": "Swiss Chard Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "More nutrients than spinach!",
+      "Cost": 4,
+      "image": "fresh_harvest.png",
+      "id": 93
+    },
+       {
+           "productName": "Solar Garden Lights (Set of 4)",
+      "manufacturer": "Open Meadows",
+      "description": "Light up your garden at night for free!",
+      "Cost": 25,
+      "image": "open_meadows.png",
+      "id": 94
+    },
+    {
+           "productName": "Orchid Food",
+      "manufacturer": "Pure Growth",
+      "description": "Specal food for beautiful orchids",
+      "Cost": 12,
+      "image": "pure_growth.png",
+      "id": 95
+    },
+     {
+      "productName": "Rosemary Plant",
+      "manufacturer": "Wild Roots",
+      "description": "Wonderful smell and flavor.",
+      "Cost": 6,
+      "image": "wild_roots.png",
+      "id": 96
+    },
+      {
+      "productName": "Watering Spout",
+      "manufacturer": "Evergreen Gardens",
+      "description": "Connect to a bottle and water your plants with precision",
+      "Cost": 6,
+      "image": "evergreen_gardens.png",
+      "id": 97
+    },
+     {
+      "productName": "Pumpkin Seeds",
+      "manufacturer": "Fresh Harvest",
+      "description": "Get ready for fall with fresh pumpkins!",
+      "Cost": 5,
+      "image": "fresh_harvest.png",
+      "id": 98
+    },
+    {
+           "productName": "Rain Gauge",
+      "manufacturer": "Open Meadows",
+      "description": "Measure how much rain you get!",
+      "Cost": 10,
+      "image": "open_meadows.png",
+      "id": 99
+    },
+     {
+      "productName": "African Violet Potting Mix",
+      "manufacturer": "Pure Growth",
+      "description": "The perfect blend of nutrients and structure for African Violets.",
+      "Cost": 15,
+      "image": "pure_growth.png",
+      "id": 100
+    }
+  ]

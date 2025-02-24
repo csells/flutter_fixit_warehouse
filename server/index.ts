@@ -7,32 +7,25 @@ const ai = genkit({
   model: gemini20Flash,
 });
 
-// TODO: four flows:
-// f1: for the questions,
-// f2: for the product description + rag.
-// hopefully that will fix the issue with the product description being
-// included in the follow-up questions. and the issue with the questions
-// not always being provided with options, e.g.
-// “That’s a beautiful rose! To help me recommend the best companion plants,
-// what type of rose is it (e.g., hybrid tea, floribunda, climbing)?”
-// f3: building the RAG index from the product catalog.
-// f4: for the product description + rag.
+// Two flows:
+// flow #1: for the Q&A between the model and the user
+// flow #2: building the RAG index from the product catalog
 
-const QuestionInputSchema = ai.defineSchema(
-  "QuestionInputSchema",
+const GtInputSchema = ai.defineSchema(
+  "GtInputSchema",
   z.object({
     userQuery: z.string(),
     image: z.string().nullable(),
   }),
 );
 
-const QuestionInputWithHistory = z.object({
-  input: QuestionInputSchema,
+const GtInputWithHistory = z.object({
+  input: GtInputSchema,
   history: z.array(z.any()),
 });
 
-const QuestionOutputSchema = ai.defineSchema(
-  "QuestionOutputSchema",
+const GtOutputSchema = ai.defineSchema(
+  "GtOutputSchema",
   z.object({
     llmResponse: z.string({
       description: "The query from the model to the user.",
@@ -49,16 +42,16 @@ const QuestionOutputSchema = ai.defineSchema(
   }),
 );
 
-const QuestionOutputWithHistory = z.object({
-  output: QuestionOutputSchema,
+const GtOutputWithHistory = z.object({
+  output: GtOutputSchema,
   history: z.any(),
 });
 
-export const greenThumbQuestion = ai.defineFlow(
+export const greenThumb = ai.defineFlow(
   {
-    name: "greenThumbQuestion",
-    inputSchema: QuestionInputWithHistory,
-    outputSchema: QuestionOutputWithHistory,
+    name: "greenThumb",
+    inputSchema: GtInputWithHistory,
+    outputSchema: GtOutputWithHistory,
   },
   async ({ input, history }) => {
     const system = `
@@ -99,7 +92,7 @@ includes the name of the plant in question.
         { text: query },
       ],
       messages: history,
-      output: { schema: QuestionOutputSchema },
+      output: { schema: GtOutputSchema },
     });
 
     const moreQuestions = (output?.optionsForUser?.length ?? 0) > 0;
@@ -111,5 +104,5 @@ includes the name of the plant in question.
 );
 
 startFlowServer({
-  flows: [greenThumbQuestion],
+  flows: [greenThumb],
 });

@@ -59,7 +59,7 @@ Future<Map<String, dynamic>> sendQuestionRequest({
   XFile? image,
 }) async {
   final host = PlatformUtil.isAndroidEmulator ? '10.0.2.2' : '127.0.0.1';
-  final url = Uri.parse('http://$host:3400/greenThumbQuestion');
+  final url = Uri.parse('http://$host:3400/greenThumb');
   final headers = {'Content-Type': 'application/json'};
 
   String? base64Image;
