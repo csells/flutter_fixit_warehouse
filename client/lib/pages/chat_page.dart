@@ -1,4 +1,5 @@
 import 'package:cross_file/cross_file.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../chat_service.dart';
@@ -23,11 +24,14 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
 
-    () async {
+    // NOTE: delaying so that the page can draw on the web before starting
+    // the chat; the delay is sending the image to the server.
+    final delay = kIsWeb ? const Duration(seconds: 1) : Duration.zero;
+    Future.delayed(delay, () async {
       await _chat.sendMessage(widget.action.prompt, widget.image);
       final title = _chat.turns.whereType<LlmQuestion>().last.titleForChat;
       _title.value = title ?? widget.action.chatTitle;
-    }();
+    });
   }
 
   @override
