@@ -1,6 +1,7 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../chat_service.dart';
 import '../gardening_action.dart';
@@ -129,11 +130,13 @@ class LlmQuestionView extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(
-                text,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(height: 1.4),
+              child: MarkdownBody(
+                data: text,
+                styleSheet: MarkdownStyleSheet(
+                  p: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(height: 1.4),
+                ),
               ),
             ),
           ],

@@ -188,6 +188,9 @@ includes the name of the plant in question.
           index === self.findIndex(p => p?.id === product?.id)
         );
 
+      console.log('PRODUCT DATA:');
+      console.log(JSON.stringify(productData, null, 2));
+
       // Get a summary from the LLM that includes product recommendations
       const { text: summary } = await ai.generate({
         prompt: `
@@ -196,15 +199,25 @@ product recommendations:
 
 ${JSON.stringify(productData, null, 2)}
 
-Please list these product recommendations by name and price as why they are
-recommended for the user's gardening question.
+Please summarized your final recommendation along with ALL of the products (by
+manufacturer, name and price) that are recommended for the user's gardening
+question and why that's the case.
+
+Ensure that the summary is provided in markdown format. Don't introduce the
+summary with any other text.
 `,
         messages, // contains the conversation history
       });
 
+      console.log('SUMMARY:');
+      console.log(summary);
+
       // Set the final response with the summary
       output.llmResponse = summary;
     }
+
+    console.log('OUTPUT:');
+    console.log(output);
 
     return { output: output!, history: messages };
   },
