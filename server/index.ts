@@ -181,19 +181,29 @@ includes the name of the plant in question.
         options: { k: 3 },
       });
 
-      // Add markdown JSON code block with product data
+      // Add markdown JSON code block with non-null and unique product data
       const productData = docs.map(doc => doc.metadata)
         .filter(Boolean)
         .filter((product, index, self) =>
           index === self.findIndex(p => p?.id === product?.id)
         );
 
-      output.llmResponse += `
-\`\`\`json
-${JSON.stringify(productData, null, 2)}
-\`\`\``;
+      // Get a summary from the LLM that includes product recommendations
+      const { text: summary } = await ai.generate({
+        prompt: `
+Based on the user's gardening question and our conversation, here are some
+product recommendations:
 
-      // TODO: add the product data to the LLM's response and ask for a summary
+${JSON.stringify(productData, null, 2)}
+
+Please list these product recommendations by name and price as why they are
+recommended for the user's gardening question.
+`,
+        messages, // contains the conversation history
+      });
+
+      // Set the final response with the summary
+      output.llmResponse = summary;
     }
 
     return { output: output!, history: messages };
