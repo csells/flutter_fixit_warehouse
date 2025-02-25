@@ -1,15 +1,92 @@
+import {
+  devLocalIndexerRef,
+  devLocalRetrieverRef,
+  devLocalVectorstore,
+} from '@genkit-ai/dev-local-vectorstore';
 import { startFlowServer } from '@genkit-ai/express';
 import { gemini20Flash, googleAI } from "@genkit-ai/googleai";
+import { textEmbedding004, vertexAI } from '@genkit-ai/vertexai';
+import { readFileSync } from 'fs';
 import { genkit, z } from "genkit";
+import { Document } from 'genkit/retriever';
+import { join } from 'path';
 
 const ai = genkit({
-  plugins: [googleAI()],
+  plugins: [
+    googleAI(),
+    vertexAI(),
+    devLocalVectorstore([
+      {
+        indexName: 'products',
+        embedder: textEmbedding004,
+      },
+    ]),
+  ],
   model: gemini20Flash,
 });
 
-// Two flows:
-// flow #1: for the Q&A between the model and the user
-// flow #2: building the RAG index from the product catalog
+// *** Flow #1: Indexing the product catalog ***
+
+// Read and parse the products JSON file
+const products = JSON.parse(
+  readFileSync(join(__dirname, 'gardening-products.json'), 'utf-8')
+) as Array<{
+  id: number;
+  productName: string;
+  description: string;
+  manufacturer: string;
+  Cost: number;
+  image: string;
+}>;
+
+const productsIndexer = devLocalIndexerRef('products');
+const productsRetriever = devLocalRetrieverRef('products');
+
+// Create a flow to index the product catalog
+const indexProducts = ai.defineFlow(
+  {
+    name: "indexProducts",
+    inputSchema: z.void(),
+    outputSchema: z.object({
+      success: z.boolean(),
+      message: z.string(),
+    }),
+  },
+  async () => {
+    try {
+      console.log('Indexing products from gardening-products.json');
+
+      // Convert products into documents
+      const documents = products.map((product) =>
+        Document.fromText(product.description, {
+          id: product.id,
+          productName: product.productName,
+          description: product.description,
+          manufacturer: product.manufacturer,
+          Cost: product.Cost,
+        })
+      );
+
+      // Add documents to the index
+      await ai.index({
+        indexer: productsIndexer,
+        documents,
+      });
+
+      return {
+        success: true,
+        message: `Successfully indexed ${documents.length} products`,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to index products: ${error}`,
+      };
+    }
+  }
+);
+
+// *** Flow #2: Q&A between the model and the user ***
 
 const GtInputSchema = ai.defineSchema(
   "GtInputSchema",
@@ -85,7 +162,6 @@ includes the name of the plant in question.
 ` : "");
 
     const { output, messages } = await ai.generate({
-      // System is only supported in the first prompt in the history.
       ...(history.length == 0 ? { system } : {}),
       prompt: [
         ...(input.image ? [{ media: { url: input.image } }] : []),
@@ -96,13 +172,34 @@ includes the name of the plant in question.
     });
 
     const moreQuestions = (output?.optionsForUser?.length ?? 0) > 0;
-    // TODO: if there are no more questions, feed the llmResponse into RAG to
-    // find a matching product.
+
+    // If there are no more questions, search for matching products
+    if (!moreQuestions && output?.llmResponse) {
+      const docs = await ai.retrieve({
+        retriever: productsRetriever,
+        query: output.llmResponse,
+        options: { k: 3 },
+      });
+
+      // Add markdown JSON code block with product data
+      const productData = docs.map(doc => doc.metadata)
+        .filter(Boolean)
+        .filter((product, index, self) =>
+          index === self.findIndex(p => p?.id === product?.id)
+        );
+
+      output.llmResponse += `
+\`\`\`json
+${JSON.stringify(productData, null, 2)}
+\`\`\``;
+
+      // TODO: add the product data to the LLM's response and ask for a summary
+    }
 
     return { output: output!, history: messages };
   },
 );
 
 startFlowServer({
-  flows: [greenThumb],
+  flows: [greenThumb, indexProducts],
 });

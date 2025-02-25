@@ -4,20 +4,24 @@
   "main": "index.js",
   "scripts": {
     "dev": "genkit start -- ts-node index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "index-products": "genkit flow:run indexProducts"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/pdf-parse": "^1.1.4",
     "genkit-cli": "^1.0.4",
     "prettier": "3.5.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "@genkit-ai/dev-local-vectorstore": "^1.0.5",
     "@genkit-ai/express": "^1.0.4",
     "@genkit-ai/googleai": "^1.0.4",
+    "@genkit-ai/vertexai": "^1.0.5",
     "genkit": "^1.0.4"
   }
 }
