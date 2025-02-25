@@ -2,3 +2,4 @@ client/.flutter-plugins-dependencies
 .DS_Store
 .vscode/launch.json
 server/.genkit
+server/__db_products.json
