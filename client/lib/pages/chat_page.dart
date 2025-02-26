@@ -63,58 +63,146 @@ class _ChatPageState extends State<ChatPage> {
           _currentStep = llmTurns.length - 1;
         }
 
-        // Use a key based on the number of steps to force a complete rebuild
-        // when the number of steps changes
-        return Stepper(
-          key: ValueKey<int>(llmTurns.length),
-          currentStep: _currentStep,
-          controlsBuilder: (context, details) {
-            // Don't show controls - navigation is handled by answer selection
-            return const SizedBox.shrink();
-          },
-          onStepTapped: (step) {
-            // Only allow going back to previous steps, not forward
-            if (step < _currentStep) {
-              setState(() {
-                _currentStep = step;
-              });
-            }
-          },
-          steps: List.generate(llmTurns.length, (index) {
-            final turn = llmTurns[index];
-            final isCurrentStep = index == _currentStep;
-            final hasAnswer = _selectedOptions.containsKey(turn);
+        // Create a PageController that starts at the current step
+        final pageController = PageController(initialPage: _currentStep);
 
-            return Step(
-              title: Text('Question #${index + 1}'),
-              content: LlmQuestionView(
-                text: turn.llmResponse,
-                options: turn.optionsForUser,
-                onPressed:
-                    isCurrentStep
-                        ? (option) => _optionSelected(turn, option)
-                        : null,
-                selectedOption: _selectedOptions[turn],
-                isActive: isCurrentStep,
+        return Column(
+          children: [
+            // Step indicators at the top
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(llmTurns.length, (index) {
+                  final isCurrentStep = index == _currentStep;
+                  final hasAnswer = _selectedOptions.containsKey(
+                    llmTurns[index],
+                  );
+
+                  return GestureDetector(
+                    onTap: () {
+                      // Only allow going back to previous steps, not forward
+                      if (index <= _currentStep) {
+                        setState(() {
+                          _currentStep = index;
+                        });
+                        pageController.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: isCurrentStep ? Colors.green : Colors.green[100],
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.green, width: 2),
+                      ),
+                      child: Center(
+                        child:
+                            hasAnswer
+                                ? const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 18,
+                                )
+                                : Text(
+                                  '${index + 1}',
+                                  style: TextStyle(
+                                    color:
+                                        isCurrentStep
+                                            ? Colors.white
+                                            : Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                      ),
+                    ),
+                  );
+                }),
               ),
-              isActive: isCurrentStep,
-              state:
-                  hasAnswer
-                      ? StepState.complete
-                      : (isCurrentStep ? StepState.editing : StepState.indexed),
-            );
-          }),
+            ),
+
+            // Question title
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                'Question #${_currentStep + 1}',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+
+            // PageView for horizontal swiping between questions
+            Expanded(
+              child: PageView.builder(
+                controller: pageController,
+                itemCount: llmTurns.length,
+                physics:
+                    _currentStep == llmTurns.length - 1
+                        ? const NeverScrollableScrollPhysics() // Prevent scrolling past the last question
+                        : const PageScrollPhysics(),
+                onPageChanged: (index) {
+                  // Only allow going back to previous steps, not forward
+                  if (index <= _currentStep) {
+                    setState(() {
+                      _currentStep = index;
+                    });
+                  } else {
+                    // If trying to go forward, snap back to current step
+                    pageController.animateToPage(
+                      _currentStep,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+                itemBuilder: (context, index) {
+                  final turn = llmTurns[index];
+                  final isCurrentStep = index == _currentStep;
+
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: LlmQuestionView(
+                      text: turn.llmResponse,
+                      options: turn.optionsForUser,
+                      onPressed:
+                          isCurrentStep
+                              ? (option) =>
+                                  _optionSelected(turn, option, pageController)
+                              : null,
+                      selectedOption: _selectedOptions[turn],
+                      isActive: isCurrentStep,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         );
       },
     ),
   );
 
-  void _optionSelected(LlmQuestion turn, String option) {
+  void _optionSelected(
+    LlmQuestion turn,
+    String option,
+    PageController pageController,
+  ) {
     setState(() {
       _selectedOptions[turn] = option;
       // Move to the next step after answering
       if (_currentStep < _chat.turns.whereType<LlmQuestion>().length - 1) {
         _currentStep++;
+        // Animate to the next page
+        pageController.animateToPage(
+          _currentStep,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
       }
     });
     _chat.sendMessage(option);
