@@ -20,7 +20,7 @@ class _ChatPageState extends State<ChatPage> {
   final _title = ValueNotifier('Loading...');
   final _chat = Chat();
   final _selectedOptions = <LlmQuestion, String>{};
-  final _scrollController = ScrollController();
+  int _currentStep = 0;
 
   @override
   void initState() {
@@ -52,48 +52,160 @@ class _ChatPageState extends State<ChatPage> {
       builder: (context, child) {
         final llmTurns = _chat.turns.whereType<LlmQuestion>().toList();
 
-        // Wait for the frame to be rendered before scrolling because:
-        // 1. The ListView's layout and content need to be built first
-        // 2. The maxScrollExtent isn't known during the build phase
-        // 3. Attempting to scroll during build would cause an error
-        // This ensures we scroll after the new content has been laid out.
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (_scrollController.hasClients) {
-            _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          }
-        });
+        if (llmTurns.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.green),
+          );
+        }
 
-        return ListView.builder(
-          controller: _scrollController,
-          itemCount: llmTurns.length,
-          itemBuilder: (context, index) {
-            final turn = llmTurns[index];
+        // Update current step if new questions have been added
+        if (_currentStep < llmTurns.length - 1) {
+          _currentStep = llmTurns.length - 1;
+        }
 
-            return LlmQuestionView(
-              text: turn.llmResponse,
-              options: turn.optionsForUser,
-              onPressed: (option) => _optionSelected(turn, option),
-              selectedOption: _selectedOptions[turn],
-            );
-          },
+        // Create a PageController that starts at the current step
+        final pageController = PageController(initialPage: _currentStep);
+
+        return Column(
+          children: [
+            // Step indicators at the top
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(llmTurns.length, (index) {
+                  final isCurrentStep = index == _currentStep;
+                  final hasAnswer = _selectedOptions.containsKey(
+                    llmTurns[index],
+                  );
+
+                  return GestureDetector(
+                    onTap: () {
+                      // Only allow going back to previous steps, not forward
+                      if (index <= _currentStep) {
+                        setState(() {
+                          _currentStep = index;
+                        });
+                        pageController.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: isCurrentStep ? Colors.green : Colors.green[100],
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.green, width: 2),
+                      ),
+                      child: Center(
+                        child:
+                            hasAnswer
+                                ? const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 18,
+                                )
+                                : Text(
+                                  '${index + 1}',
+                                  style: TextStyle(
+                                    color:
+                                        isCurrentStep
+                                            ? Colors.white
+                                            : Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+
+            // Question title
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                'Question #${_currentStep + 1}',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+
+            // PageView for horizontal swiping between questions
+            Expanded(
+              child: PageView.builder(
+                controller: pageController,
+                itemCount: llmTurns.length,
+                physics:
+                    _currentStep == llmTurns.length - 1
+                        ? const NeverScrollableScrollPhysics() // Prevent scrolling past the last question
+                        : const PageScrollPhysics(),
+                onPageChanged: (index) {
+                  // Only allow going back to previous steps, not forward
+                  if (index <= _currentStep) {
+                    setState(() {
+                      _currentStep = index;
+                    });
+                  } else {
+                    // If trying to go forward, snap back to current step
+                    pageController.animateToPage(
+                      _currentStep,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+                itemBuilder: (context, index) {
+                  final turn = llmTurns[index];
+                  final isCurrentStep = index == _currentStep;
+
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: LlmQuestionView(
+                      text: turn.llmResponse,
+                      options: turn.optionsForUser,
+                      onPressed:
+                          isCurrentStep
+                              ? (option) =>
+                                  _optionSelected(turn, option, pageController)
+                              : null,
+                      selectedOption: _selectedOptions[turn],
+                      isActive: isCurrentStep,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         );
       },
     ),
   );
 
-  void _optionSelected(LlmQuestion turn, String option) {
-    setState(() => _selectedOptions[turn] = option);
+  void _optionSelected(
+    LlmQuestion turn,
+    String option,
+    PageController pageController,
+  ) {
+    setState(() {
+      _selectedOptions[turn] = option;
+      // Move to the next step after answering
+      if (_currentStep < _chat.turns.whereType<LlmQuestion>().length - 1) {
+        _currentStep++;
+        // Animate to the next page
+        pageController.animateToPage(
+          _currentStep,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
     _chat.sendMessage(option);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
   }
 }
 
@@ -104,16 +216,18 @@ class LlmQuestionView extends StatelessWidget {
     required this.options,
     required this.onPressed,
     this.selectedOption,
+    this.isActive = true,
   });
 
   final String text;
   final List<String> options;
-  final void Function(String) onPressed;
+  final void Function(String)? onPressed;
   final String? selectedOption;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -146,28 +260,33 @@ class LlmQuestionView extends StatelessWidget {
           padding: const EdgeInsets.only(left: 40.0), // Align with text
           child: Center(
             child: Column(
-              spacing: 8,
               children: [
                 for (final option in options)
-                  SizedBox(
-                    width: 300,
-                    child: ElevatedButton(
-                      onPressed:
-                          selectedOption == null || selectedOption == option
-                              ? () => onPressed(option)
-                              : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: SizedBox(
+                      width: 300,
+                      child: ElevatedButton(
+                        onPressed:
+                            !isActive
+                                ? null
+                                : (selectedOption == null ||
+                                    selectedOption == option)
+                                ? () => onPressed?.call(option)
+                                : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 16,
+                          ),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
-                        ),
+                        child: Text(option, textAlign: TextAlign.center),
                       ),
-                      child: Text(option, textAlign: TextAlign.center),
                     ),
                   ),
               ],
