@@ -19,7 +19,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final _title = ValueNotifier('Loading...');
   final _chat = Chat();
-  final _selectedOptions = <LlmQuestion, String>{};
+  final _selectedOptions = <LlmChoice, String>{};
   int _currentStep = 0;
 
   @override
@@ -31,7 +31,7 @@ class _ChatPageState extends State<ChatPage> {
     final delay = kIsWeb ? const Duration(seconds: 1) : Duration.zero;
     Future.delayed(delay, () async {
       await _chat.sendMessage(widget.action.prompt, widget.image);
-      final title = _chat.turns.whereType<LlmQuestion>().last.titleForChat;
+      final title = _chat.turns.whereType<LlmChoice>().last.titleForChat;
       _title.value = title ?? widget.action.chatTitle;
     });
   }
@@ -50,7 +50,7 @@ class _ChatPageState extends State<ChatPage> {
     child: ListenableBuilder(
       listenable: _chat,
       builder: (context, child) {
-        final llmTurns = _chat.turns.whereType<LlmQuestion>().toList();
+        final llmTurns = _chat.turns.whereType<LlmChoice>().toList();
 
         if (llmTurns.isEmpty) {
           return const Center(
@@ -188,14 +188,14 @@ class _ChatPageState extends State<ChatPage> {
   );
 
   void _optionSelected(
-    LlmQuestion turn,
+    LlmChoice turn,
     String option,
     PageController pageController,
   ) {
     setState(() {
       _selectedOptions[turn] = option;
       // Move to the next step after answering
-      if (_currentStep < _chat.turns.whereType<LlmQuestion>().length - 1) {
+      if (_currentStep < _chat.turns.whereType<LlmChoice>().length - 1) {
         _currentStep++;
         // Animate to the next page
         pageController.animateToPage(
