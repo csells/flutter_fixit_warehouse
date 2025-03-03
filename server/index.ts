@@ -127,15 +127,13 @@ const gtChoiceInterrupt = ai.defineInterrupt(
       query: z.string().describe("The model's follow-up question."),
       choices: z.array(z.string()).describe("The list of choices."),
     }),
-    outputSchema: z.object({
-      userChoice: z.string().describe("The user's choice."),
-    }),
+    outputSchema: z.string().describe("The user's choice."),
   });
 
 const gtSystem = `
   You're an expert gardener. The user will ask a question about how to manage the
   plants in their garden. Be helpful and ask 3 to 5 clarifying questions,
-  although only ask one question at a time.
+  using the 'gtChoiceInterrupt' tool to ask the user questions.
   
   When you're done asking questions, provide a description of a product or
   products that will help the user with their original query. Each product
@@ -212,9 +210,11 @@ function productsFromDescription(description: string) {
   // TODO: RAG
   return [
     {
-      name: 'TODO: Product Name',
-      description: description,
+      productName: 'TODO: Product Name',
+      manufacturer: 'TODO: Manufacturer',
+      cost: 19.99,
       image: 'TODO',
+      reason: description,
     }];
 
   // TODO: RAG
