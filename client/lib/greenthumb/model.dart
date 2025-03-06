@@ -58,7 +58,7 @@ class Content {
   );
 
   Map<String, dynamic> toJson() => {
-    'text': text,
+    if (text != null) 'text': text,
     if (toolRequest != null) 'toolRequest': toolRequest!.toJson(),
     if (metadata != null) 'metadata': metadata!.toJson(),
     if (toolResponse != null) 'toolResponse': toolResponse!.toJson(),

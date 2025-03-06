@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
+import '../greenthumb/model.dart';
 import 'view_model.dart';
 
 class ToolChoicesView extends StatelessWidget {
   ToolChoicesView({
     required MessageUnit unit,
-    required this.onPrompt,
+    required this.onResume,
     super.key,
   }) : assert(unit.type == MessageUnitType.tool),
        question = unit.text,
@@ -16,7 +17,7 @@ class ToolChoicesView extends StatelessWidget {
   final String question;
   final Iterable<String> choices;
   final String? selectedOption;
-  final void Function(String)? onPrompt;
+  final void Function(ToolResponse)? onResume;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -36,15 +37,15 @@ class ToolChoicesView extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
-                for (final option in choices)
+                for (final choice in choices)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: SizedBox(
                       width: 300,
                       child: ElevatedButton(
                         onPressed:
-                            selectedOption == null && onPrompt != null
-                                ? () => onPrompt!(option)
+                            selectedOption == null && onResume != null
+                                ? () => _onResume(choice)
                                 : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
@@ -57,7 +58,7 @@ class ToolChoicesView extends StatelessWidget {
                             horizontal: 16,
                           ),
                         ),
-                        child: Text(option, textAlign: TextAlign.center),
+                        child: Text(choice, textAlign: TextAlign.center),
                       ),
                     ),
                   ),
@@ -68,4 +69,8 @@ class ToolChoicesView extends StatelessWidget {
       ],
     ),
   );
+
+  void _onResume(String choice) {
+    onResume?.call(ToolResponse(name: 'choiceInterrupt', output: choice));
+  }
 }

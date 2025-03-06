@@ -3,6 +3,7 @@ import 'package:flutter_fix_warehouse/greenthumb/service.dart';
 import 'package:flutter_fix_warehouse/views/tool_choices_view.dart';
 import 'package:flutter_fix_warehouse/views/user_prompt_view.dart';
 
+import '../greenthumb/model.dart';
 import '../views/model_response_view.dart';
 import '../views/view_model.dart';
 
@@ -135,7 +136,8 @@ class _WizardPageState extends State<WizardPage> {
                   final isCurrentStep = index == _currentStep;
                   final widget = _buildStepView(
                     units[index],
-                    isCurrentStep ? _onPrompt : null,
+                    isCurrentStep ? _onRequest : null,
+                    isCurrentStep ? _onResume : null,
                   );
 
                   return _chat.isLoading
@@ -157,18 +159,23 @@ class _WizardPageState extends State<WizardPage> {
     ),
   );
 
-  Widget _buildStepView(MessageUnit unit, void Function(String)? onPrompt) =>
-      switch (unit.type) {
-        MessageUnitType.user => UserPromptView(unit: unit, onPrompt: onPrompt),
-        MessageUnitType.model => ModelResponseView(unit: unit),
-        MessageUnitType.tool => switch (unit.m1.content[1].toolRequest!.name) {
-          'choiceInterrupt' => ToolChoicesView(unit: unit, onPrompt: onPrompt),
-          _ =>
-            throw Exception(
-              'Unknown tool: ${unit.m1.content.first.toolRequest!.name}',
-            ),
-        },
-      };
+  Widget _buildStepView(
+    MessageUnit unit,
+    void Function(String)? onRequest,
+    void Function(ToolResponse)? onResume,
+  ) => switch (unit.type) {
+    MessageUnitType.user => UserPromptView(unit: unit, onRequest: onRequest),
+    MessageUnitType.model => ModelResponseView(unit: unit),
+    MessageUnitType.tool => switch (unit.m1.content[1].toolRequest!.name) {
+      'choiceInterrupt' => ToolChoicesView(unit: unit, onResume: onResume),
+      _ =>
+        throw Exception(
+          'Unknown tool: ${unit.m1.content.first.toolRequest!.name}',
+        ),
+    },
+  };
 
-  void _onPrompt(String prompt) => _chat.request(prompt);
+  void _onRequest(String prompt) => _chat.request(prompt);
+
+  void _onResume(ToolResponse toolResponse) => _chat.resume(toolResponse);
 }

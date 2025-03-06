@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'view_model.dart';
 
 class UserPromptView extends StatelessWidget {
-  UserPromptView({this.onPrompt, required MessageUnit unit, super.key})
+  UserPromptView({this.onRequest, required MessageUnit unit, super.key})
     : assert(unit.type == MessageUnitType.user),
       selectedAction = GardeningAction.fromPrompt(unit.text);
 
   final GardeningAction? selectedAction;
-  final void Function(String)? onPrompt;
+  final void Function(String)? onRequest;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -29,7 +29,7 @@ class UserPromptView extends StatelessWidget {
               height: 160,
               child: ElevatedButton(
                 onPressed:
-                    onPrompt != null ? () => onPrompt!(action.prompt) : null,
+                    onRequest != null ? () => onRequest!(action.prompt) : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
                       selectedAction == action
