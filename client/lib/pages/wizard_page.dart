@@ -155,7 +155,10 @@ class _WizardPageState extends State<WizardPage> {
                     },
                     itemBuilder: (context, index) {
                       final isCurrentStep = index == _currentStep;
-                      final widget = buildStepView(units[index], isCurrentStep);
+                      final widget = _buildStepView(
+                        units[index],
+                        isCurrentStep,
+                      );
 
                       return _chat.isLoading
                           ? Column(
@@ -178,25 +181,24 @@ class _WizardPageState extends State<WizardPage> {
     },
   );
 
-  Widget buildStepView(MessageUnit unit, bool mutable) => switch (unit.type) {
-    MessageUnitType.user => UserPromptPicker(
-      unit: unit,
-      onRequest: mutable ? onRequest : null,
-    ),
-    MessageUnitType.model => LlmResponseView(unit: unit),
-    MessageUnitType.tool => switch (unit.toolRequest.name) {
-      'choiceInterrupt' => ToolChoicePicker(
-        unit: unit,
-        onResume: mutable ? onResume : null,
-      ),
-      'imageInterrupt' => ToolImagePicker(
-        unit: unit,
-        onResume: mutable ? onResume : null,
-      ),
-      _ => throw Exception('Unknown tool: ${unit.toolRequest.name}'),
-    },
-  };
+  Widget _buildStepView(MessageUnit unit, bool mutable) {
+    var onRequest = mutable ? _onRequest : null;
+    var onResume = mutable ? _onResume : null;
 
-  void onRequest(String prompt) => _chat.request(prompt);
-  void onResume(ToolResponse toolResponse) => _chat.resume(toolResponse);
+    return switch (unit.type) {
+      MessageUnitType.user => UserPromptPicker(
+        unit: unit,
+        onRequest: onRequest,
+      ),
+      MessageUnitType.model => LlmResponseView(unit: unit),
+      MessageUnitType.tool => switch (unit.toolRequest.name) {
+        'choiceInterrupt' => ToolChoicePicker(unit: unit, onResume: onResume),
+        'imageInterrupt' => ToolImagePicker(unit: unit, onResume: onResume),
+        _ => throw Exception('Unknown tool: ${unit.toolRequest.name}'),
+      },
+    };
+  }
+
+  void _onRequest(String prompt) => _chat.request(prompt);
+  void _onResume(ToolResponse toolResponse) => _chat.resume(toolResponse);
 }
