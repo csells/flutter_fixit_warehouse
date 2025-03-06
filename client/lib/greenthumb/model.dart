@@ -89,20 +89,28 @@ class ContentMetadata {
 }
 
 class ToolRequest {
+  final String? ref;
   final String name;
   final Input input;
 
-  ToolRequest({required this.name, required this.input});
+  ToolRequest({required this.ref, required this.name, required this.input});
 
   factory ToolRequest.fromRawJson(String str) =>
       ToolRequest.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory ToolRequest.fromJson(Map<String, dynamic> json) =>
-      ToolRequest(name: json['name'], input: Input.fromJson(json['input']));
+  factory ToolRequest.fromJson(Map<String, dynamic> json) => ToolRequest(
+    ref: json['ref'],
+    name: json['name'],
+    input: Input.fromJson(json['input']),
+  );
 
-  Map<String, dynamic> toJson() => {'name': name, 'input': input.toJson()};
+  Map<String, dynamic> toJson() => {
+    if (ref != null) 'ref': ref,
+    'name': name,
+    'input': input.toJson(),
+  };
 }
 
 class Input {
@@ -131,7 +139,7 @@ class ToolResponse {
   final String name;
   final String output;
 
-  ToolResponse({this.ref, required this.name, required this.output});
+  ToolResponse({required this.ref, required this.name, required this.output});
 
   factory ToolResponse.fromRawJson(String str) =>
       ToolResponse.fromJson(json.decode(str));

@@ -40,7 +40,7 @@ class GreenthumbService extends ChangeNotifier {
     return _post({
       'data': {
         'resume': Resumption(respond: [Respond(toolResponse: toolResponse)]),
-        'messages': _messages,
+        'messages': _messages.take(_messages.length - 1).toList(),
       },
     });
   }

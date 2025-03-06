@@ -113,7 +113,8 @@ const choiceInterrupt = ai.defineInterrupt(
 const gtSystem = `
   You're an expert gardener. The user will ask a question about how to manage
   their plants in their garden. Be helpful and ask 3 to 5 clarifying questions,
-  using the choiceInterrupt tool.
+  using the choiceInterrupt tool. Do NOT ask the user questions without using a
+  tool; they will not be able to respond to your question.
   
   When you're done asking questions, provide a description of a product or
   products that will help the user with their original query. Each product

@@ -11,12 +11,16 @@ class ToolChoicesView extends StatelessWidget {
     super.key,
   }) : assert(unit.type == MessageUnitType.tool),
        question = unit.text,
-       choices = unit.m1.content[1].toolRequest!.input.choices,
-       selectedOption = unit.m2?.content[0].toolResponse!.output;
+       choices = unit.toolRequest.input.choices,
+       selectedOption = unit.toolResponse?.output,
+       toolRef = unit.toolRequest.ref,
+       toolName = unit.toolRequest.name;
 
   final String question;
   final Iterable<String> choices;
   final String? selectedOption;
+  final String? toolRef;
+  final String toolName;
   final void Function(ToolResponse)? onResume;
 
   @override
@@ -45,7 +49,13 @@ class ToolChoicesView extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed:
                             selectedOption == null && onResume != null
-                                ? () => _onResume(choice)
+                                ? () => onResume!(
+                                  ToolResponse(
+                                    ref: toolRef,
+                                    name: toolName,
+                                    output: choice,
+                                  ),
+                                )
                                 : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
@@ -69,8 +79,4 @@ class ToolChoicesView extends StatelessWidget {
       ],
     ),
   );
-
-  void _onResume(String choice) {
-    onResume?.call(ToolResponse(name: 'choiceInterrupt', output: choice));
-  }
 }

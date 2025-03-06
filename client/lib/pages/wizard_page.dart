@@ -4,7 +4,7 @@ import 'package:flutter_fix_warehouse/views/tool_choices_view.dart';
 import 'package:flutter_fix_warehouse/views/user_prompt_view.dart';
 
 import '../greenthumb/model.dart';
-import '../views/model_response_view.dart';
+import '../views/llm_response_view.dart';
 import '../views/view_model.dart';
 
 class WizardPage extends StatefulWidget {
@@ -165,13 +165,10 @@ class _WizardPageState extends State<WizardPage> {
     void Function(ToolResponse)? onResume,
   ) => switch (unit.type) {
     MessageUnitType.user => UserPromptView(unit: unit, onRequest: onRequest),
-    MessageUnitType.model => ModelResponseView(unit: unit),
-    MessageUnitType.tool => switch (unit.m1.content[1].toolRequest!.name) {
+    MessageUnitType.model => LlmResponseView(unit: unit),
+    MessageUnitType.tool => switch (unit.toolRequest.name) {
       'choiceInterrupt' => ToolChoicesView(unit: unit, onResume: onResume),
-      _ =>
-        throw Exception(
-          'Unknown tool: ${unit.m1.content.first.toolRequest!.name}',
-        ),
+      _ => throw Exception('Unknown tool: ${unit.toolRequest.name}'),
     },
   };
 
