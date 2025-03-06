@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../greenthumb/model.dart';
 
-class ActionView extends StatelessWidget {
-  ActionView({this.onPrompt, MessageUnit? unit, super.key})
+class UserPromptView extends StatelessWidget {
+  UserPromptView({this.onPrompt, MessageUnit? unit, super.key})
     : selectedAction = GardeningAction.fromPrompt(unit?.text);
 
   final void Function(String)? onPrompt;

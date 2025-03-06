@@ -3,11 +3,14 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../greenthumb/model.dart';
 
-class ChoiceToolView extends StatelessWidget {
-  ChoiceToolView({required MessageUnit unit, required this.onPrompt, super.key})
-    : question = unit.m1.content.first.text,
-      choices = unit.m1.content.first.toolRequest.input.choices,
-      selectedOption = unit.m2!.content.first.toolResponse.output;
+class ToolChoicesView extends StatelessWidget {
+  ToolChoicesView({
+    required MessageUnit unit,
+    required this.onPrompt,
+    super.key,
+  }) : question = unit.m1.content.first.text,
+       choices = unit.m1.content.first.toolRequest.input.choices,
+       selectedOption = unit.m2!.content.first.toolResponse.output;
 
   final String question;
   final Iterable<String> choices;

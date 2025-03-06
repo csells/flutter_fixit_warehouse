@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fix_warehouse/greenthumb/service.dart';
-import 'package:flutter_fix_warehouse/views/action_view.dart';
-import 'package:flutter_fix_warehouse/views/choice_tool_view.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_fix_warehouse/views/tool_choices_view.dart';
+import 'package:flutter_fix_warehouse/views/user_prompt_view.dart';
 
 import '../greenthumb/model.dart';
+import '../views/model_response_view.dart';
 
 class WizardPage extends StatefulWidget {
   const WizardPage({super.key});
@@ -165,10 +165,10 @@ class _WizardPageState extends State<WizardPage> {
     MessageUnit? unit,
     void Function(String)? onPrompt,
   ) => switch (unit?.type ?? MessageUnitType.user) {
-    MessageUnitType.user => ActionView(unit: unit, onPrompt: onPrompt),
-    MessageUnitType.model => MarkdownBody(data: unit!.text),
+    MessageUnitType.user => UserPromptView(unit: unit, onPrompt: onPrompt),
+    MessageUnitType.model => ModelResponseView(unit: unit!),
     MessageUnitType.tool => switch (unit!.m1.content.first.toolRequest.name) {
-      'choiceInterrupt' => ChoiceToolView(unit: unit, onPrompt: onPrompt),
+      'choiceInterrupt' => ToolChoicesView(unit: unit, onPrompt: onPrompt),
       _ =>
         throw Exception(
           'Unknown tool: ${unit.m1.content.first.toolRequest.name}',
