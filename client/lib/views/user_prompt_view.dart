@@ -1,14 +1,15 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-import '../greenthumb/model.dart';
+import 'view_model.dart';
 
 class UserPromptView extends StatelessWidget {
-  UserPromptView({this.onPrompt, MessageUnit? unit, super.key})
-    : selectedAction = GardeningAction.fromPrompt(unit?.text);
+  UserPromptView({this.onPrompt, required MessageUnit unit, super.key})
+    : assert(unit.type == MessageUnitType.user),
+      selectedAction = GardeningAction.fromPrompt(unit.text);
 
-  final void Function(String)? onPrompt;
   final GardeningAction? selectedAction;
+  final void Function(String)? onPrompt;
 
   @override
   Widget build(BuildContext context) => Column(

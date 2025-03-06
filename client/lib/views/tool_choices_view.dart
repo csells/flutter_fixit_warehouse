@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import '../greenthumb/model.dart';
+import 'view_model.dart';
 
 class ToolChoicesView extends StatelessWidget {
   ToolChoicesView({
     required MessageUnit unit,
     required this.onPrompt,
     super.key,
-  }) : question = unit.m1.content.first.text!,
-       choices = unit.m1.content.first.toolRequest!.input.choices,
-       selectedOption = unit.m2!.content.first.toolResponse!.output;
+  }) : assert(unit.type == MessageUnitType.tool),
+       question = unit.text,
+       choices = unit.m1.content[1].toolRequest!.input.choices,
+       selectedOption = unit.m2?.content[0].toolResponse!.output;
 
   final String question;
   final Iterable<String> choices;
@@ -19,33 +20,15 @@ class ToolChoicesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    padding: const EdgeInsets.all(32),
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Colors.green[50],
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.eco, color: Colors.green, size: 20),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: MarkdownBody(
-                data: question,
-                styleSheet: MarkdownStyleSheet(
-                  p: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(height: 1.4),
-                ),
-              ),
-            ),
-          ],
+        MarkdownBody(
+          data: question,
+          styleSheet: MarkdownStyleSheet(
+            p: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.4),
+          ),
         ),
         const SizedBox(height: 16),
         Padding(

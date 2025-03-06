@@ -5,7 +5,7 @@ class Message {
   final List<Content> content;
   final MessageMetadata? metadata;
 
-  Message({required this.role, required this.content, required this.metadata});
+  Message({required this.role, required this.content, this.metadata});
 
   factory Message.fromRawJson(String str) => Message.fromJson(json.decode(str));
 
@@ -35,12 +35,7 @@ class Content {
   final ContentMetadata? metadata;
   final ToolResponse? toolResponse;
 
-  Content({
-    required this.text,
-    required this.toolRequest,
-    required this.metadata,
-    required this.toolResponse,
-  });
+  Content({this.text, this.toolRequest, this.metadata, this.toolResponse});
 
   factory Content.fromRawJson(String str) => Content.fromJson(json.decode(str));
 
@@ -71,9 +66,10 @@ class Content {
 }
 
 class ContentMetadata {
+  final bool? interrupt;
   final bool? resolvedInterrupt;
 
-  ContentMetadata({required this.resolvedInterrupt});
+  ContentMetadata({this.interrupt, this.resolvedInterrupt});
 
   factory ContentMetadata.fromRawJson(String str) =>
       ContentMetadata.fromJson(json.decode(str));
@@ -81,9 +77,13 @@ class ContentMetadata {
   String toRawJson() => json.encode(toJson());
 
   factory ContentMetadata.fromJson(Map<String, dynamic> json) =>
-      ContentMetadata(resolvedInterrupt: json['resolvedInterrupt']);
+      ContentMetadata(
+        interrupt: json['interrupt'] as bool?,
+        resolvedInterrupt: json['resolvedInterrupt'] as bool?,
+      );
 
   Map<String, dynamic> toJson() => {
+    if (interrupt != null) 'interrupt': interrupt,
     if (resolvedInterrupt != null) 'resolvedInterrupt': resolvedInterrupt,
   };
 }
@@ -201,65 +201,4 @@ class Respond {
       Respond(toolResponse: ToolResponse.fromJson(json['toolResponse']));
 
   Map<String, dynamic> toJson() => {'toolResponse': toolResponse.toJson()};
-}
-
-enum MessageUnitType { user, tool, model }
-
-class MessageUnit {
-  MessageUnit._(this.type, this.m1, [this.m2]);
-
-  final MessageUnitType type;
-  final Message m1;
-  final Message? m2;
-
-  factory MessageUnit.user(Message m1) {
-    assert(m1.role == 'user');
-    return MessageUnit._(MessageUnitType.user, m1);
-  }
-
-  factory MessageUnit.tool(Message m1, Message m2) {
-    assert(m1.role == 'model' && m2.role == 'tool');
-    return MessageUnit._(MessageUnitType.tool, m1, m2);
-  }
-
-  factory MessageUnit.model(Message m1) {
-    assert(m1.role == 'model');
-    return MessageUnit._(MessageUnitType.model, m1);
-  }
-
-  String get text => switch (type) {
-    MessageUnitType.user => m1.content.first.text!,
-    MessageUnitType.model => m1.content.first.text!,
-    _ => throw ArgumentError('Message unit type $type has no default text'),
-  };
-
-  static List<MessageUnit> unitsFrom(List<Message> messages) {
-    final units = <MessageUnit>[];
-
-    for (var i = 0; i < messages.length; i++) {
-      final message = messages[i];
-
-      // Skip system messages
-      if (message.role == 'system') continue;
-
-      // Handle user messages
-      if (message.role == 'user') {
-        units.add(MessageUnit.user(message));
-        continue;
-      }
-
-      // Handle model messages
-      if (message.role == 'model') {
-        // Check next message if available
-        if (i + 1 < messages.length && messages[i + 1].role == 'tool') {
-          units.add(MessageUnit.tool(message, messages[i + 1]));
-          i++; // Skip the tool message in next iteration
-        } else {
-          units.add(MessageUnit.model(message));
-        }
-      }
-    }
-
-    return List.unmodifiable(units);
-  }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../platform_util.dart';
+import '../views/view_model.dart';
 import 'model.dart';
 
 class GreenthumbService extends ChangeNotifier {
@@ -16,16 +17,33 @@ class GreenthumbService extends ChangeNotifier {
   var _isLoading = false;
   bool get isLoading => _isLoading;
 
-  Future<void> request(String prompt) => _post({
-    'data': {'prompt': prompt},
-  });
+  Future<void> request(String prompt) {
+    // clear the messages and add the new user prompt so that we can update
+    // the UI immediately without waiting for the first response
+    _messages.clear();
+    _messages.add(Message(role: 'user', content: [Content(text: prompt)]));
+    notifyListeners();
 
-  Future<void> resume(ToolResponse toolResponse) => _post({
-    'data': {
-      'resume': Resumption(respond: [Respond(toolResponse: toolResponse)]),
-      'messages': _messages,
-    },
-  });
+    return _post({
+      'data': {'prompt': prompt},
+    });
+  }
+
+  Future<void> resume(ToolResponse toolResponse) {
+    // add the tool response to the messages and notify listeners so that the
+    // UI can update to show the tool response
+    _messages.add(
+      Message(role: 'tool', content: [Content(toolResponse: toolResponse)]),
+    );
+    notifyListeners();
+
+    return _post({
+      'data': {
+        'resume': Resumption(respond: [Respond(toolResponse: toolResponse)]),
+        'messages': _messages,
+      },
+    });
+  }
 
   Future<void> _post(Map<String, dynamic> body) async {
     _isLoading = true;

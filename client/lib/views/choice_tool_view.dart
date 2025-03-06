@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import '../greenthumb/model.dart';
+import 'view_model.dart';
 
 class ChoiceToolView extends StatelessWidget {
   ChoiceToolView({required MessageUnit unit, required this.onPrompt, super.key})

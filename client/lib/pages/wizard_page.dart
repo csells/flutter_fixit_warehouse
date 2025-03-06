@@ -3,8 +3,8 @@ import 'package:flutter_fix_warehouse/greenthumb/service.dart';
 import 'package:flutter_fix_warehouse/views/tool_choices_view.dart';
 import 'package:flutter_fix_warehouse/views/user_prompt_view.dart';
 
-import '../greenthumb/model.dart';
 import '../views/model_response_view.dart';
+import '../views/view_model.dart';
 
 class WizardPage extends StatefulWidget {
   const WizardPage({super.key});
@@ -38,20 +38,20 @@ class _WizardPageState extends State<WizardPage> {
       builder: (context, child) {
         final units = _chat.units;
 
+        // Create a PageController that starts at the current step
+        final pageController = PageController(initialPage: units.length - 1);
+
         // Update current step if new questions have been added
         if (_currentStep < units.length - 1) {
           _currentStep = units.length - 1;
+          Future.microtask(() {
+            pageController.animateToPage(
+              _currentStep,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          });
         }
-
-        // Create a PageController that starts at the current step
-        final pageController = PageController(initialPage: _currentStep);
-        Future.microtask(() {
-          pageController.animateToPage(
-            _currentStep,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        });
 
         return Column(
           children: [
@@ -62,8 +62,6 @@ class _WizardPageState extends State<WizardPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(units.length, (index) {
                   final isCurrentStep = index == _currentStep;
-                  final unit = units[index];
-                  final needsAnswer = unit.type == MessageUnitType.model;
 
                   return GestureDetector(
                     onTap: () {
@@ -88,7 +86,7 @@ class _WizardPageState extends State<WizardPage> {
                       ),
                       child: Center(
                         child:
-                            needsAnswer
+                            isCurrentStep
                                 ? Text(
                                   '${index + 1}',
                                   style: TextStyle(
@@ -111,20 +109,11 @@ class _WizardPageState extends State<WizardPage> {
               ),
             ),
 
-            // Tool title
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Text(
-                'Step #${_currentStep + 1}',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-
             // PageView for horizontal swiping between questions
             Expanded(
               child: PageView.builder(
                 controller: pageController,
-                itemCount: units.isEmpty ? 1 : units.length,
+                itemCount: units.length,
                 physics:
                     _currentStep == units.length - 1
                         ? const NeverScrollableScrollPhysics() // Prevent scrolling past the last question
@@ -145,7 +134,7 @@ class _WizardPageState extends State<WizardPage> {
                 itemBuilder: (context, index) {
                   final isCurrentStep = index == _currentStep;
                   final widget = _buildStepView(
-                    units.isEmpty ? null : units[index],
+                    units[index],
                     isCurrentStep ? _onPrompt : null,
                   );
 
@@ -168,30 +157,18 @@ class _WizardPageState extends State<WizardPage> {
     ),
   );
 
-  Widget _buildStepView(
-    MessageUnit? unit,
-    void Function(String)? onPrompt,
-  ) => switch (unit?.type ?? MessageUnitType.user) {
-    MessageUnitType.user => UserPromptView(unit: unit, onPrompt: onPrompt),
-    MessageUnitType.model => ModelResponseView(unit: unit!),
-    MessageUnitType.tool => switch (unit!.m1.content.first.toolRequest!.name) {
-      'choiceInterrupt' => ToolChoicesView(unit: unit, onPrompt: onPrompt),
-      _ =>
-        throw Exception(
-          'Unknown tool: ${unit.m1.content.first.toolRequest!.name}',
-        ),
-    },
-  };
+  Widget _buildStepView(MessageUnit unit, void Function(String)? onPrompt) =>
+      switch (unit.type) {
+        MessageUnitType.user => UserPromptView(unit: unit, onPrompt: onPrompt),
+        MessageUnitType.model => ModelResponseView(unit: unit),
+        MessageUnitType.tool => switch (unit.m1.content[1].toolRequest!.name) {
+          'choiceInterrupt' => ToolChoicesView(unit: unit, onPrompt: onPrompt),
+          _ =>
+            throw Exception(
+              'Unknown tool: ${unit.m1.content.first.toolRequest!.name}',
+            ),
+        },
+      };
 
-  void _onPrompt(String prompt) async {
-    // void _onPrompt(String prompt, PageController pageController) async {
-    await _chat.request(prompt);
-
-    setState(() {
-      // Move to the next step after answering
-      if (_currentStep < _chat.units.length - 1) {
-        _currentStep++;
-      }
-    });
-  }
+  void _onPrompt(String prompt) => _chat.request(prompt);
 }
