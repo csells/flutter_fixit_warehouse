@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fix_warehouse/greenthumb/service.dart';
-import 'package:flutter_fix_warehouse/views/tool_choices_view.dart';
-import 'package:flutter_fix_warehouse/views/user_prompt_view.dart';
+import 'package:flutter_fix_warehouse/views/tool_choice_picker.dart';
+import 'package:flutter_fix_warehouse/views/user_prompt_picker.dart';
 
 import '../greenthumb/model.dart';
 import '../views/llm_response_view.dart';
-import '../views/tool_image_view.dart';
+import '../views/tool_image_picker.dart';
 import '../views/view_model.dart';
 
 class WizardPage extends StatefulWidget {
@@ -179,17 +179,17 @@ class _WizardPageState extends State<WizardPage> {
   );
 
   Widget buildStepView(MessageUnit unit, bool mutable) => switch (unit.type) {
-    MessageUnitType.user => UserPromptView(
+    MessageUnitType.user => UserPromptPicker(
       unit: unit,
       onRequest: mutable ? onRequest : null,
     ),
     MessageUnitType.model => LlmResponseView(unit: unit),
     MessageUnitType.tool => switch (unit.toolRequest.name) {
-      'choiceInterrupt' => ToolChoicesView(
+      'choiceInterrupt' => ToolChoicePicker(
         unit: unit,
         onResume: mutable ? onResume : null,
       ),
-      'imageInterrupt' => ToolImageView(
+      'imageInterrupt' => ToolImagePicker(
         unit: unit,
         onResume: mutable ? onResume : null,
       ),

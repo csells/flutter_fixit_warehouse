@@ -4,8 +4,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import '../greenthumb/model.dart';
 import 'view_model.dart';
 
-class ToolChoicesView extends StatelessWidget {
-  ToolChoicesView({
+class ToolChoicePicker extends StatelessWidget {
+  ToolChoicePicker({
     required MessageUnit unit,
     required this.onResume,
     super.key,

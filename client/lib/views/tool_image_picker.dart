@@ -9,8 +9,8 @@ import 'package:image/image.dart' as img;
 import '../platform_util.dart';
 import 'view_model.dart';
 
-class ToolImageView extends StatelessWidget {
-  ToolImageView({required this.unit, required this.onResume, super.key})
+class ToolImagePicker extends StatelessWidget {
+  ToolImagePicker({required this.unit, required this.onResume, super.key})
     : assert(unit.type == MessageUnitType.tool),
       image =
           unit.toolResponse?.output != null

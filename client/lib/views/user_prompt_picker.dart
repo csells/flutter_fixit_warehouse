@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'view_model.dart';
 
-class UserPromptView extends StatelessWidget {
-  UserPromptView({this.onRequest, required MessageUnit unit, super.key})
+class UserPromptPicker extends StatelessWidget {
+  UserPromptPicker({this.onRequest, required MessageUnit unit, super.key})
     : assert(unit.type == MessageUnitType.user),
       selectedAction = GardeningAction.fromPrompt(unit.text);
 
