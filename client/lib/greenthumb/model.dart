@@ -124,7 +124,10 @@ class Input {
   String toRawJson() => json.encode(toJson());
 
   factory Input.fromJson(Map<String, dynamic> json) => Input(
-    choices: List<String>.from(json['choices'].map((x) => x)),
+    choices:
+        json['choices'] == null
+            ? []
+            : List<String>.from(json['choices'].map((x) => x)),
     question: json['question'],
   );
 

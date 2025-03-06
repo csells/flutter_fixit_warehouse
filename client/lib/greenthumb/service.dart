@@ -75,25 +75,8 @@ class GreenthumbService extends ChangeNotifier {
     notifyListeners();
   }
 
-  // example usage:
-  //     final image = await _compressImage(input['image']);
-  //    final base64Image =
-  //        image != null ? 'data:image/jpeg;base64,${base64Encode(image)}' : null;
-  //
-  // Future<Uint8List?> _compressImage(Uint8List image) async {
-  //   String? base64Image;
-  //   final bytes = await image.readAsBytes();
-  //   final originalImage = img.decodeImage(bytes);
-  //   if (originalImage != null) {
-  //     // Resize image to max dimension of 400px while maintaining aspect ratio
-  //     final resized = img.copyResize(
-  //       originalImage,
-  //       width: originalImage.width > originalImage.height ? 400 : null,
-  //       height: originalImage.height >= originalImage.width ? 400 : null,
-  //     );
-  //     // Encode as JPG with 85% quality and create data URL
-  //     final compressed = img.encodeJpg(resized, quality: 85);
-  //   }
-  //   return null;
-  // }
+  void clear() {
+    _messages.clear();
+    notifyListeners();
+  }
 }
