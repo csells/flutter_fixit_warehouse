@@ -45,6 +45,13 @@ class _WizardPageState extends State<WizardPage> {
 
         // Create a PageController that starts at the current step
         final pageController = PageController(initialPage: _currentStep);
+        Future.microtask(() {
+          pageController.animateToPage(
+            _currentStep,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        });
 
         return Column(
           children: [
@@ -144,7 +151,7 @@ class _WizardPageState extends State<WizardPage> {
 
                   return _chat.isLoading
                       ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           widget,
                           const SizedBox(height: 16),
@@ -176,21 +183,15 @@ class _WizardPageState extends State<WizardPage> {
     },
   };
 
-  void _onPrompt(String prompt) {
-    // void _onPrompt(String prompt, PageController pageController) {
-    // setState(() {
-    //   // Move to the next step after answering
-    //   if (_currentStep < _chat.units.length - 1) {
-    //     _currentStep++;
-    //     // Animate to the next page
-    //     pageController.animateToPage(
-    //       _currentStep,
-    //       duration: const Duration(milliseconds: 300),
-    //       curve: Curves.easeInOut,
-    //     );
-    //   }
-    // });
+  void _onPrompt(String prompt) async {
+    // void _onPrompt(String prompt, PageController pageController) async {
+    await _chat.request(prompt);
 
-    _chat.request(prompt);
+    setState(() {
+      // Move to the next step after answering
+      if (_currentStep < _chat.units.length - 1) {
+        _currentStep++;
+      }
+    });
   }
 }
