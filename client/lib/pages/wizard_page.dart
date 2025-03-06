@@ -167,11 +167,11 @@ class _WizardPageState extends State<WizardPage> {
   ) => switch (unit?.type ?? MessageUnitType.user) {
     MessageUnitType.user => UserPromptView(unit: unit, onPrompt: onPrompt),
     MessageUnitType.model => ModelResponseView(unit: unit!),
-    MessageUnitType.tool => switch (unit!.m1.content.first.toolRequest.name) {
+    MessageUnitType.tool => switch (unit!.m1.content.first.toolRequest!.name) {
       'choiceInterrupt' => ToolChoicesView(unit: unit, onPrompt: onPrompt),
       _ =>
         throw Exception(
-          'Unknown tool: ${unit.m1.content.first.toolRequest.name}',
+          'Unknown tool: ${unit.m1.content.first.toolRequest!.name}',
         ),
     },
   };

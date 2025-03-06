@@ -16,12 +16,15 @@ class GreenthumbService extends ChangeNotifier {
   var _isLoading = false;
   bool get isLoading => _isLoading;
 
-  Future<void> request(String prompt) => _post(Prompt(prompt: prompt).toJson());
+  Future<void> request(String prompt) => _post({
+    'data': {'prompt': prompt},
+  });
 
   Future<void> resume(ToolResponse toolResponse) => _post({
-    'resume':
-        Resumption(respond: [Respond(toolResponse: toolResponse)]).toJson(),
-    'messages': _messages.map((m) => m.toJson()).toList(),
+    'data': {
+      'resume': Resumption(respond: [Respond(toolResponse: toolResponse)]),
+      'messages': _messages,
+    },
   });
 
   Future<void> _post(Map<String, dynamic> body) async {
@@ -46,7 +49,8 @@ class GreenthumbService extends ChangeNotifier {
 
     _messages.clear();
     _messages.addAll([
-      for (final message in json['messages']) Message.fromJson(message),
+      for (final message in json['result']['messages'])
+        Message.fromJson(message),
     ]);
 
     _isLoading = false;

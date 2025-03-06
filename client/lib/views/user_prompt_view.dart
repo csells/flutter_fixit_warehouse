@@ -12,7 +12,7 @@ class UserPromptView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       const Text(
         'What are you looking to do?',

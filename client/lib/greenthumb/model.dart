@@ -1,24 +1,9 @@
 import 'dart:convert';
 
-class Prompt {
-  final String prompt;
-
-  Prompt({required this.prompt});
-
-  factory Prompt.fromRawJson(String str) => Prompt.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory Prompt.fromJson(Map<String, dynamic> json) =>
-      Prompt(prompt: json['prompt']);
-
-  Map<String, dynamic> toJson() => {'prompt': prompt};
-}
-
 class Message {
   final String role;
   final List<Content> content;
-  final MessageMetadata metadata;
+  final MessageMetadata? metadata;
 
   Message({required this.role, required this.content, required this.metadata});
 
@@ -31,21 +16,24 @@ class Message {
     content: List<Content>.from(
       json['content'].map((x) => Content.fromJson(x)),
     ),
-    metadata: MessageMetadata.fromJson(json['metadata']),
+    metadata:
+        json['metadata'] == null
+            ? null
+            : MessageMetadata.fromJson(json['metadata']),
   );
 
   Map<String, dynamic> toJson() => {
     'role': role,
     'content': List<dynamic>.from(content.map((x) => x.toJson())),
-    'metadata': metadata.toJson(),
+    if (metadata != null) 'metadata': metadata!.toJson(),
   };
 }
 
 class Content {
-  final String text;
-  final ToolRequest toolRequest;
-  final ContentMetadata metadata;
-  final ToolResponse toolResponse;
+  final String? text;
+  final ToolRequest? toolRequest;
+  final ContentMetadata? metadata;
+  final ToolResponse? toolResponse;
 
   Content({
     required this.text,
@@ -60,21 +48,30 @@ class Content {
 
   factory Content.fromJson(Map<String, dynamic> json) => Content(
     text: json['text'],
-    toolRequest: ToolRequest.fromJson(json['toolRequest']),
-    metadata: ContentMetadata.fromJson(json['metadata']),
-    toolResponse: ToolResponse.fromJson(json['toolResponse']),
+    toolRequest:
+        json['toolRequest'] == null
+            ? null
+            : ToolRequest.fromJson(json['toolRequest']),
+    metadata:
+        json['metadata'] == null
+            ? null
+            : ContentMetadata.fromJson(json['metadata']),
+    toolResponse:
+        json['toolResponse'] == null
+            ? null
+            : ToolResponse.fromJson(json['toolResponse']),
   );
 
   Map<String, dynamic> toJson() => {
     'text': text,
-    'toolRequest': toolRequest.toJson(),
-    'metadata': metadata.toJson(),
-    'toolResponse': toolResponse.toJson(),
+    if (toolRequest != null) 'toolRequest': toolRequest!.toJson(),
+    if (metadata != null) 'metadata': metadata!.toJson(),
+    if (toolResponse != null) 'toolResponse': toolResponse!.toJson(),
   };
 }
 
 class ContentMetadata {
-  final bool resolvedInterrupt;
+  final bool? resolvedInterrupt;
 
   ContentMetadata({required this.resolvedInterrupt});
 
@@ -86,7 +83,9 @@ class ContentMetadata {
   factory ContentMetadata.fromJson(Map<String, dynamic> json) =>
       ContentMetadata(resolvedInterrupt: json['resolvedInterrupt']);
 
-  Map<String, dynamic> toJson() => {'resolvedInterrupt': resolvedInterrupt};
+  Map<String, dynamic> toJson() => {
+    if (resolvedInterrupt != null) 'resolvedInterrupt': resolvedInterrupt,
+  };
 }
 
 class ToolRequest {
@@ -229,8 +228,8 @@ class MessageUnit {
   }
 
   String get text => switch (type) {
-    MessageUnitType.user => m1.content.first.text,
-    MessageUnitType.model => m1.content.first.text,
+    MessageUnitType.user => m1.content.first.text!,
+    MessageUnitType.model => m1.content.first.text!,
     _ => throw ArgumentError('Message unit type $type has no default text'),
   };
 
