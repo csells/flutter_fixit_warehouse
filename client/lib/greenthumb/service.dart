@@ -49,8 +49,6 @@ class GreenthumbService extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    debugPrint('\n\n# REQUEST BODY:\n${jsonEncode(body)}\n\n');
-
     final response = await http.post(
       url,
       headers: headers,
@@ -60,8 +58,6 @@ class GreenthumbService extends ChangeNotifier {
     if (response.statusCode != 200) {
       throw 'POST failed: ${response.statusCode} ${response.body}';
     }
-
-    debugPrint('\n\n# RESPONSE BODY:\n${response.body}\n\n');
 
     final json = jsonDecode(response.body);
 
