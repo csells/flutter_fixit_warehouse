@@ -1,5 +1,8 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_picture_taker/flutter_picture_taker.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PlatformUtil {
   static bool? _isIosSimulator;
@@ -47,4 +50,12 @@ class PlatformUtil {
   }
 
   static bool get isVirtualDevice => isIosSimulator || isAndroidEmulator;
+
+  // If the user is running on desktop or a virtual device, use the gallery;
+  // otherwise, use the camera. This assumes that mobile physical devices have
+  // cameras and that desktop and virtual devices do not.
+  static Future<XFile?> getPicture(BuildContext context) =>
+      PlatformUtil.isDesktop || PlatformUtil.isVirtualDevice
+          ? ImagePicker().pickImage(source: ImageSource.gallery)
+          : showStillCameraDialog(context);
 }

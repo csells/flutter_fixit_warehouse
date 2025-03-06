@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'gardening_page.dart';
+import 'package:flutter_fix_warehouse/pages/wizard_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -127,11 +126,11 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const GardeningPage(),
+                        builder: (context) => const WizardPage(),
                       ),
                     );
                   },
-                  child: const Text('Try GreenThumb™'),
+                  child: const Text('Try GreenThumb'),
                 ),
               ],
             ),
