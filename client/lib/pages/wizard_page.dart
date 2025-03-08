@@ -224,7 +224,7 @@ class _WizardPageState extends State<WizardPage> {
         ),
         'rangeInterrupt' => ToolRangeValuePicker(
           unit: unit,
-          onResume: onResume,
+          onResume: unit.toolResponse == null ? onResume : null,
         ),
         _ => throw Exception('Unknown tool: ${unit.toolRequest.name}'),
       },
