@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fix_warehouse/greenthumb/service.dart';
 import 'package:flutter_fix_warehouse/views/tool_choice_picker.dart';
+import 'package:flutter_fix_warehouse/views/tool_range_value_picker.dart';
 import 'package:flutter_fix_warehouse/views/user_prompt_picker.dart';
 
 import '../greenthumb/model.dart';
@@ -191,9 +192,15 @@ class _WizardPageState extends State<WizardPage> {
         onRequest: onRequest,
       ),
       MessageUnitType.model => LlmResponseView(unit: unit),
+
+      // New interrupt tools go here
       MessageUnitType.tool => switch (unit.toolRequest.name) {
         'choiceInterrupt' => ToolChoicePicker(unit: unit, onResume: onResume),
         'imageInterrupt' => ToolImagePicker(unit: unit, onResume: onResume),
+        'rangeInterrupt' => ToolRangeValuePicker(
+          unit: unit,
+          onResume: onResume,
+        ),
         _ => throw Exception('Unknown tool: ${unit.toolRequest.name}'),
       },
     };

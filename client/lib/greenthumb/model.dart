@@ -114,26 +114,32 @@ class ToolRequest {
 }
 
 class Input {
-  final List<String> choices;
   final String question;
+  final List<String> choices;
+  final int? min;
+  final int? max;
 
-  Input({required this.choices, required this.question});
+  Input({required this.choices, required this.question, this.min, this.max});
 
   factory Input.fromRawJson(String str) => Input.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory Input.fromJson(Map<String, dynamic> json) => Input(
+    question: json['question'],
     choices:
         json['choices'] == null
             ? []
             : List<String>.from(json['choices'].map((x) => x)),
-    question: json['question'],
+    min: json['min'],
+    max: json['max'],
   );
 
   Map<String, dynamic> toJson() => {
-    'choices': List<dynamic>.from(choices.map((x) => x)),
     'question': question,
+    'choices': List<dynamic>.from(choices.map((x) => x)),
+    if (min != null) 'min': min,
+    if (max != null) 'max': max,
   };
 }
 

@@ -12,13 +12,13 @@ class ToolChoicePicker extends StatelessWidget {
   }) : assert(unit.type == MessageUnitType.tool),
        question = unit.text,
        choices = unit.toolRequest.input.choices,
-       selectedOption = unit.toolResponse?.output,
+       selectedValue = unit.toolResponse?.output,
        toolRef = unit.toolRequest.ref,
        toolName = unit.toolRequest.name;
 
   final String question;
   final Iterable<String> choices;
-  final String? selectedOption;
+  final String? selectedValue;
   final String? toolRef;
   final String toolName;
   final void Function(ToolResponse)? onResume;
@@ -48,7 +48,7 @@ class ToolChoicePicker extends StatelessWidget {
                       width: 300,
                       child: ElevatedButton(
                         onPressed:
-                            selectedOption == null && onResume != null
+                            selectedValue == null && onResume != null
                                 ? () => onResume!(
                                   ToolResponse(
                                     ref: toolRef,

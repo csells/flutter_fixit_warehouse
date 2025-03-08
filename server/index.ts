@@ -120,11 +120,23 @@ const imageInterrupt = ai.defineInterrupt(
     outputSchema: z.string().describe("base64 encoded image."),
   });
 
+const rangeInterrupt = ai.defineInterrupt(
+  {
+    name: 'rangeInterrupt',
+    description: 'Asks the user to choose a number in a range',
+    inputSchema: z.object({
+      question: z.string().describe("The model's follow-up question."),
+      min: z.number().describe("The minimum value of the range."),
+      max: z.number().describe("The maximum value of the range."),
+    }),
+    outputSchema: z.number().describe("A number in the range."),
+  });
+
 const gtSystem = `
   You're an expert gardener. The user will ask a question about how to manage
   their plants in their garden. Be helpful and ask 3 to 5 clarifying questions,
-  using the choiceInterrupt and imageInterrupt tools. Do NOT ask the user
-  questions without using a tool; they will not be able to respond.
+  using the choiceInterrupt, imageInterrupt, and rangeInterrupt tools. Do NOT
+  ask the user questions without using a tool; they will not be able to respond.
   
   When you're done asking questions, provide a description of a product or
   products that will help the user with their original query. Each product
@@ -142,7 +154,7 @@ export const greenThumb = ai.defineFlow(
     const response = await ai.generate({
       ...(messages && messages.length > 0 ? {} : { system: gtSystem }),
       prompt,
-      tools: [choiceInterrupt, imageInterrupt],
+      tools: [choiceInterrupt, imageInterrupt, rangeInterrupt],
       messages,
       resume,
     });
