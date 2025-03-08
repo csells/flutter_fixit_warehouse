@@ -9,17 +9,30 @@ import 'package:image/image.dart' as img;
 import '../platform_util.dart';
 import 'view_model.dart';
 
-class ToolImagePicker extends StatelessWidget {
+class ToolImagePicker extends StatefulWidget {
   ToolImagePicker({required this.unit, required this.onResume, super.key})
     : assert(unit.type == MessageUnitType.tool),
-      image =
+      selectedImage =
           unit.toolResponse?.output != null
               ? base64Decode(unit.toolResponse!.output.split(',').last)
               : null;
 
   final MessageUnit unit;
-  final Uint8List? image;
+  final Uint8List? selectedImage;
   final void Function(ToolResponse)? onResume;
+
+  @override
+  State<ToolImagePicker> createState() => _ToolImagePickerState();
+}
+
+class _ToolImagePickerState extends State<ToolImagePicker> {
+  Uint8List? _currentImageBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentImageBytes = widget.selectedImage;
+  }
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -27,39 +40,49 @@ class ToolImagePicker extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SingleChildScrollView(
-          child: MarkdownBody(
-            data: unit.text,
-            styleSheet: MarkdownStyleSheet(
-              p: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.4),
-            ),
+        MarkdownBody(
+          data: widget.unit.text,
+          styleSheet: MarkdownStyleSheet(
+            p: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.4),
           ),
         ),
         const SizedBox(height: 16),
-        Container(
-          height: 200,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child:
-              image == null
-                  ? InkWell(
-                    onTap: () => _getPicture(context),
-                    child: Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Tap to take a picture',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                      ),
+        Expanded(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (_currentImageBytes != null)
+                  Expanded(
+                    child: Image.memory(
+                      _currentImageBytes!,
+                      fit: BoxFit.contain,
                     ),
-                  )
-                  : Image.memory(image!, fit: BoxFit.contain),
+                  ),
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: OverflowBar(
+                    spacing: 16,
+                    children: [
+                      GtButton(
+                        onPressed:
+                            widget.onResume == null
+                                ? null
+                                : () => _getPicture(context),
+                        child: const Text('Take Picture'),
+                      ),
+                      if (_currentImageBytes != null)
+                        GtButton(
+                          onPressed: widget.onResume == null ? null : _submit,
+                          child: const Text('Submit'),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     ),
@@ -68,16 +91,23 @@ class ToolImagePicker extends StatelessWidget {
   void _getPicture(BuildContext context) async {
     final file = await PlatformUtil.getPicture(context);
     if (file == null) return;
+    _currentImageBytes = await file.readAsBytes();
+    setState(() {});
+  }
+
+  void _submit() async {
+    assert(widget.onResume != null);
+    assert(_currentImageBytes != null);
 
     // shrink the image if it's too large for Genkit
-    final bytes = await file.readAsBytes();
-    final shrunk = (await _resizeImageIfNeeded(bytes))!;
-    final base64Image = 'data:image/jpeg;base64,${base64Encode(shrunk)}';
+    final bytes = (await _resizeImageIfNeeded(_currentImageBytes!))!;
+    final base64Image = 'data:image/jpeg;base64,${base64Encode(bytes)}';
 
-    onResume!(
+    // TODO: tuck the image compression into the tool response w/ a closure
+    widget.onResume!(
       ToolResponse(
-        ref: unit.toolRequest.ref,
-        name: unit.toolRequest.name,
+        ref: widget.unit.toolRequest.ref,
+        name: widget.unit.toolRequest.name,
         output: base64Image,
       ),
     );
@@ -97,4 +127,23 @@ class ToolImagePicker extends StatelessWidget {
     // encode as JPG with 85% quality and create data URL
     return img.encodeJpg(resized, quality: 85);
   }
+}
+
+// TODO: use this everywhere
+class GtButton extends StatelessWidget {
+  const GtButton({super.key, required this.onPressed, required this.child});
+
+  final VoidCallback? onPressed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => ElevatedButton(
+    onPressed: onPressed,
+    style: ElevatedButton.styleFrom(
+      backgroundColor: onPressed == null ? Colors.grey : Colors.green,
+      foregroundColor: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+    ),
+    child: child,
+  );
 }

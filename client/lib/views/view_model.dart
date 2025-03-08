@@ -59,8 +59,10 @@ class MessageUnit {
   String get text => switch (type) {
     MessageUnitType.user => m1.content.first.text!,
     MessageUnitType.model => m1.content.first.text!,
-    MessageUnitType.tool =>
-      '${m1.content[0].text ?? ''}\n${toolRequest.input.question}',
+    // NOTE: adding the content text is often redundant
+    // MessageUnitType.tool =>
+    //   '${m1.content[0].text ?? ''}\n${toolRequest.input.question}',
+    MessageUnitType.tool => toolRequest.input.question,
   };
 
   static List<MessageUnit> unitsFrom(List<Message> messages) {

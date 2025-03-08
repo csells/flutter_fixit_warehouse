@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
@@ -56,7 +58,7 @@ class _ToolRangeValuePickerState extends State<ToolRangeValuePicker> {
         ),
         const SizedBox(height: 16),
         Padding(
-          padding: const EdgeInsets.only(left: 40.0), // Align with text
+          padding: const EdgeInsets.only(left: 40.0),
           child: Center(
             child: Column(
               children: [
@@ -64,7 +66,7 @@ class _ToolRangeValuePickerState extends State<ToolRangeValuePicker> {
                   value: _currentValue.toDouble(),
                   min: widget.min.toDouble(),
                   max: widget.max.toDouble(),
-                  divisions: widget.max - widget.min,
+                  divisions: max(widget.max - widget.min, 10),
                   label: _currentValue.toString(),
                   onChanged:
                       (value) => setState(() => _currentValue = value.round()),

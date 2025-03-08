@@ -37,7 +37,7 @@ class ToolChoicePicker extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Padding(
-          padding: const EdgeInsets.only(left: 40.0), // Align with text
+          padding: const EdgeInsets.only(left: 40.0),
           child: Center(
             child: Column(
               children: [

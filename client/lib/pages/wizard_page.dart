@@ -26,17 +26,32 @@ class _WizardPageState extends State<WizardPage> {
     builder: (context, child) {
       final units = _chat.units;
 
+      const titleTextStyle = TextStyle(fontSize: 18, color: Colors.white);
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.green,
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.eco, color: Colors.white),
-              SizedBox(width: 8),
-              Text('GreenThumb', style: TextStyle(color: Colors.white)),
-              Text(
-                ' by Fix-It Warehouse',
-                style: TextStyle(fontSize: 18, color: Colors.white),
+              const Icon(Icons.eco, color: Colors.white),
+              const SizedBox(width: 8),
+              Flexible(
+                child: RichText(
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'GreenThumb',
+                        style: titleTextStyle.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' by Fix-It Warehouse',
+                        style: titleTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -162,12 +177,17 @@ class _WizardPageState extends State<WizardPage> {
                       );
 
                       return _chat.isLoading
-                          ? Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                          ? Stack(
                             children: [
-                              widget,
-                              const SizedBox(height: 16),
-                              const CircularProgressIndicator(),
+                              // Dimmed widget
+                              Opacity(opacity: 0.4, child: widget),
+                              // Overlay with progress indicator
+                              Container(
+                                alignment: Alignment.center,
+                                child: const CircularProgressIndicator(
+                                  color: Colors.green,
+                                ),
+                              ),
                             ],
                           )
                           : widget;
@@ -185,6 +205,10 @@ class _WizardPageState extends State<WizardPage> {
   Widget _buildStepView(MessageUnit unit, bool mutable) {
     var onRequest = mutable ? _onRequest : null;
     var onResume = mutable ? _onResume : null;
+
+    if (unit.type == MessageUnitType.tool) {
+      debugPrint('tool: ${unit.toolRequest.name}');
+    }
 
     return switch (unit.type) {
       MessageUnitType.user => UserPromptPicker(
