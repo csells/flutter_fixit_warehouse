@@ -4,7 +4,6 @@ import 'package:flutter_fix_warehouse/views/tool_choice_picker.dart';
 import 'package:flutter_fix_warehouse/views/tool_range_value_picker.dart';
 import 'package:flutter_fix_warehouse/views/user_prompt_picker.dart';
 
-import '../greenthumb/model.dart';
 import '../views/llm_response_view.dart';
 import '../views/tool_image_picker.dart';
 import '../views/view_model.dart';
@@ -206,10 +205,6 @@ class _WizardPageState extends State<WizardPage> {
     var onRequest = mutable ? _onRequest : null;
     var onResume = mutable ? _onResume : null;
 
-    if (unit.type == MessageUnitType.tool) {
-      debugPrint('tool: ${unit.toolRequest.name}');
-    }
-
     return switch (unit.type) {
       MessageUnitType.user => UserPromptPicker(
         unit: unit,
@@ -231,5 +226,10 @@ class _WizardPageState extends State<WizardPage> {
   }
 
   void _onRequest(String prompt) => _chat.request(prompt);
-  void _onResume(ToolResponse toolResponse) => _chat.resume(toolResponse);
+
+  void _onResume({
+    String? ref,
+    required String name,
+    required Future<String> Function() output,
+  }) => _chat.resume(ref: ref, name: name, output: output);
 }

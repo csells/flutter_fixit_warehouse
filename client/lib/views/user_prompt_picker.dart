@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
+import '../greenthumb/service.dart';
 import 'view_model.dart';
 
 class UserPromptPicker extends StatelessWidget {
@@ -9,7 +10,7 @@ class UserPromptPicker extends StatelessWidget {
       selectedAction = GardeningAction.fromPrompt(unit.text);
 
   final GardeningAction? selectedAction;
-  final void Function(String)? onRequest;
+  final ToolRequestCallback? onRequest;
 
   @override
   Widget build(BuildContext context) => Column(

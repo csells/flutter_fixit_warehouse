@@ -7,6 +7,15 @@ import '../platform_util.dart';
 import '../views/view_model.dart';
 import 'model.dart';
 
+typedef ToolRequestCallback = void Function(String prompt);
+
+typedef ToolResumeCallback =
+    void Function({
+      required String? ref,
+      required String name,
+      required Future<String> Function() output,
+    });
+
 class GreenthumbService extends ChangeNotifier {
   late final host = PlatformUtil.isAndroidEmulator ? '10.0.2.2' : '127.0.0.1';
   late final url = Uri.parse('http://$host:3400/greenThumb');
@@ -29,7 +38,20 @@ class GreenthumbService extends ChangeNotifier {
     });
   }
 
-  Future<void> resume(ToolResponse toolResponse) {
+  Future<void> resume({
+    required String? ref,
+    required String name,
+    required Future<String> Function() output,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final toolResponse = ToolResponse(
+      ref: ref,
+      name: name,
+      output: await output(),
+    );
+
     // add the tool response to the messages and notify listeners so that the
     // UI can update to show the tool response
     _messages.add(

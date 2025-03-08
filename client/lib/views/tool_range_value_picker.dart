@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import '../greenthumb/model.dart';
+import '../greenthumb/service.dart';
 import 'view_model.dart';
 
 class ToolRangeValuePicker extends StatefulWidget {
@@ -27,7 +27,7 @@ class ToolRangeValuePicker extends StatefulWidget {
   final int? selectedValue;
   final String? toolRef;
   final String toolName;
-  final void Function(ToolResponse)? onResume;
+  final ToolResumeCallback? onResume;
 
   @override
   State<ToolRangeValuePicker> createState() => _ToolRangeValuePickerState();
@@ -83,11 +83,9 @@ class _ToolRangeValuePickerState extends State<ToolRangeValuePicker> {
                           ? null
                           : () {
                             widget.onResume!(
-                              ToolResponse(
-                                ref: widget.toolRef,
-                                name: widget.toolName,
-                                output: _currentValue.toString(),
-                              ),
+                              ref: widget.toolRef,
+                              name: widget.toolName,
+                              output: () async => _currentValue.toString(),
                             );
                           },
                   style: ElevatedButton.styleFrom(

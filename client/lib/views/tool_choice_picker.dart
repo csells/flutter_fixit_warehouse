@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-import '../greenthumb/model.dart';
+import '../greenthumb/service.dart';
 import 'view_model.dart';
 
 class ToolChoicePicker extends StatelessWidget {
@@ -21,7 +21,7 @@ class ToolChoicePicker extends StatelessWidget {
   final String? selectedValue;
   final String? toolRef;
   final String toolName;
-  final void Function(ToolResponse)? onResume;
+  final ToolResumeCallback? onResume;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -50,11 +50,9 @@ class ToolChoicePicker extends StatelessWidget {
                         onPressed:
                             selectedValue == null && onResume != null
                                 ? () => onResume!(
-                                  ToolResponse(
-                                    ref: toolRef,
-                                    name: toolName,
-                                    output: choice,
-                                  ),
+                                  ref: toolRef,
+                                  name: toolName,
+                                  output: () async => choice,
                                 )
                                 : null,
                         style: ElevatedButton.styleFrom(

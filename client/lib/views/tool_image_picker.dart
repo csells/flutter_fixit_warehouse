@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_fix_warehouse/greenthumb/model.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:image/image.dart' as img;
 
+import '../greenthumb/service.dart';
 import '../platform_util.dart';
 import 'view_model.dart';
 
@@ -19,7 +19,7 @@ class ToolImagePicker extends StatefulWidget {
 
   final MessageUnit unit;
   final Uint8List? selectedImage;
-  final void Function(ToolResponse)? onResume;
+  final ToolResumeCallback? onResume;
 
   @override
   State<ToolImagePicker> createState() => _ToolImagePickerState();
@@ -99,17 +99,15 @@ class _ToolImagePickerState extends State<ToolImagePicker> {
     assert(widget.onResume != null);
     assert(_currentImageBytes != null);
 
-    // shrink the image if it's too large for Genkit
-    final bytes = (await _resizeImageIfNeeded(_currentImageBytes!))!;
-    final base64Image = 'data:image/jpeg;base64,${base64Encode(bytes)}';
-
-    // TODO: tuck the image compression into the tool response w/ a closure
+    // tuck the image compression into the tool response w/ a closure
     widget.onResume!(
-      ToolResponse(
-        ref: widget.unit.toolRequest.ref,
-        name: widget.unit.toolRequest.name,
-        output: base64Image,
-      ),
+      ref: widget.unit.toolRequest.ref,
+      name: widget.unit.toolRequest.name,
+      output: () async {
+        // shrink the image if it's too large for Genkit
+        final bytes = (await _resizeImageIfNeeded(_currentImageBytes!))!;
+        return 'data:image/jpeg;base64,${base64Encode(bytes)}';
+      },
     );
   }
 
