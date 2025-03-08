@@ -169,10 +169,9 @@ class _WizardPageState extends State<WizardPage> {
                       }
                     },
                     itemBuilder: (context, index) {
-                      final isCurrentStep = index == _currentStep;
                       final widget = _buildStepView(
                         units[index],
-                        isCurrentStep,
+                        index == _currentStep,
                       );
 
                       return _chat.isLoading
@@ -201,30 +200,29 @@ class _WizardPageState extends State<WizardPage> {
     },
   );
 
-  Widget _buildStepView(MessageUnit unit, bool mutable) {
-    var onRequest = mutable ? _onRequest : null;
-    var onResume = mutable ? _onResume : null;
+  Widget _buildStepView(MessageUnit unit, bool isCurrentStep) {
+    final isToolResponse =
+        unit.type == MessageUnitType.tool && unit.toolResponse != null;
+    final onRequest = isCurrentStep && !isToolResponse ? _onRequest : null;
+    final onResume = isCurrentStep && !isToolResponse ? _onResume : null;
 
     return switch (unit.type) {
+      // gather initial user prompt
       MessageUnitType.user => UserPromptPicker(
         unit: unit,
         onRequest: onRequest,
       ),
+
+      // display final model response
       MessageUnitType.model => LlmResponseView(unit: unit),
 
-      // New interrupt tools go here
+      // Handle interrupt tools
       MessageUnitType.tool => switch (unit.toolRequest.name) {
-        'choiceInterrupt' => ToolChoicePicker(
-          unit: unit,
-          onResume: unit.toolResponse == null ? onResume : null,
-        ),
-        'imageInterrupt' => ToolImagePicker(
-          unit: unit,
-          onResume: unit.toolResponse == null ? onResume : null,
-        ),
+        'choiceInterrupt' => ToolChoicePicker(unit: unit, onResume: onResume),
+        'imageInterrupt' => ToolImagePicker(unit: unit, onResume: onResume),
         'rangeInterrupt' => ToolRangeValuePicker(
           unit: unit,
-          onResume: unit.toolResponse == null ? onResume : null,
+          onResume: onResume,
         ),
         _ => throw Exception('Unknown tool: ${unit.toolRequest.name}'),
       },
