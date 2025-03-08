@@ -66,7 +66,7 @@ class _ToolRangeValuePickerState extends State<ToolRangeValuePicker> {
                   value: _currentValue.toDouble(),
                   min: widget.min.toDouble(),
                   max: widget.max.toDouble(),
-                  divisions: max(widget.max - widget.min, 10),
+                  divisions: min(widget.max - widget.min, 10),
                   label: _currentValue.toString(),
                   onChanged:
                       (value) => setState(() => _currentValue = value.round()),
