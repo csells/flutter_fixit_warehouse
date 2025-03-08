@@ -214,8 +214,14 @@ class _WizardPageState extends State<WizardPage> {
 
       // New interrupt tools go here
       MessageUnitType.tool => switch (unit.toolRequest.name) {
-        'choiceInterrupt' => ToolChoicePicker(unit: unit, onResume: onResume),
-        'imageInterrupt' => ToolImagePicker(unit: unit, onResume: onResume),
+        'choiceInterrupt' => ToolChoicePicker(
+          unit: unit,
+          onResume: unit.toolResponse == null ? onResume : null,
+        ),
+        'imageInterrupt' => ToolImagePicker(
+          unit: unit,
+          onResume: unit.toolResponse == null ? onResume : null,
+        ),
         'rangeInterrupt' => ToolRangeValuePicker(
           unit: unit,
           onResume: onResume,
@@ -227,9 +233,6 @@ class _WizardPageState extends State<WizardPage> {
 
   void _onRequest(String prompt) => _chat.request(prompt);
 
-  void _onResume({
-    String? ref,
-    required String name,
-    required Future<String> Function() output,
-  }) => _chat.resume(ref: ref, name: name, output: output);
+  void _onResume({String? ref, required String name, required String output}) =>
+      _chat.resume(ref: ref, name: name, output: output);
 }

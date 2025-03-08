@@ -85,7 +85,7 @@ class _ToolRangeValuePickerState extends State<ToolRangeValuePicker> {
                             widget.onResume!(
                               ref: widget.toolRef,
                               name: widget.toolName,
-                              output: () async => _currentValue.toString(),
+                              output: _currentValue.toString(),
                             );
                           },
                   style: ElevatedButton.styleFrom(

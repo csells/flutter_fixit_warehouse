@@ -52,7 +52,7 @@ class ToolChoicePicker extends StatelessWidget {
                                 ? () => onResume!(
                                   ref: toolRef,
                                   name: toolName,
-                                  output: () async => choice,
+                                  output: choice,
                                 )
                                 : null,
                         style: ElevatedButton.styleFrom(

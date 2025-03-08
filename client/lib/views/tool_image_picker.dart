@@ -12,6 +12,7 @@ import 'view_model.dart';
 class ToolImagePicker extends StatefulWidget {
   ToolImagePicker({required this.unit, required this.onResume, super.key})
     : assert(unit.type == MessageUnitType.tool),
+      assert(unit.toolResponse == null || onResume == null),
       selectedImage =
           unit.toolResponse?.output != null
               ? base64Decode(unit.toolResponse!.output.split(',').last)
@@ -27,6 +28,7 @@ class ToolImagePicker extends StatefulWidget {
 
 class _ToolImagePickerState extends State<ToolImagePicker> {
   Uint8List? _currentImageBytes;
+  var _isCompressing = false;
 
   @override
   void initState() {
@@ -67,14 +69,17 @@ class _ToolImagePickerState extends State<ToolImagePicker> {
                     children: [
                       GtButton(
                         onPressed:
-                            widget.onResume == null
+                            _isCompressing || widget.onResume == null
                                 ? null
                                 : () => _getPicture(context),
                         child: const Text('Take Picture'),
                       ),
                       if (_currentImageBytes != null)
                         GtButton(
-                          onPressed: widget.onResume == null ? null : _submit,
+                          onPressed:
+                              _isCompressing || widget.onResume == null
+                                  ? null
+                                  : _submit,
                           child: const Text('Submit'),
                         ),
                     ],
@@ -99,16 +104,20 @@ class _ToolImagePickerState extends State<ToolImagePicker> {
     assert(widget.onResume != null);
     assert(_currentImageBytes != null);
 
-    // tuck the image compression into the tool response w/ a closure
-    widget.onResume!(
-      ref: widget.unit.toolRequest.ref,
-      name: widget.unit.toolRequest.name,
-      output: () async {
-        // shrink the image if it's too large for Genkit
-        final bytes = (await _resizeImageIfNeeded(_currentImageBytes!))!;
-        return 'data:image/jpeg;base64,${base64Encode(bytes)}';
-      },
-    );
+    // shrink the image if it's too large for Genkit
+    setState(() => _isCompressing = true);
+
+    // give the web a chance to show the disabled buttons
+    Future.delayed(const Duration(microseconds: kIsWeb ? 250 : 0), () async {
+      final bytes = (await _resizeImageIfNeeded(_currentImageBytes!))!;
+
+      widget.onResume!(
+        ref: widget.unit.toolRequest.ref,
+        name: widget.unit.toolRequest.name,
+        output: 'data:image/jpeg;base64,${base64Encode(bytes)}',
+      );
+      setState(() => _isCompressing = false);
+    });
   }
 
   Future<Uint8List?> _resizeImageIfNeeded(Uint8List bytes) async {
@@ -138,7 +147,8 @@ class GtButton extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
     onPressed: onPressed,
     style: ElevatedButton.styleFrom(
-      backgroundColor: onPressed == null ? Colors.grey : Colors.green,
+      disabledBackgroundColor: Colors.grey,
+      backgroundColor: Colors.green,
       foregroundColor: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
     ),

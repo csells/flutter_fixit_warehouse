@@ -13,7 +13,7 @@ typedef ToolResumeCallback =
     void Function({
       required String? ref,
       required String name,
-      required Future<String> Function() output,
+      required String output,
     });
 
 class GreenthumbService extends ChangeNotifier {
@@ -31,7 +31,6 @@ class GreenthumbService extends ChangeNotifier {
     // the UI immediately without waiting for the first response
     _messages.clear();
     _messages.add(Message(role: 'user', content: [Content(text: prompt)]));
-    notifyListeners();
 
     return _post({
       'data': {'prompt': prompt},
@@ -41,23 +40,14 @@ class GreenthumbService extends ChangeNotifier {
   Future<void> resume({
     required String? ref,
     required String name,
-    required Future<String> Function() output,
+    required String output,
   }) async {
-    _isLoading = true;
-    notifyListeners();
-
-    final toolResponse = ToolResponse(
-      ref: ref,
-      name: name,
-      output: await output(),
-    );
-
     // add the tool response to the messages and notify listeners so that the
     // UI can update to show the tool response
+    final toolResponse = ToolResponse(ref: ref, name: name, output: output);
     _messages.add(
       Message(role: 'tool', content: [Content(toolResponse: toolResponse)]),
     );
-    notifyListeners();
 
     return _post({
       'data': {
