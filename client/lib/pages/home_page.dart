@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fix_warehouse/pages/wizard_page.dart';
 
-import 'gardening_page.dart';
+import '../views/gt_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -9,47 +10,54 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
       backgroundColor: Colors.green,
-      title: Row(
-        children: [
-          const Icon(Icons.build_circle, size: 30, color: Colors.white),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Container(
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.green[50],
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  prefixIcon: Icon(Icons.search, color: Colors.green),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10),
+      toolbarHeight: 68,
+      title: Padding(
+        padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+        child: Row(
+          children: [
+            const Icon(Icons.build_circle, size: 30, color: Colors.white),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.green[50],
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    prefixIcon: Icon(Icons.search, color: Colors.green),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(vertical: 10),
+                  ),
                 ),
               ),
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.shopping_cart, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
+            IconButton(
+              icon: const Icon(Icons.shopping_cart, color: Colors.white),
+              onPressed: () {},
+            ),
+          ],
+        ),
       ),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(40),
-        child: Container(
-          color: Colors.green,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: const Row(
-            children: [
-              Icon(Icons.location_on, color: Colors.white),
-              Text('Valley Stream', style: TextStyle(color: Colors.white)),
-              Text(' 10PM', style: TextStyle(color: Colors.white)),
-              Spacer(),
-              Icon(Icons.local_shipping, color: Colors.white),
-              Text('11581', style: TextStyle(color: Colors.white)),
-            ],
+        preferredSize: const Size.fromHeight(50),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Container(
+            color: Colors.green,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: const Row(
+              children: [
+                Icon(Icons.location_on, color: Colors.white),
+                Text('Valley Stream', style: TextStyle(color: Colors.white)),
+                Text(' 10PM', style: TextStyle(color: Colors.white)),
+                Spacer(),
+                Icon(Icons.local_shipping, color: Colors.white),
+                Text('11581', style: TextStyle(color: Colors.white)),
+              ],
+            ),
           ),
         ),
       ),
@@ -118,20 +126,17 @@ class HomePage extends StatelessWidget {
               children: [
                 const Text('Looking for gardening help?'),
                 const SizedBox(height: 8),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFF26722),
-                    foregroundColor: Colors.white,
-                  ),
+                GtButton(
+                  backgroundColor: const Color(0xFFF26722),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const GardeningPage(),
+                        builder: (context) => const WizardPage(),
                       ),
                     );
                   },
-                  child: const Text('Try GreenThumb™'),
+                  child: const Text('Try GreenThumb'),
                 ),
               ],
             ),
