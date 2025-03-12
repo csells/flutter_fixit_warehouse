@@ -7,6 +7,7 @@ import 'package:image/image.dart' as img;
 
 import '../greenthumb/service.dart';
 import '../platform_util.dart';
+import 'gt_button.dart';
 import 'view_model.dart';
 
 class ToolImagePicker extends StatefulWidget {
@@ -134,24 +135,4 @@ class _ToolImagePickerState extends State<ToolImagePicker> {
     // encode as JPG with 85% quality and create data URL
     return img.encodeJpg(resized, quality: 85);
   }
-}
-
-// TODO: use this everywhere
-class GtButton extends StatelessWidget {
-  const GtButton({super.key, required this.onPressed, required this.child});
-
-  final VoidCallback? onPressed;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) => ElevatedButton(
-    onPressed: onPressed,
-    style: ElevatedButton.styleFrom(
-      disabledBackgroundColor: Colors.grey,
-      backgroundColor: Colors.green,
-      foregroundColor: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-    ),
-    child: child,
-  );
 }

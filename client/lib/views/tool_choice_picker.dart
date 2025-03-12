@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../greenthumb/service.dart';
+import 'gt_button.dart';
 import 'view_model.dart';
 
 class ToolChoicePicker extends StatelessWidget {
@@ -46,7 +47,7 @@ class ToolChoicePicker extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: SizedBox(
                       width: 300,
-                      child: ElevatedButton(
+                      child: GtButton(
                         onPressed:
                             selectedValue == null && onResume != null
                                 ? () => onResume!(
@@ -55,17 +56,7 @@ class ToolChoicePicker extends StatelessWidget {
                                   output: choice,
                                 )
                                 : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                            horizontal: 16,
-                          ),
-                        ),
+
                         child: Text(choice, textAlign: TextAlign.center),
                       ),
                     ),

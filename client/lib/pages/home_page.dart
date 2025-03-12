@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fix_warehouse/pages/wizard_page.dart';
 
+import '../views/gt_button.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -117,11 +119,8 @@ class HomePage extends StatelessWidget {
               children: [
                 const Text('Looking for gardening help?'),
                 const SizedBox(height: 8),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFF26722),
-                    foregroundColor: Colors.white,
-                  ),
+                GtButton(
+                  backgroundColor: const Color(0xFFF26722),
                   onPressed: () {
                     Navigator.push(
                       context,

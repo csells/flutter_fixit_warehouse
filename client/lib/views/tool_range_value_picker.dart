@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../greenthumb/service.dart';
+import 'gt_button.dart';
 import 'view_model.dart';
 
 class ToolRangeValuePicker extends StatefulWidget {
@@ -77,7 +78,7 @@ class _ToolRangeValuePickerState extends State<ToolRangeValuePicker> {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
+                GtButton(
                   onPressed:
                       widget.onResume == null
                           ? null
@@ -88,14 +89,6 @@ class _ToolRangeValuePickerState extends State<ToolRangeValuePicker> {
                               output: _currentValue.toString(),
                             );
                           },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
-                  ),
                   child: const Text('Submit'),
                 ),
               ],

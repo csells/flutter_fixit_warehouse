@@ -99,7 +99,6 @@ class _WizardPageState extends State<WizardPage> {
                       return GestureDetector(
                         onTap: () {
                           // Only allow going back to previous steps, not forward
-                          // TODO: allow folks to look at previous steps
                           if (index <= _currentStep) {
                             setState(() => _currentStep = index);
                             pageController.animateToPage(
