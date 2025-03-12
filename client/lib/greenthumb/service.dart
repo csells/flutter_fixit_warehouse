@@ -21,7 +21,7 @@ class GreenthumbService extends ChangeNotifier {
   late final url = Uri.parse('http://$host:3400/greenThumb');
   late final headers = {'Content-Type': 'application/json'};
 
-  final _messages = <Message>[];
+  final _messages = <RawMessage>[];
   List<MessageUnit> get units => MessageUnit.unitsFrom(_messages);
   var _isLoading = false;
   bool get isLoading => _isLoading;
@@ -30,7 +30,7 @@ class GreenthumbService extends ChangeNotifier {
     // clear the messages and add the new user prompt so that we can update
     // the UI immediately without waiting for the first response
     _messages.clear();
-    _messages.add(Message(role: 'user', content: [Content(text: prompt)]));
+    _messages.add(RawMessage(role: 'user', content: [Content(text: prompt)]));
 
     return _post({
       'data': {'prompt': prompt},
@@ -46,7 +46,7 @@ class GreenthumbService extends ChangeNotifier {
     // UI can update to show the tool response
     final toolResponse = ToolResponse(ref: ref, name: name, output: output);
     _messages.add(
-      Message(role: 'tool', content: [Content(toolResponse: toolResponse)]),
+      RawMessage(role: 'tool', content: [Content(toolResponse: toolResponse)]),
     );
 
     return _post({
@@ -76,7 +76,7 @@ class GreenthumbService extends ChangeNotifier {
     _messages.clear();
     _messages.addAll([
       for (final message in json['result']['messages'])
-        Message.fromJson(message),
+        RawMessage.fromJson(message),
     ]);
 
     _isLoading = false;

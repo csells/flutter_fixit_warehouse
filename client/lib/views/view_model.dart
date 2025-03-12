@@ -6,17 +6,17 @@ class MessageUnit {
   MessageUnit._(this.type, this.m1, [this.m2]);
 
   final MessageUnitType type;
-  final Message m1;
-  final Message? m2;
+  final RawMessage m1;
+  final RawMessage? m2;
 
-  factory MessageUnit.user(Message m1) {
+  factory MessageUnit.user(RawMessage m1) {
     assert(m1.role == 'user');
     assert(m1.content.isNotEmpty);
     assert(m1.content.first.text != null);
     return MessageUnit._(MessageUnitType.user, m1);
   }
 
-  factory MessageUnit.tool(Message m1, [Message? m2]) {
+  factory MessageUnit.tool(RawMessage m1, [RawMessage? m2]) {
     assert(m1.role == 'model');
     assert(m2 == null || m2.role == 'tool');
     assert(m1.content.isNotEmpty);
@@ -49,7 +49,7 @@ class MessageUnit {
     return m2!.content.first.toolResponse!;
   }
 
-  factory MessageUnit.model(Message m1) {
+  factory MessageUnit.model(RawMessage m1) {
     assert(m1.role == 'model');
     assert(m1.content.isNotEmpty);
     assert(m1.content.first.text != null);
@@ -65,7 +65,7 @@ class MessageUnit {
     MessageUnitType.tool => toolRequest.input.question,
   };
 
-  static List<MessageUnit> unitsFrom(List<Message> messages) {
+  static List<MessageUnit> unitsFrom(List<RawMessage> messages) {
     final units = <MessageUnit>[];
 
     for (var i = 0; i < messages.length; i++) {
@@ -106,7 +106,7 @@ class MessageUnit {
       // yet)
       units.add(
         MessageUnit.user(
-          Message(role: 'user', content: [Content(text: 'TBD')]),
+          RawMessage(role: 'user', content: [Content(text: 'TBD')]),
         ),
       );
     }

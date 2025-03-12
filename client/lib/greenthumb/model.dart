@@ -1,17 +1,18 @@
 import 'dart:convert';
 
-class Message {
+class RawMessage {
   final String role;
   final List<Content> content;
   final MessageMetadata? metadata;
 
-  Message({required this.role, required this.content, this.metadata});
+  RawMessage({required this.role, required this.content, this.metadata});
 
-  factory Message.fromRawJson(String str) => Message.fromJson(json.decode(str));
+  factory RawMessage.fromRawJson(String str) =>
+      RawMessage.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
+  factory RawMessage.fromJson(Map<String, dynamic> json) => RawMessage(
     role: json['role'],
     content: List<Content>.from(
       json['content'].map((x) => Content.fromJson(x)),
