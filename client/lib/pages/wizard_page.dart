@@ -16,14 +16,14 @@ class WizardPage extends StatefulWidget {
 }
 
 class _WizardPageState extends State<WizardPage> {
-  final _chat = GreenthumbService();
+  final _service = GreenthumbService();
   var _currentStep = 0;
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
-    listenable: _chat,
+    listenable: _service,
     builder: (context, child) {
-      final units = _chat.units;
+      final messages = _service.messages;
 
       const titleTextStyle = TextStyle(fontSize: 18, color: Colors.white);
       return Scaffold(
@@ -55,13 +55,13 @@ class _WizardPageState extends State<WizardPage> {
             ],
           ),
           actions: [
-            if (units.length > 1)
+            if (messages.length > 1)
               IconButton(
                 icon: const Icon(Icons.refresh, color: Colors.white),
                 tooltip: 'Restart',
                 onPressed:
                     () => setState(() {
-                      _chat.clear();
+                      _service.clear();
                       _currentStep = 0;
                     }),
               ),
@@ -71,12 +71,12 @@ class _WizardPageState extends State<WizardPage> {
           builder: (context) {
             // Create a PageController that starts at the current step
             final pageController = PageController(
-              initialPage: units.length - 1,
+              initialPage: messages.length - 1,
             );
 
             // Update current step if new questions have been added
-            if (_currentStep < units.length - 1) {
-              _currentStep = units.length - 1;
+            if (_currentStep < messages.length - 1) {
+              _currentStep = messages.length - 1;
               Future.microtask(() {
                 pageController.animateToPage(
                   _currentStep,
@@ -93,7 +93,7 @@ class _WizardPageState extends State<WizardPage> {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(units.length, (index) {
+                    children: List.generate(messages.length, (index) {
                       final isCurrentStep = index == _currentStep;
 
                       return GestureDetector(
@@ -149,9 +149,9 @@ class _WizardPageState extends State<WizardPage> {
                 Expanded(
                   child: PageView.builder(
                     controller: pageController,
-                    itemCount: units.length,
+                    itemCount: messages.length,
                     physics:
-                        _currentStep == units.length - 1
+                        _currentStep == messages.length - 1
                             ? const NeverScrollableScrollPhysics() // Prevent scrolling past the last question
                             : const PageScrollPhysics(),
                     onPageChanged: (index) {
@@ -169,11 +169,11 @@ class _WizardPageState extends State<WizardPage> {
                     },
                     itemBuilder: (context, index) {
                       final widget = _buildStepView(
-                        units[index],
+                        messages[index],
                         index == _currentStep,
                       );
 
-                      return _chat.isLoading
+                      return _service.isLoading
                           ? Stack(
                             children: [
                               // Dimmed widget
@@ -199,37 +199,40 @@ class _WizardPageState extends State<WizardPage> {
     },
   );
 
-  Widget _buildStepView(MessageUnit unit, bool isCurrentStep) {
+  Widget _buildStepView(Message message, bool isCurrentStep) {
     final isToolResponse =
-        unit.type == MessageUnitType.tool && unit.toolResponse != null;
+        message is ToolMessage && message.toolResponse != null;
     final onRequest = isCurrentStep && !isToolResponse ? _onRequest : null;
     final onResume = isCurrentStep && !isToolResponse ? _onResume : null;
 
-    return switch (unit.type) {
+    return switch (message) {
       // gather initial user prompt
-      MessageUnitType.user => UserPromptPicker(
-        unit: unit,
-        onRequest: onRequest,
-      ),
+      UserRequest() => UserPromptPicker(message: message, onRequest: onRequest),
 
       // display final model response
-      MessageUnitType.model => LlmResponseView(unit: unit),
+      ModelResponse() => LlmResponseView(message: message),
 
       // Handle interrupt tools
-      MessageUnitType.tool => switch (unit.toolRequest.name) {
-        'choiceInterrupt' => ToolChoicePicker(unit: unit, onResume: onResume),
-        'imageInterrupt' => ToolImagePicker(unit: unit, onResume: onResume),
-        'rangeInterrupt' => ToolRangeValuePicker(
-          unit: unit,
+      ToolMessage() => switch (message.toolRequest.name) {
+        'choiceInterrupt' => ToolChoicePicker(
+          message: message,
           onResume: onResume,
         ),
-        _ => throw Exception('Unknown tool: ${unit.toolRequest.name}'),
+        'imageInterrupt' => ToolImagePicker(
+          message: message,
+          onResume: onResume,
+        ),
+        'rangeInterrupt' => ToolRangeValuePicker(
+          message: message,
+          onResume: onResume,
+        ),
+        _ => throw Exception('Unknown tool: ${message.toolRequest.name}'),
       },
     };
   }
 
-  void _onRequest(String prompt) => _chat.request(prompt);
+  void _onRequest(String prompt) => _service.request(prompt);
 
   void _onResume({String? ref, required String name, required String output}) =>
-      _chat.resume(ref: ref, name: name, output: output);
+      _service.resume(ref: ref, name: name, output: output);
 }

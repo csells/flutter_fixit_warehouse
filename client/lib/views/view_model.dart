@@ -1,116 +1,119 @@
 import '../greenthumb/model.dart';
 
-enum MessageUnitType { user, tool, model }
+sealed class Message {
+  Message._(RawMessage rawMessage) : _rawMessage = rawMessage;
+  final RawMessage _rawMessage;
 
-class MessageUnit {
-  MessageUnit._(this.type, this.m1, [this.m2]);
+  String get text;
 
-  final MessageUnitType type;
-  final RawMessage m1;
-  final RawMessage? m2;
+  static List<Message> messagesFrom(List<RawMessage> rawMessages) {
+    final result = <Message>[];
 
-  factory MessageUnit.user(RawMessage m1) {
-    assert(m1.role == 'user');
-    assert(m1.content.isNotEmpty);
-    assert(m1.content.first.text != null);
-    return MessageUnit._(MessageUnitType.user, m1);
+    for (var i = 0; i < rawMessages.length; i++) {
+      final rawMessage = rawMessages[i];
+
+      // skip system messages
+      if (rawMessage.role == 'system') continue;
+
+      // handle user messages
+      if (rawMessage.role == 'user') {
+        result.add(UserRequest(rawMessage));
+        continue;
+      }
+
+      // handle model messages
+      if (rawMessage.role == 'model') {
+        assert(rawMessage.content.isNotEmpty);
+        final toolRequest =
+            rawMessage.content.length == 2
+                ? rawMessage.content[1].toolRequest
+                : rawMessage.content[0].toolRequest;
+
+        if (toolRequest == null) {
+          // found a model response and not a tool request
+          result.add(ModelResponse(rawMessage));
+        } else if (i + 1 < rawMessages.length &&
+            rawMessages[i + 1].role == 'tool') {
+          // found a tool response as well as a tool request
+          result.add(ToolMessage(rawMessage, rawMessages[i + 1]));
+
+          // skip the tool message in next iteration
+          i++;
+        } else {
+          // found a tool request without a response
+          result.add(ToolMessage(rawMessage));
+        }
+      }
+    }
+
+    if (result.isEmpty) {
+      // placeholder to make building the UI easier; shows the UserPromptView
+      // before there are any messages (because we haven't requested anything
+      // yet)
+      result.add(
+        UserRequest(RawMessage(role: 'user', content: [Content(text: 'TBD')])),
+      );
+    }
+
+    return List.unmodifiable(result);
+  }
+}
+
+class UserRequest extends Message {
+  UserRequest(RawMessage rawMessage) : super._(rawMessage) {
+    assert(rawMessage.role == 'user');
+    assert(rawMessage.content.isNotEmpty);
+    assert(rawMessage.content.first.text != null);
   }
 
-  factory MessageUnit.tool(RawMessage m1, [RawMessage? m2]) {
-    assert(m1.role == 'model');
-    assert(m2 == null || m2.role == 'tool');
-    assert(m1.content.isNotEmpty);
-    return MessageUnit._(MessageUnitType.tool, m1, m2);
+  @override
+  String get text => _rawMessage.content.first.text!;
+}
+
+class ToolMessage extends Message {
+  final RawMessage? _rawMessage2;
+
+  ToolMessage(RawMessage rawMessage, [RawMessage? rawMessage2])
+    : _rawMessage2 = rawMessage2,
+      super._(rawMessage) {
+    assert(rawMessage.role == 'model');
+    assert(rawMessage2 == null || rawMessage2.role == 'tool');
+    assert(rawMessage.content.isNotEmpty);
   }
 
   ContentMetadata get metadata {
-    assert(type == MessageUnitType.tool);
     final metadata =
-        m1.content.length == 2
-            ? m1.content[1].metadata
-            : m1.content[0].metadata;
+        _rawMessage.content.length == 2
+            ? _rawMessage.content[1].metadata
+            : _rawMessage.content[0].metadata;
     assert(metadata != null);
     return metadata!;
   }
 
   ToolRequest get toolRequest {
-    assert(type == MessageUnitType.tool);
-    return m1.content.length == 2
-        ? m1.content[1].toolRequest!
-        : m1.content[0].toolRequest!;
+    return _rawMessage.content.length == 2
+        ? _rawMessage.content[1].toolRequest!
+        : _rawMessage.content[0].toolRequest!;
   }
 
   ToolResponse? get toolResponse {
-    assert(type == MessageUnitType.tool);
-    if (m2 == null) return null;
+    if (_rawMessage2 == null) return null;
 
-    assert(m2!.role == 'tool');
-    assert(m2!.content.first.toolResponse != null);
-    return m2!.content.first.toolResponse!;
+    assert(_rawMessage2.role == 'tool');
+    return _rawMessage2.content.first.toolResponse!;
   }
 
-  factory MessageUnit.model(RawMessage m1) {
-    assert(m1.role == 'model');
-    assert(m1.content.isNotEmpty);
-    assert(m1.content.first.text != null);
-    return MessageUnit._(MessageUnitType.model, m1);
+  @override
+  String get text => toolRequest.input.question;
+}
+
+class ModelResponse extends Message {
+  ModelResponse(RawMessage rawMessage) : super._(rawMessage) {
+    assert(rawMessage.role == 'model');
+    assert(rawMessage.content.isNotEmpty);
+    assert(rawMessage.content.first.text != null);
   }
 
-  String get text => switch (type) {
-    MessageUnitType.user => m1.content.first.text!,
-    MessageUnitType.model => m1.content.first.text!,
-    // NOTE: adding the content text is often redundant
-    // MessageUnitType.tool =>
-    //   '${m1.content[0].text ?? ''}\n${toolRequest.input.question}',
-    MessageUnitType.tool => toolRequest.input.question,
-  };
-
-  static List<MessageUnit> unitsFrom(List<RawMessage> messages) {
-    final units = <MessageUnit>[];
-
-    for (var i = 0; i < messages.length; i++) {
-      final message = messages[i];
-
-      // Skip system messages
-      if (message.role == 'system') continue;
-
-      // Handle user messages
-      if (message.role == 'user') {
-        units.add(MessageUnit.user(message));
-        continue;
-      }
-
-      // Handle model messages
-      if (message.role == 'model') {
-        assert(message.content.isNotEmpty);
-        final metadata =
-            message.content.length == 2
-                ? message.content[1].metadata
-                : message.content[0].metadata;
-        if (metadata == null) {
-          units.add(MessageUnit.model(message));
-        } else if (i + 1 < messages.length && messages[i + 1].role == 'tool') {
-          // if the next message is a tool, we've got a tool response
-          units.add(MessageUnit.tool(message, messages[i + 1]));
-          i++; // Skip the tool message in next iteration
-        } else {
-          // if the next message is not a tool, we've got a tool request
-          units.add(MessageUnit.tool(message));
-        }
-      }
-    }
-
-    if (units.isEmpty) {
-      // placeholder to make building the UI easier; shows the UserPromptView
-      // before there are any messages (because we haven't requested anything
-      // yet)
-      units.add(
-        MessageUnit.user(
-          RawMessage(role: 'user', content: [Content(text: 'TBD')]),
-        ),
-      );
-    }
-
-    return List.unmodifiable(units);
-  }
+  @override
+  String get text => _rawMessage.content.first.text!;
 }

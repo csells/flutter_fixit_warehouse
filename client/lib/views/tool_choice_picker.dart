@@ -7,15 +7,14 @@ import 'view_model.dart';
 
 class ToolChoicePicker extends StatelessWidget {
   ToolChoicePicker({
-    required MessageUnit unit,
+    required ToolMessage message,
     required this.onResume,
     super.key,
-  }) : assert(unit.type == MessageUnitType.tool),
-       question = unit.text,
-       choices = unit.toolRequest.input.choices,
-       selectedValue = unit.toolResponse?.output,
-       toolRef = unit.toolRequest.ref,
-       toolName = unit.toolRequest.name;
+  }) : question = message.text,
+       choices = message.toolRequest.input.choices,
+       selectedValue = message.toolResponse?.output,
+       toolRef = message.toolRequest.ref,
+       toolName = message.toolRequest.name;
 
   final String question;
   final Iterable<String> choices;

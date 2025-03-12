@@ -9,18 +9,17 @@ import 'view_model.dart';
 
 class ToolRangeValuePicker extends StatefulWidget {
   ToolRangeValuePicker({
-    required MessageUnit unit,
+    required ToolMessage message,
     required this.onResume,
     super.key,
-  }) : assert(unit.type == MessageUnitType.tool),
-       assert(unit.toolRequest.input.min != null),
-       assert(unit.toolRequest.input.max != null),
-       question = unit.text,
-       min = unit.toolRequest.input.min!,
-       max = unit.toolRequest.input.max!,
-       selectedValue = int.tryParse(unit.toolResponse?.output ?? ''),
-       toolRef = unit.toolRequest.ref,
-       toolName = unit.toolRequest.name;
+  }) : assert(message.toolRequest.input.min != null),
+       assert(message.toolRequest.input.max != null),
+       question = message.text,
+       min = message.toolRequest.input.min!,
+       max = message.toolRequest.input.max!,
+       selectedValue = int.tryParse(message.toolResponse?.output ?? ''),
+       toolRef = message.toolRequest.ref,
+       toolName = message.toolRequest.name;
 
   final String question;
   final int min;

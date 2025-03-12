@@ -22,7 +22,7 @@ class GreenthumbService extends ChangeNotifier {
   late final headers = {'Content-Type': 'application/json'};
 
   final _messages = <RawMessage>[];
-  List<MessageUnit> get units => MessageUnit.unitsFrom(_messages);
+  List<Message> get messages => Message.messagesFrom(_messages);
   var _isLoading = false;
   bool get isLoading => _isLoading;
 

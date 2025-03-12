@@ -11,15 +11,14 @@ import 'gt_button.dart';
 import 'view_model.dart';
 
 class ToolImagePicker extends StatefulWidget {
-  ToolImagePicker({required this.unit, required this.onResume, super.key})
-    : assert(unit.type == MessageUnitType.tool),
-      assert(unit.toolResponse == null || onResume == null),
+  ToolImagePicker({required this.message, required this.onResume, super.key})
+    : assert(message.toolResponse == null || onResume == null),
       selectedImage =
-          unit.toolResponse?.output != null
-              ? base64Decode(unit.toolResponse!.output.split(',').last)
+          message.toolResponse?.output != null
+              ? base64Decode(message.toolResponse!.output.split(',').last)
               : null;
 
-  final MessageUnit unit;
+  final ToolMessage message;
   final Uint8List? selectedImage;
   final ToolResumeCallback? onResume;
 
@@ -44,7 +43,7 @@ class _ToolImagePickerState extends State<ToolImagePicker> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         MarkdownBody(
-          data: widget.unit.text,
+          data: widget.message.text,
           styleSheet: MarkdownStyleSheet(
             p: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.4),
           ),
@@ -113,8 +112,8 @@ class _ToolImagePickerState extends State<ToolImagePicker> {
       final bytes = (await _resizeImageIfNeeded(_currentImageBytes!))!;
 
       widget.onResume!(
-        ref: widget.unit.toolRequest.ref,
-        name: widget.unit.toolRequest.name,
+        ref: widget.message.toolRequest.ref,
+        name: widget.message.toolRequest.name,
         output: 'data:image/jpeg;base64,${base64Encode(bytes)}',
       );
       setState(() => _isCompressing = false);

@@ -5,9 +5,9 @@ import '../greenthumb/service.dart';
 import 'view_model.dart';
 
 class UserPromptPicker extends StatelessWidget {
-  UserPromptPicker({this.onRequest, required MessageUnit unit, super.key})
-    : assert(unit.type == MessageUnitType.user),
-      selectedAction = GardeningAction.fromPrompt(unit.text);
+  UserPromptPicker({this.onRequest, required Message message, super.key})
+    : assert(message is UserRequest),
+      selectedAction = GardeningAction.fromPrompt(message.text);
 
   final GardeningAction? selectedAction;
   final ToolRequestCallback? onRequest;
