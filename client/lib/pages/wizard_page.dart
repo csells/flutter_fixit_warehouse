@@ -98,6 +98,7 @@ class _WizardPageState extends State<WizardPage> {
 
                       return GestureDetector(
                         onTap: () {
+                          // TODO: like folks see the previous steps!
                           // Only allow going back to previous steps, not forward
                           if (index <= _currentStep) {
                             setState(() => _currentStep = index);
@@ -213,7 +214,7 @@ class _WizardPageState extends State<WizardPage> {
       ModelResponse() => ModelResponseView(message: message),
 
       // Handle interrupt tools
-      InterruptMessage() => switch (message.toolRequest.name) {
+      InterruptMessage() => switch (message.toolRequest!.name) {
         'choiceInterrupt' => InterruptChoicePicker(
           message: message,
           onResume: onResume,
@@ -226,7 +227,7 @@ class _WizardPageState extends State<WizardPage> {
           message: message,
           onResume: onResume,
         ),
-        _ => throw Exception('Unknown tool: ${message.toolRequest.name}'),
+        _ => throw Exception('Unknown tool: ${message.toolRequest!.name}'),
       },
     };
   }

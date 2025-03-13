@@ -10,26 +10,23 @@ import '../platform_util.dart';
 import 'gt_button.dart';
 import 'view_model.dart';
 
-class InterruptImagePicker extends StatefulWidget {
-  InterruptImagePicker({
-    required this.message,
-    required this.onResume,
-    super.key,
-  }) : assert(message.toolResponse == null || onResume == null),
-       selectedImage =
-           message.toolResponse?.output != null
-               ? base64Decode(message.toolResponse!.output.split(',').last)
-               : null;
+class ToolImagePicker extends StatefulWidget {
+  ToolImagePicker({required this.message, required this.onResume, super.key})
+    : assert(message.toolResponse == null || onResume == null),
+      selectedImage =
+          message.toolResponse?.output != null
+              ? base64Decode(message.toolResponse!.output.split(',').last)
+              : null;
 
   final InterruptMessage message;
   final Uint8List? selectedImage;
   final ToolResumeCallback? onResume;
 
   @override
-  State<InterruptImagePicker> createState() => _InterruptImagePickerState();
+  State<ToolImagePicker> createState() => _ToolImagePickerState();
 }
 
-class _InterruptImagePickerState extends State<InterruptImagePicker> {
+class _ToolImagePickerState extends State<ToolImagePicker> {
   Uint8List? _currentImageBytes;
   var _isCompressing = false;
 

@@ -12,14 +12,14 @@ class InterruptRangeValuePicker extends StatefulWidget {
     required InterruptMessage message,
     required this.onResume,
     super.key,
-  }) : assert(message.toolRequest.input.min != null),
-       assert(message.toolRequest.input.max != null),
+  }) : assert(message.toolRequest!.input.min != null),
+       assert(message.toolRequest!.input.max != null),
        question = message.text,
-       min = message.toolRequest.input.min!,
-       max = message.toolRequest.input.max!,
+       min = message.toolRequest!.input.min!,
+       max = message.toolRequest!.input.max!,
        selectedValue = int.tryParse(message.toolResponse?.output ?? ''),
-       toolRef = message.toolRequest.ref,
-       toolName = message.toolRequest.name;
+       toolRef = message.toolRequest!.ref,
+       toolName = message.toolRequest!.name;
 
   final String question;
   final int min;

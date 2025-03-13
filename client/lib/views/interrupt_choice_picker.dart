@@ -11,10 +11,10 @@ class InterruptChoicePicker extends StatelessWidget {
     required this.onResume,
     super.key,
   }) : question = message.text,
-       choices = message.toolRequest.input.choices,
+       choices = message.toolRequest!.input.choices,
        selectedValue = message.toolResponse?.output,
-       toolRef = message.toolRequest.ref,
-       toolName = message.toolRequest.name;
+       toolRef = message.toolRequest!.ref,
+       toolName = message.toolRequest!.name;
 
   final String question;
   final Iterable<String> choices;
