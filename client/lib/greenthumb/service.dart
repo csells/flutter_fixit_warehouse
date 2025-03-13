@@ -73,9 +73,6 @@ class GreenthumbService extends ChangeNotifier {
 
     final json = jsonDecode(response.body);
 
-    // TODO: remove this
-    debugPrint('\n\nRESPONSE:\n${response.body}\n\n');
-
     _messages.clear();
     _messages.addAll([
       for (final message in json['result']['messages'])

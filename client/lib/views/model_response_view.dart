@@ -18,8 +18,13 @@ class ModelResponseView extends StatelessWidget {
           p: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.4),
         ),
         imageBuilder:
-            // TODO: resolve the image URL
-            (uri, title, alt) => Placeholder(child: Text(uri.toString())),
+        // TODO: resolve the image URL
+        (uri, title, alt) {
+          final image = uri.toString();
+          return Placeholder(
+            child: Text(image.isNotEmpty ? image : '[missing]'),
+          );
+        },
       ),
     ),
   );

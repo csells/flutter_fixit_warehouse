@@ -23,7 +23,9 @@ const ai = genkit({
       },
     ]),
   ],
-  model: gemini20Flash,
+  // turn down the creativity of the model so that it doesn't make up product
+  // names or details
+  model: gemini20Flash.withConfig({ temperature: 0.3 }),
 });
 
 // *** Flow #1: Indexing the product catalog ***
@@ -131,9 +133,9 @@ const rangeInterrupt = ai.defineInterrupt(
     outputSchema: z.number().describe("A number in the range."),
   });
 
-const productFromDescriptionTool = ai.defineTool(
+const productLookupTool = ai.defineTool(
   {
-    name: 'productFromDescriptionTool',
+    name: 'productLookupTool',
     description: 'Find the top product that matches a given description',
     inputSchema: z.object({
       description: z.string().describe('The description of the product')
@@ -177,22 +179,39 @@ using the choiceInterrupt, imageInterrupt, and rangeInterrupt tools. Do NOT ask
 the user questions without using a tool; they will not be able to respond.
 
 When you're done asking questions, produce the description of a product or
-products that will help the user with their original query. Use the
-productFromDescriptionTool to look up the product details to include in your
-response.
+products that will help the user with their original query. YOU MUST pass the
+description of each product to the productLookupTool tool to look up the
+product details to include in your response.
 
-Images returned from the productFromDescriptionTool should be displayed in a
-Markdown image tag.
-
-DO NOT make up any product names or details; ONLY use the
-productFromDescriptionTool tool to get the product details.
+DO NOT make up any product names or details; ONLY use the product names and
+details returned by the productLookupTool tool.
 
 DO NOT use real-world product names; only use the product names returned by the 
-productFromDescriptionTool tool.
+productLookupTool tool.
+
+DO NOT make up any images; only use the images returned by the
+productLookupTool tool.
 
 The response should be a summary of your final recommendation as well as a list
-of products incorporating the product name, manufacturer, cost, and image in a
-pleasant format.
+of products incorporating the product name, manufacturer, cost, and image. The
+response should be structured in Markdown format like this:
+
+
+[put your overall recommendation here; be clear and concise].
+
+To help with that, here are the product(s) that you may want to consider:
+
+# [product 1]
+From [manufacturer] for $[cost]
+
+![](product 1 image)
+
+# [product 2]
+From [manufacturer] for $[cost]
+
+![](product 2 image)
+
+...
 `;
 
 const greenThumb = ai.defineFlow(
@@ -205,7 +224,7 @@ const greenThumb = ai.defineFlow(
     const response = await ai.generate({
       ...(messages && messages.length > 0 ? {} : { system: gtSystem }),
       prompt,
-      tools: [choiceInterrupt, imageInterrupt, rangeInterrupt, productFromDescriptionTool],
+      tools: [choiceInterrupt, imageInterrupt, rangeInterrupt, productLookupTool],
       messages,
       resume,
     });
