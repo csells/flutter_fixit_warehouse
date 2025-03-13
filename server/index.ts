@@ -1,10 +1,11 @@
 import {
   devLocalIndexerRef,
+  devLocalRetrieverRef,
   devLocalVectorstore
 } from '@genkit-ai/dev-local-vectorstore';
 import { startFlowServer } from '@genkit-ai/express';
 import { gemini20Flash, googleAI } from "@genkit-ai/googleai";
-import { textEmbedding004 } from '@genkit-ai/vertexai';
+import vertexAI, { textEmbedding004 } from '@genkit-ai/vertexai';
 import { readFileSync } from 'fs';
 import { genkit, MessageSchema, z } from "genkit/beta";
 import { ToolResponsePartSchema } from 'genkit/model';
@@ -14,7 +15,7 @@ import { join } from 'path';
 const ai = genkit({
   plugins: [
     googleAI(),
-    // vertexAI(), // TODO: needed?
+    vertexAI(),
     devLocalVectorstore([
       {
         indexName: 'products',
@@ -41,7 +42,7 @@ const loadProducts = () => {
 };
 
 const productsIndexer = devLocalIndexerRef('products');
-// const productsRetriever = devLocalRetrieverRef('products');
+const productsRetriever = devLocalRetrieverRef('products');
 
 const indexProducts = ai.defineFlow(
   {
@@ -132,19 +133,59 @@ const rangeInterrupt = ai.defineInterrupt(
     outputSchema: z.number().describe("A number in the range."),
   });
 
+const productFromDescriptionTool = ai.defineTool(
+  {
+    name: 'productFromDescriptionTool',
+    description: 'Find the top product that matches a given description',
+    inputSchema: z.object({
+      description: z.string().describe('The description of the product')
+    }),
+    outputSchema: z.object({
+      productName: z.string().describe('The name of the product'),
+      manufacturer: z.string().describe('The manufacturer of the product'),
+      cost: z.number().describe('The cost of the product'),
+      image: z.string().describe('The image of the product'),
+      reason: z.string().describe('The reason for the recommendation'),
+    }),
+  },
+  async (input) => {
+    const docs = await ai.retrieve({
+      retriever: productsRetriever,
+      query: input.description,
+      options: { k: 1 },
+    });
+
+    const metadata = docs[0].metadata;
+    const product = {
+      productName: metadata?.productName || "Unknown",
+      manufacturer: metadata?.manufacturer || "Unknown",
+      cost: metadata?.cost || 0,
+      image: metadata?.image || "",
+      reason: `Matched based on: ${input.description}`
+    };
+
+    console.log('PRODUCT:');
+    console.log(JSON.stringify(product, null, 2));
+
+    return product;
+  }
+);
+
+
 const gtSystem = `
   You're an expert gardener. The user will ask a question about how to manage
   their plants in their garden. Be helpful and ask 3 to 5 clarifying questions,
   using the choiceInterrupt, imageInterrupt, and rangeInterrupt tools. Do NOT
   ask the user questions without using a tool; they will not be able to respond.
   
-  When you're done asking questions, provide a description of a product or
-  products that will help the user with their original query. Each product
-  description should NOT include another question for the user nor should it
-  include the name of any specific product.
+  When you're done asking questions, produce the description of a product or
+  products that will help the user with their original query. Use the
+  productFromDescriptionTool to look up the product details to include in your
+  response. The response should be a list of products incorporating the product
+  name, manufacturer, cost, and image in a pleasing format.
 `;
 
-export const greenThumb = ai.defineFlow(
+const greenThumb = ai.defineFlow(
   {
     name: "greenThumb",
     inputSchema: gtInputSchema,
@@ -154,68 +195,14 @@ export const greenThumb = ai.defineFlow(
     const response = await ai.generate({
       ...(messages && messages.length > 0 ? {} : { system: gtSystem }),
       prompt,
-      tools: [choiceInterrupt, imageInterrupt, rangeInterrupt],
+      tools: [choiceInterrupt, imageInterrupt, rangeInterrupt, productFromDescriptionTool],
       messages,
       resume,
     });
 
-    return {
-      messages: response.messages,
-    };
+    return { messages: response.messages };
   });
 
-// function productsFromDescription(description: string) {
-//   // TODO: RAG
-//   return [
-//     {
-//       productName: 'TODO: Product Name',
-//       manufacturer: 'TODO: Manufacturer',
-//       cost: 19.99,
-//       image: 'TODO',
-//       reason: description,
-//     }];
-
-//   // TODO: RAG
-//   //       const docs = await ai.retrieve({
-//   //         retriever: productsRetriever,
-//   //         query: output.llmResponse,
-//   //         options: { k: 3 },
-//   //       });
-
-//   //       // Add markdown JSON code block with non-null and unique product data
-//   //       const productData = docs.map(doc => doc.metadata)
-//   //         .filter(Boolean)
-//   //         .filter((product, index, self) =>
-//   //           index === self.findIndex(p => p?.id === product?.id)
-//   //         );
-
-//   //       console.log('PRODUCT DATA:');
-//   //       console.log(JSON.stringify(productData, null, 2));
-
-//   //       // Get a summary from the LLM that includes product recommendations
-//   //       const { text: summary } = await ai.generate({
-//   //         prompt: `
-//   // Based on the user's gardening question and our conversation, here are some
-//   // product recommendations:
-
-//   // ${JSON.stringify(productData, null, 2)}
-
-//   // Please summarized your final recommendation along with ALL of the products (by
-//   // manufacturer, name and price) that are recommended for the user's gardening
-//   // question and why that's the case.
-
-//   // Ensure that the summary is provided in markdown format. Don't introduce the
-//   // summary with any other text.
-//   // `,
-//   //         messages, // contains the conversation history
-//   //       });
-
-//   //       console.log('SUMMARY:');
-//   //       console.log(summary);
-
-//   //       // Set the final response with the summary
-//   //       output.llmResponse = summary;    
-// }
 
 startFlowServer({
   flows: [indexProducts, greenThumb],

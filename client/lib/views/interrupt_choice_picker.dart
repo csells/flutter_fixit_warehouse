@@ -5,9 +5,9 @@ import '../greenthumb/service.dart';
 import 'gt_button.dart';
 import 'view_model.dart';
 
-class ToolChoicePicker extends StatelessWidget {
-  ToolChoicePicker({
-    required ToolMessage message,
+class InterruptChoicePicker extends StatelessWidget {
+  InterruptChoicePicker({
+    required InterruptMessage message,
     required this.onResume,
     super.key,
   }) : question = message.text,

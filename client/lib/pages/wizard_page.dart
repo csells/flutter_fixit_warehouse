@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fix_warehouse/greenthumb/service.dart';
-import 'package:flutter_fix_warehouse/views/tool_choice_picker.dart';
-import 'package:flutter_fix_warehouse/views/tool_range_value_picker.dart';
+import 'package:flutter_fix_warehouse/views/interrupt_choice_picker.dart';
+import 'package:flutter_fix_warehouse/views/interrupt_range_value_picker.dart';
 import 'package:flutter_fix_warehouse/views/user_prompt_picker.dart';
 
-import '../views/llm_response_view.dart';
-import '../views/tool_image_picker.dart';
+import '../views/interrupt_image_picker.dart';
+import '../views/model_response_view.dart';
 import '../views/view_model.dart';
 
 class WizardPage extends StatefulWidget {
@@ -201,7 +201,7 @@ class _WizardPageState extends State<WizardPage> {
 
   Widget _buildStepView(Message message, bool isCurrentStep) {
     final isToolResponse =
-        message is ToolMessage && message.toolResponse != null;
+        message is InterruptMessage && message.toolResponse != null;
     final onRequest = isCurrentStep && !isToolResponse ? _onRequest : null;
     final onResume = isCurrentStep && !isToolResponse ? _onResume : null;
 
@@ -210,19 +210,19 @@ class _WizardPageState extends State<WizardPage> {
       UserRequest() => UserPromptPicker(message: message, onRequest: onRequest),
 
       // display final model response
-      ModelResponse() => LlmResponseView(message: message),
+      ModelResponse() => ModelResponseView(message: message),
 
       // Handle interrupt tools
-      ToolMessage() => switch (message.toolRequest.name) {
-        'choiceInterrupt' => ToolChoicePicker(
+      InterruptMessage() => switch (message.toolRequest.name) {
+        'choiceInterrupt' => InterruptChoicePicker(
           message: message,
           onResume: onResume,
         ),
-        'imageInterrupt' => ToolImagePicker(
+        'imageInterrupt' => InterruptImagePicker(
           message: message,
           onResume: onResume,
         ),
-        'rangeInterrupt' => ToolRangeValuePicker(
+        'rangeInterrupt' => InterruptRangeValuePicker(
           message: message,
           onResume: onResume,
         ),

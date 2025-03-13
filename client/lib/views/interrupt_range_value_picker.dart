@@ -7,9 +7,9 @@ import '../greenthumb/service.dart';
 import 'gt_button.dart';
 import 'view_model.dart';
 
-class ToolRangeValuePicker extends StatefulWidget {
-  ToolRangeValuePicker({
-    required ToolMessage message,
+class InterruptRangeValuePicker extends StatefulWidget {
+  InterruptRangeValuePicker({
+    required InterruptMessage message,
     required this.onResume,
     super.key,
   }) : assert(message.toolRequest.input.min != null),
@@ -30,10 +30,11 @@ class ToolRangeValuePicker extends StatefulWidget {
   final ToolResumeCallback? onResume;
 
   @override
-  State<ToolRangeValuePicker> createState() => _ToolRangeValuePickerState();
+  State<InterruptRangeValuePicker> createState() =>
+      _InterruptRangeValuePickerState();
 }
 
-class _ToolRangeValuePickerState extends State<ToolRangeValuePicker> {
+class _InterruptRangeValuePickerState extends State<InterruptRangeValuePicker> {
   late int _currentValue;
 
   @override

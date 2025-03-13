@@ -3,8 +3,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'view_model.dart';
 
-class LlmResponseView extends StatelessWidget {
-  const LlmResponseView({required this.message, super.key});
+class ModelResponseView extends StatelessWidget {
+  const ModelResponseView({required this.message, super.key});
 
   final ModelResponse message;
 

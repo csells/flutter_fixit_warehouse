@@ -1,4 +1,4 @@
-import '../greenthumb/model.dart';
+import '../greenthumb/data.dart';
 
 sealed class Message {
   Message._(RawMessage rawMessage) : _rawMessage = rawMessage;
@@ -22,28 +22,48 @@ sealed class Message {
       }
 
       // handle model messages
-      if (rawMessage.role == 'model') {
-        assert(rawMessage.content.isNotEmpty);
-        final toolRequest =
-            rawMessage.content.length == 2
-                ? rawMessage.content[1].toolRequest
-                : rawMessage.content[0].toolRequest;
+      assert(rawMessage.role == 'model');
+      assert(rawMessage.content.isNotEmpty);
 
-        if (toolRequest == null) {
-          // found a model response and not a tool request
-          result.add(ModelResponse(rawMessage));
-        } else if (i + 1 < rawMessages.length &&
-            rawMessages[i + 1].role == 'tool') {
-          // found a tool response as well as a tool request
-          result.add(ToolMessage(rawMessage, rawMessages[i + 1]));
+      final toolRequest =
+          rawMessage.content.length == 2
+              ? rawMessage.content[1].toolRequest
+              : rawMessage.content[0].toolRequest;
 
-          // skip the tool message in next iteration
-          i++;
-        } else {
-          // found a tool request without a response
-          result.add(ToolMessage(rawMessage));
-        }
+      if (toolRequest == null) {
+        // found a model response and not a interrupt tool request
+        result.add(ModelResponse(rawMessage));
+        continue;
       }
+
+      final metadata =
+          rawMessage.content.length == 2
+              ? rawMessage.content[1].metadata
+              : rawMessage.content[0].metadata;
+
+      if (i + 1 == rawMessages.length || rawMessages[i + 1].role != 'tool') {
+        // found a tool request without a response, but is it an interrupt?
+
+        if (metadata == null) {
+          // no metadata means this is not an interrupt, so skip it
+          continue;
+        } else {
+          // metadata means this is an interrupt
+          result.add(InterruptMessage(rawMessage));
+        }
+        continue;
+      }
+
+      // found a tool response and a tool request, but is it an interrupt?
+      if (metadata == null) {
+        // no metadata means this is not an interrupt, so skip it
+      } else {
+        // metadata means this is an interrupt
+        result.add(InterruptMessage(rawMessage, rawMessages[i + 1]));
+      }
+
+      // skip the interrupt tool response message in next loop thru
+      i++;
     }
 
     if (result.isEmpty) {
@@ -70,10 +90,10 @@ class UserRequest extends Message {
   String get text => _rawMessage.content.first.text!;
 }
 
-class ToolMessage extends Message {
+class InterruptMessage extends Message {
   final RawMessage? _rawMessage2;
 
-  ToolMessage(RawMessage rawMessage, [RawMessage? rawMessage2])
+  InterruptMessage(RawMessage rawMessage, [RawMessage? rawMessage2])
     : _rawMessage2 = rawMessage2,
       super._(rawMessage) {
     assert(rawMessage.role == 'model');
@@ -104,7 +124,7 @@ class ToolMessage extends Message {
   }
 
   @override
-  String get text => toolRequest.input.question;
+  String get text => toolRequest.input.question ?? '';
 }
 
 class ModelResponse extends Message {

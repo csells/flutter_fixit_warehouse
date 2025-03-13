@@ -115,12 +115,19 @@ class ToolRequest {
 }
 
 class Input {
-  final String question;
+  final String? question;
+  final String? description;
   final List<String> choices;
   final int? min;
   final int? max;
 
-  Input({required this.choices, required this.question, this.min, this.max});
+  Input({
+    required this.choices,
+    required this.question,
+    required this.description,
+    this.min,
+    this.max,
+  });
 
   factory Input.fromRawJson(String str) => Input.fromJson(json.decode(str));
 
@@ -128,6 +135,7 @@ class Input {
 
   factory Input.fromJson(Map<String, dynamic> json) => Input(
     question: json['question'],
+    description: json['description'],
     choices:
         json['choices'] == null
             ? []
@@ -147,7 +155,7 @@ class Input {
 class ToolResponse {
   final String? ref;
   final String name;
-  final String output;
+  final dynamic output;
 
   ToolResponse({required this.ref, required this.name, required this.output});
 
