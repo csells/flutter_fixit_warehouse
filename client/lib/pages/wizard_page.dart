@@ -215,15 +215,15 @@ class _WizardPageState extends State<WizardPage> {
 
       // Handle interrupt tools
       InterruptMessage() => switch (message.toolRequest!.name) {
-        'choiceInterrupt' => InterruptChoicePicker(
+        'choice' => InterruptChoicePicker(
           message: message,
           onResume: onResume,
         ),
-        'imageInterrupt' => InterruptImagePicker(
+        'image' => InterruptImagePicker(
           message: message,
           onResume: onResume,
         ),
-        'rangeInterrupt' => InterruptRangeValuePicker(
+        'range' => InterruptRangeValuePicker(
           message: message,
           onResume: onResume,
         ),

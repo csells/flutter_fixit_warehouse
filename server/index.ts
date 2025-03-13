@@ -102,7 +102,7 @@ const gtOutputSchema = z.object({
 
 const choiceInterrupt = ai.defineInterrupt(
   {
-    name: 'choiceInterrupt',
+    name: 'choice',
     description: 'Asks the user a question with a list of choices',
     inputSchema: z.object({
       question: z.string().describe("The model's follow-up question."),
@@ -113,7 +113,7 @@ const choiceInterrupt = ai.defineInterrupt(
 
 const imageInterrupt = ai.defineInterrupt(
   {
-    name: 'imageInterrupt',
+    name: 'image',
     description: 'Asks the user to take a picture of their plant',
     inputSchema: z.object({
       question: z.string().describe("The model's follow-up question."),
@@ -123,7 +123,7 @@ const imageInterrupt = ai.defineInterrupt(
 
 const rangeInterrupt = ai.defineInterrupt(
   {
-    name: 'rangeInterrupt',
+    name: 'range',
     description: 'Asks the user to choose a number in a range',
     inputSchema: z.object({
       question: z.string().describe("The model's follow-up question."),
@@ -135,7 +135,7 @@ const rangeInterrupt = ai.defineInterrupt(
 
 const productLookupTool = ai.defineTool(
   {
-    name: 'productLookupTool',
+    name: 'productLookup',
     description: 'Find the top product that matches a given description',
     inputSchema: z.object({
       description: z.string().describe('The description of the product')
@@ -145,7 +145,6 @@ const productLookupTool = ai.defineTool(
       manufacturer: z.string().describe('The manufacturer of the product'),
       cost: z.number().describe('The cost of the product'),
       image: z.string().describe('The image of the product'),
-      reason: z.string().describe('The reason for the recommendation'),
     }),
   },
   async (input) => {
@@ -161,7 +160,6 @@ const productLookupTool = ai.defineTool(
       manufacturer: metadata?.manufacturer || "Unknown",
       cost: metadata?.cost || 0,
       image: metadata?.image || "",
-      reason: `Matched based on: ${input.description}`
     };
 
     console.log('PRODUCT:');
@@ -178,31 +176,29 @@ helps people with their plants. A user will ask you questions about gardening.
 
 You must follow these steps exactly:
 1.	Ask 3 to 5 clarifying questions to the user about their situation.
-•	Use the tools choiceInterrupt, imageInterrupt, and rangeInterrupt to ask these questions.
+•	Use the choice, image, and range tools to ask these questions.
 •	Do not ask any questions in plain text. All clarifying questions must be asked by calling the appropriate interrupt tool(s).
 
 2.	Once the user has answered your clarifying questions, you must recommend only products from our product database.
-•	You must call the productLookupTool to fetch product details that match the user's needs.
-•	For each product you recommend, you must pass a relevant query or description into the productLookupTool.
-•	DO NOT invent product names, DO NOT invent product data, and DO NOT invent images. If the productLookupTool returns nothing, then you have no product to recommend.
+•	You must call the productLookup tool to fetch product details that match the user's needs.
+•	For each product you recommend, you must pass a relevant query or description into the productLookup tool.
+•	DO NOT invent product names, DO NOT invent product data, and DO NOT invent images. If the productLookup tool returns nothing, then you have no product to recommend.
 
-3.	If you fail to call the productLookupTool when recommending products, or if you invent any detail not returned by the productLookupTool, your answer is invalid.
+3.	If you fail to call the productLookup tool when recommending products, or if you invent any detail not returned by the productLookup tool, your answer is invalid.
 
-4.	Your final response (after you've received the results from the productLookupTool) must follow the format below:
+4.	Your final response (after you've received the results from the productLookup tool) must follow the Markdown format below:
 
     [put your overall recommendation here; be clear and concise].
-
-    To help with that, here are the product(s) that you may want to consider:
 
     # [product 1]
     From [manufacturer] for $[cost]
 
-    ![](product 1 image)
+    ![](image)
 
     # [product 2]
     From [manufacturer] for $[cost]
 
-    ![](product 2 image)
+    ![](image)
 
     ...
 `;
