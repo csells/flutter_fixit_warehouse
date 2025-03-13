@@ -17,6 +17,9 @@ class ModelResponseView extends StatelessWidget {
         styleSheet: MarkdownStyleSheet(
           p: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.4),
         ),
+        imageBuilder:
+            // TODO: resolve the image URL
+            (uri, title, alt) => Placeholder(child: Text(uri.toString())),
       ),
     ),
   );

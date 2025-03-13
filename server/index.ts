@@ -32,12 +32,12 @@ const loadProducts = () => {
   return JSON.parse(
     readFileSync(join(__dirname, 'gardening-products.json'), 'utf-8')
   ) as Array<{
-    id: number;
-    productName: string;
-    description: string;
+    product: string;
     manufacturer: string;
+    description: string;
     cost: number;
     image: string;
+    id: number;
   }>;
 };
 
@@ -61,19 +61,17 @@ const indexProducts = ai.defineFlow(
       const products = loadProducts();
       const documents = products.map((product) =>
         Document.fromText(product.description, {
-          id: product.id,
-          productName: product.productName,
-          description: product.description,
+          product: product.product,
           manufacturer: product.manufacturer,
+          description: product.description,
           cost: product.cost,
+          image: product.image,
+          id: product.id,
         })
       );
 
       // Add documents to the index
-      await ai.index({
-        indexer: productsIndexer,
-        documents,
-      });
+      await ai.index({ indexer: productsIndexer, documents });
 
       return {
         success: true,
@@ -141,7 +139,7 @@ const productFromDescriptionTool = ai.defineTool(
       description: z.string().describe('The description of the product')
     }),
     outputSchema: z.object({
-      productName: z.string().describe('The name of the product'),
+      product: z.string().describe('The name of the product'),
       manufacturer: z.string().describe('The manufacturer of the product'),
       cost: z.number().describe('The cost of the product'),
       image: z.string().describe('The image of the product'),
@@ -157,7 +155,7 @@ const productFromDescriptionTool = ai.defineTool(
 
     const metadata = docs[0].metadata;
     const product = {
-      productName: metadata?.productName || "Unknown",
+      product: metadata?.product || "Unknown",
       manufacturer: metadata?.manufacturer || "Unknown",
       cost: metadata?.cost || 0,
       image: metadata?.image || "",
@@ -173,16 +171,28 @@ const productFromDescriptionTool = ai.defineTool(
 
 
 const gtSystem = `
-  You're an expert gardener. The user will ask a question about how to manage
-  their plants in their garden. Be helpful and ask 3 to 5 clarifying questions,
-  using the choiceInterrupt, imageInterrupt, and rangeInterrupt tools. Do NOT
-  ask the user questions without using a tool; they will not be able to respond.
-  
-  When you're done asking questions, produce the description of a product or
-  products that will help the user with their original query. Use the
-  productFromDescriptionTool to look up the product details to include in your
-  response. The response should be a list of products incorporating the product
-  name, manufacturer, cost, and image in a pleasing format.
+You're an expert gardener. The user will ask a question about how to manage
+their plants in their garden. Be helpful and ask 3 to 5 clarifying questions,
+using the choiceInterrupt, imageInterrupt, and rangeInterrupt tools. Do NOT ask
+the user questions without using a tool; they will not be able to respond.
+
+When you're done asking questions, produce the description of a product or
+products that will help the user with their original query. Use the
+productFromDescriptionTool to look up the product details to include in your
+response.
+
+Images returned from the productFromDescriptionTool should be displayed in a
+Markdown image tag.
+
+DO NOT make up any product names or details; ONLY use the
+productFromDescriptionTool tool to get the product details.
+
+DO NOT use real-world product names; only use the product names returned by the 
+productFromDescriptionTool tool.
+
+The response should be a summary of your final recommendation as well as a list
+of products incorporating the product name, manufacturer, cost, and image in a
+pleasant format.
 `;
 
 const greenThumb = ai.defineFlow(

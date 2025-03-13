@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import '../greenthumb/data.dart';
 
 sealed class Message {
@@ -25,10 +27,7 @@ sealed class Message {
       assert(rawMessage.role == 'model');
       assert(rawMessage.content.isNotEmpty);
 
-      final toolRequest =
-          rawMessage.content.length == 2
-              ? rawMessage.content[1].toolRequest
-              : rawMessage.content[0].toolRequest;
+      final toolRequest = Message.toolRequestFrom(rawMessage);
 
       if (toolRequest == null) {
         // found a model response and not a interrupt tool request
@@ -36,10 +35,7 @@ sealed class Message {
         continue;
       }
 
-      final metadata =
-          rawMessage.content.length == 2
-              ? rawMessage.content[1].metadata
-              : rawMessage.content[0].metadata;
+      final metadata = Message.metadataFrom(rawMessage);
 
       if (i + 1 == rawMessages.length || rawMessages[i + 1].role != 'tool') {
         // found a tool request without a response, but is it an interrupt?
@@ -77,6 +73,24 @@ sealed class Message {
 
     return List.unmodifiable(result);
   }
+
+  static ContentMetadata? metadataFrom(RawMessage rawMessage) {
+    return rawMessage.content
+        .firstWhereOrNull((m) => m.metadata != null)
+        ?.metadata;
+  }
+
+  static ToolRequest? toolRequestFrom(RawMessage rawMessage) {
+    return rawMessage.content
+        .firstWhereOrNull((m) => m.toolRequest != null)
+        ?.toolRequest;
+  }
+
+  static ToolResponse? toolResponseFrom(RawMessage rawMessage) {
+    return rawMessage.content
+        .firstWhereOrNull((m) => m.toolResponse != null)
+        ?.toolResponse;
+  }
 }
 
 class UserRequest extends Message {
@@ -101,30 +115,13 @@ class InterruptMessage extends Message {
     assert(rawMessage.content.isNotEmpty);
   }
 
-  ContentMetadata get metadata {
-    final metadata =
-        _rawMessage.content.length == 2
-            ? _rawMessage.content[1].metadata
-            : _rawMessage.content[0].metadata;
-    assert(metadata != null);
-    return metadata!;
-  }
-
-  ToolRequest get toolRequest {
-    return _rawMessage.content.length == 2
-        ? _rawMessage.content[1].toolRequest!
-        : _rawMessage.content[0].toolRequest!;
-  }
-
-  ToolResponse? get toolResponse {
-    if (_rawMessage2 == null) return null;
-
-    assert(_rawMessage2.role == 'tool');
-    return _rawMessage2.content.first.toolResponse!;
-  }
+  ContentMetadata? get metadata => Message.metadataFrom(_rawMessage);
+  ToolRequest? get toolRequest => Message.toolRequestFrom(_rawMessage);
+  ToolResponse? get toolResponse =>
+      _rawMessage2 == null ? null : Message.toolResponseFrom(_rawMessage2);
 
   @override
-  String get text => toolRequest.input.question ?? '';
+  String get text => toolRequest?.input.question ?? '';
 }
 
 class ModelResponse extends Message {
