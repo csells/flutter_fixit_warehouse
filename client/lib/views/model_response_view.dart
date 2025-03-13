@@ -17,12 +17,14 @@ class ModelResponseView extends StatelessWidget {
         styleSheet: MarkdownStyleSheet(
           p: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.4),
         ),
-        imageBuilder:
-        // TODO: resolve the image URL
-        (uri, title, alt) {
+        imageBuilder: (uri, title, alt) {
           final image = uri.toString();
-          return Placeholder(
-            child: Text(image.isNotEmpty ? image : '[missing]'),
+          return Image.asset(
+            'assets/product-images/$image',
+            errorBuilder:
+                (context, error, stackTrace) => Placeholder(
+                  child: Text(image.isNotEmpty ? image : '[missing]'),
+                ),
           );
         },
       ),
