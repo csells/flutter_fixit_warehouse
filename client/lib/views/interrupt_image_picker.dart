@@ -55,7 +55,7 @@ class _InterruptImagePickerState extends State<InterruptImagePicker> {
         Expanded(
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 if (_currentImageBytes != null)
                   Expanded(

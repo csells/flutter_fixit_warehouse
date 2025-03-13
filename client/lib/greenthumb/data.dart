@@ -140,8 +140,8 @@ class Input {
         json['choices'] == null
             ? []
             : List<String>.from(json['choices'].map((x) => x)),
-    min: json['min'],
-    max: json['max'],
+    min: json['min'] != null ? (json['min'] as num).toInt() : null,
+    max: json['max'] != null ? (json['max'] as num).toInt() : null,
   );
 
   Map<String, dynamic> toJson() => {
