@@ -17,7 +17,7 @@ navigated there from an imaginary home page:
 <img src="README/garden-ideas.png" width="400">
 
 This page contains the entry point to our generative AI agent, code-named
-"Green Thumb" and is activated with the orange button.
+"GreenThumb" and is activated with the orange button.
 
 ## Q&A
 
@@ -32,19 +32,16 @@ This choice is built into the app and you can see the details in the
 over and begins asking the user a series of clarifying questions.
 
 ## Human In The Loop
-The way that the LLM can ask the user questions is using a set of tools at it's
-disposal called "interrupts." These days, Most generative AI SDKs have the
-ability to add tools to enable the LLM to get data that you'd rather it not
-guess about, like the current weather. However, those tools are typically
-handled in the same process as the LLM is being invoked from. In our case, we're
-using Genkit on the server, so a traditional tool would need to be invoked from
-the server.
+To enable the LLM to gather data outside of the context it was given, Genkit
+ability has to provide it with tools. However, most of the time tools are
+handled on the server, like when an LLM needs the weather for a location
+provided in a prompt.
 
 However, what we want is to enable the LLM to call from the server process back
-to the client with a question, for the client to gather the answer form the user
-of the app and then to send that answer back to the server so that it can
-continue with whatever it was doing before it interrupted itself to get the user
-involved in the first place. Hence the name: interrupt.
+to the client with a question so that the client can gather the answer from the
+user. Genkit also provides for such tools, which are called "interrupts,"
+because they interrupt what the LLM response generation to gather more data;
+once the data is collected, the LLM's generation is resumed.
 
 There are three kinds of interrupts that this sample supports: choice, range and
 image.
@@ -85,11 +82,11 @@ the `interrupt_image_picker.dart` file.
 ## LLM Reponse
 
 Once the LLM has gathered the additional information it needs, it forms a
-recommendation, including looking up any useful products from the product
-database on the server using another tool that performs an embedding-based
-search using Genkit helpers.
+recommendation. That recommendation includes looking up useful products from the
+product database on the server, which it does using a tool that performs
+executes on the server. It does an embedding-based search using Genkit helpers.
 
-<img src="README/model-response.mov" width="400">
+<img src="README/model-response.png" width="400">
 
 The final response comes back as simple Markdown, which is displayed for the
 user in `model_response_view.dart`.
@@ -102,7 +99,7 @@ server to resume an interrupt tool and choosing which pages to show based on the
 messages it's receiving from the LLM.
 
 The most important part of this orchestation is mapping the kind of message
-received from the server to the apppropriate page in the wizard to display next:
+received from the server to the apppropriate Flutter page to display next:
 
 ```dart
 class _WizardPageState extends State<WizardPage> {
@@ -166,29 +163,167 @@ handle GreenThumb requests from the Flutter app and one to index the product
 database. The app uses the former and you can see how to use the latter yourself
 in the Setup section below.
 
-The 
+The server also defines four tools: three interrupts and a server-side tool for
+looking up indexed products by their embeddings:
+
+```typescript
+const choiceInterrupt = ai.defineInterrupt(
+  {
+    name: 'choice',
+    description: 'Asks the user a question with a list of choices',
+    inputSchema: z.object({
+      question: z.string().describe("The model's follow-up question."),
+      choices: z.array(z.string()).describe("The list of choices."),
+    }),
+    outputSchema: z.string().describe("The user's choice."),
+  });
+
+const imageInterrupt = ai.defineInterrupt(
+  {
+    name: 'image',
+    description: 'Asks the user to take a picture of their plant',
+    inputSchema: z.object({
+      question: z.string().describe("The model's follow-up question."),
+    }),
+    outputSchema: z.string().describe("base64 encoded image."),
+  });
+
+const rangeInterrupt = ai.defineInterrupt(
+  {
+    name: 'range',
+    description: 'Asks the user to choose a number in a range',
+    inputSchema: z.object({
+      question: z.string().describe("The model's follow-up question."),
+      min: z.number().describe("The minimum value of the range."),
+      max: z.number().describe("The maximum value of the range."),
+    }),
+    outputSchema: z.number().describe("A number in the range."),
+  });
+
+const productLookupTool = ai.defineTool(
+  {
+    name: 'productLookup',
+    description: 'Find the top product that matches a given description',
+    inputSchema: z.object({
+      description: z.string().describe('The description of the product')
+    }),
+    outputSchema: z.object({
+      product: z.string().describe('The name of the product'),
+      manufacturer: z.string().describe('The manufacturer of the product'),
+      cost: z.number().describe('The cost of the product'),
+      image: z.string().describe('The image of the product'),
+    }),
+  },
+  async (input) => {...}
+);
+```
+
+You can see here the three interrupts by name: choice, image and range. You'll
+recognize these as the same interrupts that are named in `wizard_page.dart`. The
+LLM is given these tools in the `greenThumb` flow to process the user's initial
+request and each one of the resume calls from the Flutter app:
+
+```typescript
+const gtInputSchema = z.object({
+  prompt: z.string().optional(),
+  messages: z.array(MessageSchema).optional(),
+  resume: z.object({ respond: z.array(ToolResponsePartSchema) }).optional(),
+});
+
+const gtOutputSchema = z.object({
+  messages: z.array(MessageSchema),
+});
+
+const gtSystem = `
+You are GreenThumb, an expert gardener assistant integrated into an app that
+helps people with their plants. A user will ask you questions about gardening.
+...
+`;
+
+const greenThumb = ai.defineFlow(
+  {
+    name: "greenThumb",
+    inputSchema: gtInputSchema,
+    outputSchema: gtOutputSchema,
+  },
+  async ({ prompt, messages, resume }) => {
+    const response = await ai.generate({
+      ...(messages && messages.length > 0 ? {} : { system: gtSystem }),
+      prompt,
+      tools: [choiceInterrupt, imageInterrupt, rangeInterrupt, productLookupTool],
+      messages,
+      resume,
+    });
+
+    return { messages: response.messages };
+  });
+```
+
+When the LLM decides to use the product lookup tool, it does so without
+returning from the `ai.generate` function. However, each time it decides to use
+an interrupt, it does return, but the messages it returns include an interrupted
+tool request without a response.
+
+Those messages are then sent back to the client, which notices the state that
+the request is in, asks the user, responds with the data they provide and pass
+that back as the `resume` argument to this flow. This back and forth is how the
+LLM is able to involve the client-side app, and ulimately the user, in getting
+the data it needs to provide the best answer for the user's original request.
 
 # Setup
 
+Before running the Flutter client, get the Genkit server running.
+
+1. The first step is to great a GCP project at
+[console.cloud.google.com](https://console.cloud.google.com).
+
+1. You will also need to enable Vertex for your new GCP project, which you can
+   do at https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=YOUR-GCP-PROJECT-HERE
+
+1. Grab yourself a Gemini API key from
+   [Google AI Studio](https://aistudio.google.com/app/apikey).
+
+1. Now you can use the information from your GCP project and your Gemini API key
+to either edit the top of `index.ts` or ensure the following environment
+variables are set before you launch the server:
+
+- GOOGLE_GENAI_API_KEY, e.g. "A00000000000000000000000000000000000000"
+- GCP_PROJECT_ID, e.g. "flutter-fixit-warehouse"
+- GCP_LOCATION, e.g. "us-central1"
+
+1. To run the server locally, make sure you have Node installed. Then install
+   the server's dependencies by executing the following from the `server`
+   folder:
+
 ```sh
-npm install
+$ npm install
 ```
 
-TODO: changing the endpoint address in the Flutter app
-
-## Usage
+6. Now run the server:
 
 ```sh
-export GOOGLE_GENAI_API_KEY=...
-npm run dev
+$ npm run dev
 ```
 
-## Config
-Index the products:
-- create a new GCP project, e.g. my-gcp-proj
-- Enable the Vertex AI API by visiting https://console.developers.google.com/apis/api/aiplatform.googleapis.com/overview?project=my-gcp-proj
-- set the GCP project via `gcloud auth application-default set-quota-project fixit-warehouse`
+Once the server is running, you can connect to it from the Flutter app, which
+has already been configured to run against localhost.
 
-- npm run index-products
-- rm __db_products.json to reset embeddings
-- 
+## Changing the Server Location
+
+If you host the server someplace that isn't localhost, change the `host` address
+at the top of the `service.dart` file.
+
+## Re-indexing the Product Database
+
+The Genkit server is configured to use a local embeddings database created from
+the product information in the `gardening-products.json` file. The included
+embeddings data is provided in the `__db_products.json` file.
+
+If you'd like to recreate this index, you can do so by deleting this file and
+executing the following:
+
+```sh
+$ npm run index-products
+```
+
+The command output will tell you the success or failure of the command.

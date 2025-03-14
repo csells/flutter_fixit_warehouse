@@ -14,8 +14,13 @@ import { join } from 'path';
 
 const ai = genkit({
   plugins: [
-    googleAI(),
-    vertexAI(),
+    googleAI({
+      apiKey: process.env.GOOGLE_GENAI_API_KEY!,
+    }),
+    vertexAI({
+      projectId: process.env.GCP_PROJECT_ID!,
+      location: process.env.GCP_LOCATION!,
+    }),
     devLocalVectorstore([
       {
         indexName: 'products',
@@ -90,16 +95,6 @@ const indexProducts = ai.defineFlow(
 
 // *** Flow #2: Q&A between the model and the user ***
 
-const gtInputSchema = z.object({
-  prompt: z.string().optional(),
-  messages: z.array(MessageSchema).optional(),
-  resume: z.object({ respond: z.array(ToolResponsePartSchema) }).optional(),
-});
-
-const gtOutputSchema = z.object({
-  messages: z.array(MessageSchema),
-});
-
 const choiceInterrupt = ai.defineInterrupt(
   {
     name: 'choice',
@@ -169,6 +164,15 @@ const productLookupTool = ai.defineTool(
   }
 );
 
+const gtInputSchema = z.object({
+  prompt: z.string().optional(),
+  messages: z.array(MessageSchema).optional(),
+  resume: z.object({ respond: z.array(ToolResponsePartSchema) }).optional(),
+});
+
+const gtOutputSchema = z.object({
+  messages: z.array(MessageSchema),
+});
 
 const gtSystem = `
 You are GreenThumb, an expert gardener assistant integrated into an app that
