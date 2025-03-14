@@ -204,9 +204,9 @@ class _WizardPageState extends State<WizardPage> {
     final onRequest = isCurrentStep ? _onRequest : null;
 
     // don't allow the user to create a response if the tool already has one
-    final isToolResponse =
+    final hasToolResponse =
         message is InterruptMessage && message.toolResponse != null;
-    final onResume = isCurrentStep && !isToolResponse ? _onResume : null;
+    final onResume = isCurrentStep && !hasToolResponse ? _onResume : null;
 
     return switch (message) {
       // gather initial user prompt
