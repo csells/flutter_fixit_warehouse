@@ -21,10 +21,10 @@ class ModelResponseView extends StatelessWidget {
           final image = uri.toString();
           return Image.asset(
             'assets/product-images/$image',
-            errorBuilder:
-                (context, error, stackTrace) => Placeholder(
-                  child: Text(image.isNotEmpty ? image : '[missing]'),
-                ),
+            errorBuilder: (context, error, stackTrace) {
+              debugPrint('Error loading image: $error');
+              return SizedBox.shrink();
+            },
           );
         },
       ),
