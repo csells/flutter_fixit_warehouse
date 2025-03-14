@@ -200,9 +200,12 @@ class _WizardPageState extends State<WizardPage> {
   );
 
   Widget _buildStepView(Message message, bool isCurrentStep) {
+    // don't allow the user to form a request if we're already handling one
+    final onRequest = isCurrentStep ? _onRequest : null;
+
+    // don't allow the user to create a response if the tool already has one
     final isToolResponse =
         message is InterruptMessage && message.toolResponse != null;
-    final onRequest = isCurrentStep && !isToolResponse ? _onRequest : null;
     final onResume = isCurrentStep && !isToolResponse ? _onResume : null;
 
     return switch (message) {
