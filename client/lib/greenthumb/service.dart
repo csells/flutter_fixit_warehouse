@@ -18,7 +18,8 @@ typedef ToolResumeCallback =
 
 class GreenthumbService extends ChangeNotifier {
   late final host = PlatformUtil.isAndroidEmulator ? '10.0.2.2' : '127.0.0.1';
-  late final url = Uri.parse('http://$host:3400/greenThumb');
+  final port = 3400;
+  late final url = Uri.parse('http://$host:$port/greenThumb');
   late final headers = {'Content-Type': 'application/json'};
 
   final _messages = <RawMessage>[];
